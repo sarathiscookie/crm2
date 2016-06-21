@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/customer/create', 'CustomerController@index');
+Route::post('/customer/save', 'CustomerController@save');
