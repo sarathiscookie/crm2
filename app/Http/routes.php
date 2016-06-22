@@ -31,11 +31,9 @@ Route::group(['middleware' => 'web'], function () {
      | Create form, List, Store
     */
 
-    /* List customer page */
+    /* List customers */
     Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
 
-    /* List customers */
-    Route::get('/customer', ['as' => 'listCustomers', 'uses' => 'CustomerController@show']);
 
 });
 /*Route::auth();

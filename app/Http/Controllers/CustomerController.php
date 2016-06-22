@@ -13,7 +13,10 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $listCustomers    = Customer::select('id', 'firstname', 'lastname', 'email', 'phone', 'created_at')
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('dashboard', compact('listCustomers'));
     }
 
     public function create()
@@ -61,9 +64,7 @@ class CustomerController extends Controller
 
     public function show()
     {
-        return Customer::select('firstname', 'lastname', 'email', 'phone', 'created_at')
-            ->orderBy('id', 'desc')
-            ->get();
+
     }
 
 }
