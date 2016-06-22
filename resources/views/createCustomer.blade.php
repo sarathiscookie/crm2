@@ -101,7 +101,7 @@
     <script src="/assets/js/editor.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script>
-        //contact section city- google places autocomplete
+        //Customer Address - google places auto-complete
         $("#addCustomerFrm").ready( function () {
             var inputID = "address";
             var placeSearch, autocomplete;
@@ -135,7 +135,7 @@
             }
         });
 
-
+        //WYSIWYG Editor
         $(document).ready(function() {
             $("#txtEditor").Editor({
                 'l_align':false,
@@ -168,11 +168,10 @@
 
         });
 
+        //Submit Form- button action
         $('#btnCreate').click( function () {
             $("#txtEditor").html($("#txtEditor").Editor("getText"));
             $("#addCustomerFrm").submit();
-        })
-
-        /*$('div.alert').delay(3000).slideUp(300);*/
+        });
     </script>
 @endpush

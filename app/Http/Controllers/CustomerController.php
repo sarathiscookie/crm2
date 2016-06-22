@@ -11,16 +11,27 @@ use Mail;
 
 class CustomerController extends Controller
 {
+    /**
+     * view dashboard
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('dashboard');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         return view('createCustomer');
     }
 
+    /**
+     * @param CustomerRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function save(CustomerRequest $request)
     {
         $route         = $request->route;
