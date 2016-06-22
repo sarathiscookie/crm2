@@ -7,10 +7,16 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Requests\CustomerRequest;
+use Mail;
 
 class CustomerController extends Controller
 {
     public function index()
+    {
+        return view('dashboard');
+    }
+
+    public function create()
     {
         return view('createCustomer');
     }
@@ -59,5 +65,16 @@ class CustomerController extends Controller
         $customer->freetext = $request->freetext;
         $customer->save();
 
+        Mail::send('auth.emails.newCustomerNotification', ['firstname' => $customer->firstname, 'lastname' => $customer->lastname, 'email' => $customer->email, 'phone' => $customer->phone, 'created_at' => $customer->created_at ], function ($message) use ($customer) {
+            $message->to('sarath@regensburg-it.de')->subject('New customer created');
+        });
     }
+
+    public function show()
+    {
+        return Customer::select('firstname', 'lastname', 'email', 'phone', 'created_at')
+            ->orderBy('id', 'desc')
+            ->get();
+    }
+
 }
