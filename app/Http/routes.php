@@ -15,5 +15,29 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/customer/create', 'CustomerController@index');
-Route::post('/customer/save', 'CustomerController@save');
+Route::group(['middleware' => 'web'], function () {
+
+    /*
+     |--------------------------------------------------------------------------
+     | Routes for customers
+     |--------------------------------------------------------------------------
+     |
+     | Create form, List, Store
+    */
+
+    /* Create customers */
+    Route::get('/customer/create', 'CustomerController@create');
+
+    /* List customer page */
+    Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
+
+    /* List customers */
+    Route::get('/customer', ['as' => 'listCustomers', 'uses' => 'CustomerController@show']);
+
+    /* Store customers */
+    Route::post('/customer/save', 'CustomerController@save');
+   
+});
+/*Route::auth();
+
+Route::get('/home', 'HomeController@index');*/
