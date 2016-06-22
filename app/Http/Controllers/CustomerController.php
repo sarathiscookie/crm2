@@ -34,7 +34,7 @@ class CustomerController extends Controller
             $street = $street_number;
 
         $customer = new Customer();
-        $customer->customer_id = rand(1,99);
+        $customer->customer_id = rand(1,999);
         $customer->firstname = $request->firstname;
         $customer->lastname = $request->lastname;
         $customer->email = $request->email;
