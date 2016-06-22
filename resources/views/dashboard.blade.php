@@ -44,8 +44,8 @@
 
 @push('script')
 <!-- Vue Js -->
-<script src="/js/vue.js"></script>
-<script src="/js/vue-resource.js"></script>
+<script src="/assets/js/vue.js"></script>
+<script src="/assets/js/vue-resource.js"></script>
 <script>
     new Vue({
         http: {
