@@ -31,7 +31,7 @@ class CustomerRequest extends Request
             'phone'      => 'required|max:30',
             'license'    => 'required|max:50',
             'chassis'    => 'required|max:100',
-            'mileage'    => 'required',
+            'mileage'    => 'required|numeric',
         ];
     }
 }

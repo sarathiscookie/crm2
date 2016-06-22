@@ -9,11 +9,6 @@
 @section('content')
     <div class="row">
         <h1 class="page-header">Create Customer</h1>
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -178,6 +173,6 @@
             $("#addCustomerFrm").submit();
         })
 
-        $('div.alert').delay(3000).slideUp(300);
+        /*$('div.alert').delay(3000).slideUp(300);*/
     </script>
 @endpush
