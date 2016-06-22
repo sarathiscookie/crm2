@@ -21,6 +21,12 @@
         <form id="addCustomerFrm" action="{{ url('/customer/save') }}" method="post">
             {{ csrf_field() }}
             <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="name">Company</label>
+                    <input type="text" class="form-control" name="company" value="{{ old('company') }}">
+                </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="name">First name</label>
                     <input type="text" class="form-control" name="firstname" value="{{ old('firstname') }}">
@@ -49,6 +55,7 @@
                     <label for="payment">Payment</label><br />
                     <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Credit card</label>
                     <label class="radio-inline"><input type="radio" name="payment" value="bank">Bank</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">Paypal</label>
                     <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Cash</label>
                     <label class="radio-inline"><input type="radio" name="payment" value="invoice">Invoice</label>
                 </div>
@@ -91,6 +98,7 @@
             <input type="hidden" name="street_number" id="street_number" value="{{ old('street_number') }}">
             <input type="hidden" name="route" id="route" value="{{ old('route') }}">
             <input type="hidden" name="city" id="locality" value="{{ old('city') }}">
+            <input type="hidden" name="state" id="administrative_area_level_1" value="{{ old('state') }}">
             <input type="hidden" name="country" id="country" value="{{ old('country') }}">
             <input type="hidden" name="postal" id="postal_code" value="{{ old('postal') }}">
         </form>

@@ -19,12 +19,12 @@ class CreateCustomersTable extends Migration
             $table->string('company',100)->nullable();            
             $table->string('firstname', 100);
             $table->string('lastname', 100);
+            $table->string('email', 255)->unique();
             $table->string('street', 255)->nullable();
             $table->string('postal', 10)->nullable();
             $table->string('city', 255)->nullable();
             $table->string('state', 50)->nullable();
-            $table->string('country', 255)->nullable();            
-            $table->string('email', 255)->unique();
+            $table->string('country', 255)->nullable();
             $table->string('phone', 30);           
             $table->text('freetext')->nullable();
             $table->enum('status', ['customer','prospect','vip','reseller','blocked','deleted'])->default('customer');
