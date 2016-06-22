@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
-
+@section('styles')
+    <link rel="stylesheet" href="/assets/css/editor.css">
+@endsection
 
 @section('content')
     <div class="row">
         <h1 class="page-header">Create Customer</h1>
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -78,11 +85,11 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label for="name">Freetext</label>
-                    <textarea name="freetext"></textarea>
+                    <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
+                <button type="submit" id="btnCreate" class="btn btn-primary btn-lg btn-block">Save</button>
             </div>
             <input type="hidden" name="address_places" id="addressval">
 
@@ -91,6 +98,7 @@
 @endsection
 
 @section('scripts')
+    <script src="/assets/js/editor.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script>
         //contact section city- google places autocomplete
@@ -126,5 +134,43 @@
             }
         });
 
+
+        $(document).ready(function() {
+            $("#txtEditor").Editor({
+                'l_align':false,
+                'r_align':false,
+                'c_align':false,
+                'justify':false,
+                'insert_link':false,
+                'unlink':false,
+                'insert_img':false,
+                'hr_line':false,
+                'block_quote':false,
+                'source':false,
+                'strikeout':true,
+                'indent':false,
+                'outdent':false,
+                'fonts':false,
+                'styles':false,
+                'print':false,
+                'rm_format':false,
+                'status_bar':false,
+                'font_size':false,
+                'color':false,
+                'splchars':false,
+                'insert_table':false,
+                'select_all':false,
+                'togglescreen':false
+            });
+
+            $("#txtEditor").Editor("setText", $("#txtEditor").text());
+
+        });
+
+        $('#btnCreate').click( function () {
+            $("#txtEditor").html($("#txtEditor").Editor("getText"));
+        })
+
+        $('div.alert').delay(3000).slideUp(300);
     </script>
 @endsection
