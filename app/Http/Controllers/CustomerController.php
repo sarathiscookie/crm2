@@ -64,8 +64,9 @@ class CustomerController extends Controller
         $customer->dyno = $request->dyno;
         $customer->freetext = $request->freetext;
         $customer->save();
-        Mail::send('auth.emails.newCustomerNotification', ['firstname' => $customer->firstname, 'lastname' => $customer->lastname, 'email' => $customer->email, 'phone' => $customer->phone, 'created_at' => $customer->created_at ], function ($message) use ($customer) {
-            $message->to('sam371986@gmail.com')->subject('New customer created');
+
+        Mail::send('emails.newCustomerNotification', ['firstname' => $customer->firstname, 'lastname' => $customer->lastname, 'email' => $customer->email, 'phone' => $customer->phone, 'created_at' => $customer->created_at ], function ($message) use ($customer) {
+            $message->to('iamsarath1986@gmail.com')->subject('New customer created');
         });
 
         return redirect(url('/'))/*->with('status','Created successfully')*/;
