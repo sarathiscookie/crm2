@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('styles')
+@section('style')
     <link rel="stylesheet" href="/assets/css/editor.css">
 @endsection
 
@@ -97,7 +97,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('script')
     <script src="/assets/js/editor.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script>
@@ -173,4 +173,4 @@
 
         $('div.alert').delay(3000).slideUp(300);
     </script>
-@endsection
+@endpush
