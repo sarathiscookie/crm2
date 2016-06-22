@@ -24,14 +24,14 @@ class CustomerRequest extends Request
     public function rules()
     {
         return [
-            'firstname'     => 'required|max:100',
-            'lastname'      => 'required|max:100',
-            'email'    => 'required|email|max:255|unique:customers,email,'.$this->id,
-            'address'      => 'required',
-            'phone'      => 'required',
-            'license'      => 'required',
-            'chassis'      => 'required',
-            'mileage'      => 'required',
+            'firstname'  => 'required|max:100',
+            'lastname'   => 'required|max:100',
+            'email'      => 'required|email|max:255|unique:customers,email,'.$this->id,
+            'address'    => 'required',
+            'phone'      => 'required|max:30',
+            'license'    => 'required|max:50',
+            'chassis'    => 'required|max:100',
+            'mileage'    => 'required',
         ];
     }
 }

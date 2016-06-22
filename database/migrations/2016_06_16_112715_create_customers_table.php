@@ -25,7 +25,7 @@ class CreateCustomersTable extends Migration
             $table->string('city', 255);
             $table->string('country', 255);
             $table->enum('payment', ['creditcard', 'bank', 'cash', 'invoice']);
-            $table->string('email', 100)->unique();
+            $table->string('email', 255)->unique();
             $table->string('phone', 30);
             $table->string('license_plate', 50);
             $table->string('chassis_number', 100);

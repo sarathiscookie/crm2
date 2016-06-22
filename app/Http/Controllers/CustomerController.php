@@ -59,5 +59,6 @@ class CustomerController extends Controller
         $customer->freetext = $request->freetext;
         $customer->save();
 
+        return redirect(url('/customer/create'))->with('status','Created successfully');
     }
 }

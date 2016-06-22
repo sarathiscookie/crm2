@@ -8,7 +8,7 @@
     <title>@yield('title')</title>
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
 
     <!-- Styles -->
