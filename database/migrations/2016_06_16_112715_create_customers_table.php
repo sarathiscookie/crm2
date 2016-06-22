@@ -14,25 +14,20 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('customer_id')->unique();
-            $table->integer('parent_customer_id')->unsigned();
-            $table->integer('car_id')->unsigned();
-            $table->integer('stage');
+            $table->integer('erp_id')->unique();
+            $table->integer('advertiser_id')->unsigned()->nullable();
+            $table->string('company',100)->nullable();            
             $table->string('firstname', 100);
             $table->string('lastname', 100);
-            $table->string('street', 255);
-            $table->string('postal', 10);
-            $table->string('city', 255);
-            $table->string('country', 255);
-            $table->enum('payment', ['creditcard', 'bank', 'cash', 'invoice']);
+            $table->string('street', 255)->nullable();
+            $table->string('postal', 10)->nullable();
+            $table->string('city', 255)->nullable();
+            $table->string('state', 50)->nullable();
+            $table->string('country', 255)->nullable();            
             $table->string('email', 255)->unique();
-            $table->string('phone', 30);
-            $table->string('license_plate', 50);
-            $table->string('chassis_number', 100);
-            $table->integer('mileage');
-            $table->enum('tuning', ['yes', 'no']);
-            $table->enum('dyno', ['yes', 'no']);
-            $table->text('freetext');
+            $table->string('phone', 30);           
+            $table->text('freetext')->nullable();
+            $table->enum('status', ['customer','prospect','vip','reseller','blocked','deleted'])->default('customer');
             $table->timestamps();
         });
     }
