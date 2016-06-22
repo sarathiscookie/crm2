@@ -23,39 +23,26 @@ class CustomerController extends Controller
 
     public function save(CustomerRequest $request)
     {
-        $address = explode("|", $request->address_places);
+        $route         = $request->route;
+        $street_number = $request->street_number;
         $street ='';
-        $city ='';
-        $country ='';
-        $postal ='';
-        foreach ($address as $fields)
-        {
-            $field = explode(":", $fields);
-            switch ($field[0]){
-                case 'street_number':
-                    $street = $field[1];
-                    break;
-                case 'locality':
-                    $city = $field[1];
-                    break;
-                case 'country':
-                    $country = $field[1];
-                    break;
-                case 'postal_code':
-                    $postal = $field[1];
-                    break;
-            }
-        }
+        if($route!='')
+            $street  = $route;
+        if($street !='' && $street_number!='')
+            $street .= ' '.$street_number;
+        elseif ($street_number!='')
+            $street = $street_number;
+
         $customer = new Customer();
-        $customer->customer_id = rand(1,99);
+        $customer->customer_id = rand(1,999);
         $customer->firstname = $request->firstname;
         $customer->lastname = $request->lastname;
         $customer->email = $request->email;
         $customer->phone = $request->phone;
         $customer->street = $street;
-        $customer->city = $city;
-        $customer->country = $country;
-        $customer->postal = $postal;
+        $customer->city = $request->city;
+        $customer->country = $request->country;
+        $customer->postal = $request->postal;
         $customer->payment = $request->payment;
         $customer->license_plate = $request->license;
         $customer->chassis_number = $request->chassis;
