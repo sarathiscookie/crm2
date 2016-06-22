@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title',' Create Customer')
+
 @section('style')
     <link rel="stylesheet" href="/assets/css/editor.css">
 @endsection
@@ -89,10 +91,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" id="btnCreate" class="btn btn-primary btn-lg btn-block">Save</button>
+                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Save</button>
             </div>
-            <input type="hidden" name="address_places" id="addressval">
-
+            <input type="hidden" name="street_number" id="street_number" value="{{ old('street_number') }}">
+            <input type="hidden" name="route" id="route" value="{{ old('route') }}">
+            <input type="hidden" name="city" id="locality" value="{{ old('city') }}">
+            <input type="hidden" name="country" id="country" value="{{ old('country') }}">
+            <input type="hidden" name="postal" id="postal_code" value="{{ old('postal') }}">
         </form>
     </div>
 @endsection
@@ -119,18 +124,19 @@
             autocomplete.addListener('place_changed', fillInAddress);
 
             function fillInAddress() {
+                $('#street_number').val('');
+                $('#route').val('');
+                $('#locality').val('');
+                $('#country').val('');
+                $('#postal_code').val('');
                 var place = autocomplete.getPlace();
-                var params = '';
                 for (var i = 0; i < place.address_components.length; i++) {
                     var addressType = place.address_components[i].types[0];
                     if (componentForm[addressType]) {
                         var val = place.address_components[i][componentForm[addressType]];
-                        if(params!='')
-                            params = params+'|';
-                        params += addressType+':'+val;
+                        $('#'+addressType).val(val);
                     }
                 }
-                $('#addressval').val(params);
             }
         });
 
@@ -169,6 +175,7 @@
 
         $('#btnCreate').click( function () {
             $("#txtEditor").html($("#txtEditor").Editor("getText"));
+            $("#addCustomerFrm").submit();
         })
 
         $('div.alert').delay(3000).slideUp(300);
