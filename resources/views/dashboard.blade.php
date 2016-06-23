@@ -44,7 +44,7 @@
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{key | capitalize}}<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                    <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{key.replace("_"," ") | capitalize}}<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
                     </th>
                 </tr>
                 </thead>
