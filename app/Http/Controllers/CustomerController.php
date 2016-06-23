@@ -79,7 +79,7 @@ class CustomerController extends Controller
         $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
         /* Save data in to hardware table and vehicle_hardwares */
-        $tags = explode(',', $request->vehicletitle);
+        $tags = explode(',', $request->hardwares);
 
         foreach($tags as $key) {
             $hardware          = new Hardware();

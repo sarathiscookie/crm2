@@ -32,7 +32,7 @@ class CustomerRequest extends Request
             'license'    => 'required|max:50',
             'chassis'    => 'required|max:100',
             'mileage'    => 'required|numeric',
-            'vehicletitle' => 'required|max:100',
+            'hardwares'  => 'required',
         ];
     }
 }

@@ -92,7 +92,7 @@
                     <label for="name">Vehicle Hardware</label>
                     <ul class="tag-handler form-control">
                     </ul>
-                    <input type="hidden" id="vehicletitle" name="vehicletitle" value="">
+                    <input type="hidden" id="hardwares" name="hardwares" value="">
                 </div>
             </div>
             <div class="row">
@@ -202,13 +202,13 @@
 
             onAdd: function (tag) {
                 assignedTags: [ tag ],
-                $('#vehicletitle').val(function(i,val) {
+                $('#hardwares').val(function(i,val) {
                     return val + (!val ? '' : ',') + tag;
                 });
             },
 
             afterDelete: function (tag) {
-                $("#vehicletitle").val($(".tag-handler").tagHandler("getSerializedTags"));
+                $("#hardwares").val($(".tag-handler").tagHandler("getSerializedTags"));
             }
         });
 
