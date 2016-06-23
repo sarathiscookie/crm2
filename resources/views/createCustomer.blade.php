@@ -3,6 +3,7 @@
 @section('title',' Create Customer')
 
 @section('style')
+    <link rel="stylesheet" href="/assets/css/jquery.taghandler.css">
     <link rel="stylesheet" href="/assets/css/editor.css">
 @endsection
 
@@ -89,7 +90,9 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label for="name">Vehicle Hardware</label>
-                    <input type="text" class="form-control" name="vehiclehardware" value="{{ old('vehiclehardware') }}">
+                    <ul class="tag-handler form-control">
+                    </ul>
+                    <input type="hidden" id="hardwares" name="hardwares" value="">
                 </div>
             </div>
             <div class="row">
@@ -112,9 +115,15 @@
 @endsection
 
 @push('script')
+    <script src="/assets/js/jquery.taghandler.js"></script>
     <script src="/assets/js/editor.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         //Customer Address - google places auto-complete
         $("#addCustomerFrm").ready( function () {
             var inputID = "address";
@@ -187,5 +196,21 @@
             $("#txtEditor").html($("#txtEditor").Editor("getText"));
             $("#addCustomerFrm").submit();
         });
+
+        /* Tag handler */
+        $(".tag-handler").tagHandler({
+
+            onAdd: function (tag) {
+                assignedTags: [ tag ],
+                $('#hardwares').val(function(i,val) {
+                    return val + (!val ? '' : ',') + tag;
+                });
+            },
+
+            afterDelete: function (tag) {
+                $("#hardwares").val($(".tag-handler").tagHandler("getSerializedTags"));
+            }
+        });
+
     </script>
 @endpush
