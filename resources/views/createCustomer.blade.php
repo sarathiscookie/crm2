@@ -88,6 +88,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-12">
+                    <label for="name">Vehicle Hardware</label>
+                    <input type="text" class="form-control" name="vehiclehardware" value="{{ old('vehiclehardware') }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
                     <label for="name">Freetext</label>
                     <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
                 </div>
