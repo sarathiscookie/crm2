@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\CustomerRequest;
 use Mail;
+use DB;
 
 class CustomerController extends Controller
 {
@@ -23,7 +24,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'firstname', 'lastname', 'email', 'phone', 'created_at')
+        $listCustomers    = Customer::select('id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
         return view('dashboard', compact('listCustomers'));
@@ -110,7 +111,13 @@ class CustomerController extends Controller
         $vehicle->save();
         return $vehicle->id;
     }
-    
+
+    /**
+     * Save an event based on customer_id and vehicle
+     * @param $customer_id
+     * @param $vehicle_id
+     * @param $request
+     */
     protected function saveEvent($customer_id, $vehicle_id, $request)
     {
         if($customer_id>0 && $vehicle_id>0) {
@@ -120,17 +127,20 @@ class CustomerController extends Controller
             $event->partner_id  = 1149;
             $event->title       = 'Terminvereinbarung';
             $event->freetext_external = $request->freetext;
-            $event->mileage = $request->mileage;
-            $event->tuning  = $request->tuning;
-            $event->dyno    = $request->dyno;
-            $event->payment = $request->payment;
+            $event->mileage  = $request->mileage;
+            $event->tuning   = $request->tuning;
+            $event->dyno     = $request->dyno;
+            $event->payment  = $request->payment;
             $event->begin_at = Carbon::now();
             $event->save();
         }
-
-
     }
 
+    /**
+     * Save to customer_vehicle
+     * @param $customer_id
+     * @param $vehicle_id
+     */
     protected function saveCustomerVehicle($customer_id, $vehicle_id)
     {
         $cust_vehicle = new Customervehicle();
