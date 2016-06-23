@@ -33,11 +33,6 @@ Route::group(['middleware' => 'web'], function () {
 
     /* List customers */
     Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
-
-    Route::get('/tag/submit', ['as' => 'tagsubmit', 'uses' => 'CustomerController@tagsubmit']);
-
-
-
 });
 /*Route::auth();
 

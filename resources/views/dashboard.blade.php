@@ -66,7 +66,6 @@
                     <label for="query">Search </label>
                     <input name="query" class="form-control" v-model="searchQuery">
                 </form>
-                {{--<input v-model="filterData" placeholder="Filter by..." type="text" class="form-control" autocomplete="off">--}}
             </div>
             <br>
             <customer-grid  :customers="{{$listCustomers}}"  :columns="gridColumns"  :filter-key="searchQuery"></customer-grid>
