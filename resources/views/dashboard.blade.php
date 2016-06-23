@@ -55,15 +55,16 @@
                     <td>@{{customer.lastname}}</td>
                     <td>@{{customer.email}}</td>
                     <td>@{{customer.phone}}</td>
-                    <td>@{{customer.created_at}}</td>
+                    <td>@{{customer.created_on}}</td>
                 </tr>
                 </tbody>
             </table>
         </template>
         <div id="app">
             <div class="form-group col-md-4">
-                <form id="search">
-                    Search <input name="query" v-model="searchQuery">
+                <form id="search" class="form-inline">
+                    <label for="query">Search </label>
+                    <input name="query" class="form-control" v-model="searchQuery">
                 </form>
                 {{--<input v-model="filterData" placeholder="Filter by..." type="text" class="form-control" autocomplete="off">--}}
             </div>
@@ -109,7 +110,7 @@
         el: '#app',
         data: {
             searchQuery: '',
-            gridColumns: ['firstname', 'lastname', 'email', 'phone', 'created_at'],
+            gridColumns: ['firstname', 'lastname', 'email', 'phone', 'created_on'],
             gridData: null
         },
 
