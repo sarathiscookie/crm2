@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Hardware;
+use App\Vehiclehardware;
 use App\Customervehicle;
 use App\Event;
 use App\Vehicle;
@@ -41,6 +43,7 @@ class CustomerController extends Controller
      */
     public function save(CustomerRequest $request)
     {
+
         $route         = $request->route;
         $street_number = $request->street_number;
         $street ='';
@@ -73,12 +76,24 @@ class CustomerController extends Controller
         $vehicle_id = $this->saveVehicle($request);
         $this->saveEvent($customer_id, $vehicle_id, $request);
         $this->saveCustomerVehicle($customer_id, $vehicle_id);
+
+        /* Save data in to hardware table and vehicle_hardwares */
+        $tags = explode(',', $request->vehicletitle);
+
+        foreach($tags as $key) {
+            $hardware          = new Hardware();
+            $hardware->user_id = 0;
+            $hardware->title   = $key;
+            $hardware->status  = 'online';
+            $hardware->save();
+
+            $vehicleHardware              = new Vehiclehardware();
+            $vehicleHardware->vehicle_id  = $vehicle_id;
+            $vehicleHardware->hardware_id = $hardware->id;
+            $vehicleHardware->save();
+        }
+
         return redirect(url('/'))/*->with('status','Created successfully')*/;
-    }
-
-    public function show()
-    {
-
     }
 
 
