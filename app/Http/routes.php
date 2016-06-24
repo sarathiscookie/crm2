@@ -21,6 +21,11 @@ Route::get('/customer/create', 'CustomerController@create');
 /* Store customers */
 Route::post('/customer/save', 'CustomerController@save');
 
+/*Search */
+Route::get('/search', 'SearchController@search');
+
+
+
 Route::group(['middleware' => 'web'], function () {
 
     /*

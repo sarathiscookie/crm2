@@ -24,22 +24,14 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
+                <div class="form-group navbar-form navbar-right" role="search">
+                    <input type="text" id="searchkey" class="form-control" placeholder="Search">
+                    <img src="/assets/img/loading.gif" class="media-middle srch-loader invisible" width="24px" alt="loading" >
+                    <div style="margin-top: -1px;position: absolute; z-index: 100; background: #f8f8f8; padding: 30px; display: none;" id="navSrchBox" class="table-bordered col-md-3"></div>
+                </div>
                 <!-- Authentication Links -->
-                @if (Auth::guest())
                     <li><a href="{{ url('/customer/create') }}">Create Customer</a></li>
-                    {{--<li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>--}}
-                @else
-                    {{--<li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                        </ul>
-                    </li>--}}
-                @endif
             </ul>
         </div>
     </div>
