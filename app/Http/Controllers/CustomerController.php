@@ -24,7 +24,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
         return view('dashboard', compact('listCustomers'));
@@ -147,6 +147,109 @@ class CustomerController extends Controller
         $cust_vehicle->customer_id =$customer_id;
         $cust_vehicle->vehicle_id =$vehicle_id;
         $cust_vehicle->save();
+    }
+
+
+    public function showDetails($id)
+    {
+        $customer = Customer::find($id);
+        $events   = $this->getCustomerEvents($id);
+        $cars     = $this->getCustomerVehicles($id);
+
+
+
+        return view('customerDetails', ['customer' => $customer, 'events' => $events]);
+    }
+
+
+    protected function getCustomerEvents($customer_id)
+    {
+        $customer_events = Event::where('customer_id', $customer_id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $events ='';
+        $i=1;
+        foreach($customer_events as $event) {
+            if ($i == 1) {
+                $collapse = "in";
+                $a_class = '';
+                $expanded = "true";
+            } else {
+                $collapse = "";
+                $a_class = 'class="collapsed"';
+                $expanded = "false";
+            }
+            $events .= '<div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+                        <h4 class="panel-title">
+                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
+                                <h4>' . $event->title . '</h4>
+                                <p><small>' . date('m.d.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
+                        <div class="panel-body">
+                             <div>Vechicle: '.$event->vehicle_id.'</div>
+                             <div>Mileage: '.$event->mileage.'</div>
+                             <div>Tuning: '.$event->tuning.'</div>
+                             <div>Dyno: '.$event->dyno.'</div>
+                             <div>Payment: '.$event->payment.'</div>
+                            ' . $event->freetext_external . '
+                        </div>
+                    </div>
+                </div>';
+            $i++;
+        }
+
+        return $events;
+    }
+
+    protected function getCustomerVehicles($customer_id)
+    {
+        $customer_events = Customervehicle::select('vehicles.*')
+            ->where('customer_id', $customer_id)
+            ->join('vehicles', 'vehicles.id', '=', 'customer_vehicles.vehicle_id')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $events ='';
+        $i=1;
+        foreach($customer_events as $event) {
+            if ($i == 1) {
+                $collapse = "in";
+                $a_class = '';
+                $expanded = "true";
+            } else {
+                $collapse = "";
+                $a_class = 'class="collapsed"';
+                $expanded = "false";
+            }
+            $events .= '<div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+                        <h4 class="panel-title">
+                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
+                                <h4>' . $event->title . '</h4>
+                                <p><small>' . date('m.d.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
+                        <div class="panel-body">
+                             <div>Vechicle: '.$event->vehicle_id.'</div>
+                             <div>Mileage: '.$event->mileage.'</div>
+                             <div>Tuning: '.$event->tuning.'</div>
+                             <div>Dyno: '.$event->dyno.'</div>
+                             <div>Payment: '.$event->payment.'</div>
+                            ' . $event->freetext_external . '
+                        </div>
+                    </div>
+                </div>';
+            $i++;
+        }
+
+        return $events;
     }
 
 }

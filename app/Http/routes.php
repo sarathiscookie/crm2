@@ -24,6 +24,9 @@ Route::post('/customer/save', 'CustomerController@save');
 /*Search */
 Route::get('/search', 'SearchController@search');
 
+/*Cutomer Details */
+Route::get('/customer/details/{id}', 'CustomerController@showDetails')->where(['id' => '[0-9]+']);
+
 
 
 Route::group(['middleware' => 'web'], function () {

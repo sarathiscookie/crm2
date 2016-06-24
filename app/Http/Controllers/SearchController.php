@@ -49,13 +49,13 @@ class SearchController extends Controller
             ->orderBy('firstname')
             ->get();
         if(count($customers)>0) {
-            $result_customer = '<ul class="list-group"><li class="list-unstyled"><h5 class="list-group-item-heading">CUSTOMERS ('.count($customers).')</h5></li>';
+            $result_customer = '<div class="list-group"><h5 class="list-group-item-heading">CUSTOMERS ('.count($customers).')</h5>';
             foreach ($customers as $customer) {
-                $result_customer .= '<li class="list-group-item">
+                $result_customer .= '<a href="'.url('/customer/details/'.$customer->id).'" class="list-group-item">
 '.title_case($customer->firstname).' '.title_case($customer->lastname).'
-</li>';
+</a>';
             }
-            $result_customer .='</ul>';
+            $result_customer .='</div>';
         }
         return  $result_customer;
     }

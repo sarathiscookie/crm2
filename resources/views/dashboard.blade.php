@@ -43,16 +43,15 @@
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th>Id</th>
                     <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{ heading[key] }} <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(index, customer) in customers | filterBy filterKey | orderBy sortKey sortOrders[sortKey]">
-                    <td>@{{ index + 1 }}</td>
+                    <td>@{{ customer.erp_id }}</td>
                     <td>@{{customer.firstname}}</td>
-                    <td>@{{customer.lastname}}</td>
+                    <td><a href="{{ url('/customer/details/') }}/@{{ customer.id }}">@{{customer.lastname}}</a></td>
                     <td>@{{customer.email}}</td>
                     <td>@{{customer.phone}}</td>
                     <td>@{{customer.created_on}}</td>
@@ -112,9 +111,9 @@
         el: '#app',
         data: {
             searchQuery: '',
-            gridColumns: ['firstname', 'lastname', 'email', 'phone', 'created_on'],
+            gridColumns: ['erp_id', 'firstname', 'lastname', 'email', 'phone', 'created_on'],
             gridData: null,
-            colTitles: {'firstname':'First Name', 'lastname':'Last Name', 'email':'Email', 'phone':'Phone', 'created_on':'Created At'}
+            colTitles: {'erp_id':'Erp ID', 'firstname':'First Name', 'lastname':'Last Name', 'email':'Email', 'phone':'Phone', 'created_on':'Created At'}
         },
 
         created: function() {
