@@ -27,6 +27,13 @@
 
             </div>
         </div>
-        <div class="col-md-6"><h2>Customer Cars</h2></div>
+        <div class="col-md-6">
+            <h2>Customer Cars <button class="btn btn-primary pull-right">Add Car  <span class="badge"><i class="fa fa-plus"></i></span></button></h2>
+            <div class="panel-group" id="accordionVehicle" role="tablist" aria-multiselectable="true">
+
+                {!! $vehicles !!}
+
+            </div>
+        </div>
     </div>
 @endsection

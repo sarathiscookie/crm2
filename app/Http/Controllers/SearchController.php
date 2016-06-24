@@ -47,6 +47,7 @@ class SearchController extends Controller
                     ->orWhere('V.license_plate', 'LIKE', '%'.$keyword.'%');
             })
             ->orderBy('firstname')
+            ->groupBy('customers.id')
             ->get();
         if(count($customers)>0) {
             $result_customer = '<div class="list-group"><h5 class="list-group-item-heading">CUSTOMERS ('.count($customers).')</h5>';

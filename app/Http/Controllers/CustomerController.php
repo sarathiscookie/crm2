@@ -154,11 +154,11 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $events   = $this->getCustomerEvents($id);
-        $cars     = $this->getCustomerVehicles($id);
+        $vehicles     = $this->getCustomerVehicles($id);
 
 
 
-        return view('customerDetails', ['customer' => $customer, 'events' => $events]);
+        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles]);
     }
 
 
@@ -208,7 +208,7 @@ class CustomerController extends Controller
 
     protected function getCustomerVehicles($customer_id)
     {
-        $customer_events = Customervehicle::select('vehicles.*')
+        $customer_vehicle = Customervehicle::select('vehicles.*')
             ->where('customer_id', $customer_id)
             ->join('vehicles', 'vehicles.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
@@ -216,7 +216,7 @@ class CustomerController extends Controller
 
         $events ='';
         $i=1;
-        foreach($customer_events as $event) {
+        foreach($customer_vehicle as $vehicle) {
             if ($i == 1) {
                 $collapse = "in";
                 $a_class = '';
@@ -227,22 +227,19 @@ class CustomerController extends Controller
                 $expanded = "false";
             }
             $events .= '<div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+                    <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
                         <h4 class="panel-title">
-                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $event->title . '</h4>
-                                <p><small>' . date('m.d.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
+                                <h4>Vehicle - ' . $vehicle->id . '</h4>
                             </a>
                         </h4>
                     </div>
-                    <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
+                    <div id="collapseV' . $vehicle->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
                         <div class="panel-body">
-                             <div>Vechicle: '.$event->vehicle_id.'</div>
-                             <div>Mileage: '.$event->mileage.'</div>
-                             <div>Tuning: '.$event->tuning.'</div>
-                             <div>Dyno: '.$event->dyno.'</div>
-                             <div>Payment: '.$event->payment.'</div>
-                            ' . $event->freetext_external . '
+                             <div>Vechicle: '.$vehicle->id.'</div>
+                             <div>License Plate: '.$vehicle->mileage.'</div>
+                             <div>Chassis Number: '.$vehicle->tuning.'</div>
+                             <div>Created On: ' . date('m.d.Y H:i', strtotime($vehicle->created_at)).'</div>
                         </div>
                     </div>
                 </div>';
