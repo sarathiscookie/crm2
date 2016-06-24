@@ -199,18 +199,19 @@
 
         /* Tag handler */
         $(".tag-handler").tagHandler({
-
+            getURL: '/tag/hardware',
+            autocomplete: true,
+            initLoad: false,
+            autoUpdate: true,
             onAdd: function (tag) {
                 assignedTags: [ tag ],
-                $('#hardwares').val(function(i,val) {
-                    return val + (!val ? '' : ',') + tag;
-                });
+                        $('#hardwares').val(function(i,val) {
+                            return val + (!val ? '' : ',') + tag;
+                        });
             },
-
             afterDelete: function (tag) {
                 $("#hardwares").val($(".tag-handler").tagHandler("getSerializedTags"));
             }
         });
-
     </script>
 @endpush

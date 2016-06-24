@@ -11,6 +11,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
 {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <!-- Fonts -->
@@ -38,7 +39,7 @@
 
 <!-- JavaScripts -->
 <script src="/assets/js/jquery.min.js"></script>
-
+<script src="/assets/js/jquery-ui.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="/assets/js/bootstrap.min.js"></script>
 
