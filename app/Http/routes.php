@@ -42,11 +42,11 @@ Route::group(['middleware' => 'web'], function () {
     /* List customers */
     Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
 
-    Route::get('/tag/submit', ['as' => 'tagsubmit', 'uses' => 'CustomerController@tagsubmit']);
-
-
-
+    /* Hardware tag Listout */
+    Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerController@getHardwareTag']);
 });
+
+
 /*Route::auth();
 
 Route::get('/home', 'HomeController@index');*/

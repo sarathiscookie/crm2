@@ -82,16 +82,31 @@ class CustomerController extends Controller
         $tags = explode(',', $request->hardwares);
 
         foreach($tags as $key) {
-            $hardware          = new Hardware();
-            $hardware->user_id = 0;
-            $hardware->title   = $key;
-            $hardware->status  = 'online';
-            $hardware->save();
 
-            $vehicleHardware              = new Vehiclehardware();
-            $vehicleHardware->vehicle_id  = $vehicle_id;
-            $vehicleHardware->hardware_id = $hardware->id;
-            $vehicleHardware->save();
+            $selectHardwareTitle = Hardware::where('title', $key)
+                ->select('id', 'title')
+                ->first();
+
+            if(count($selectHardwareTitle) > 0){
+                if($selectHardwareTitle->title == $key){
+                    $vehicleHardware              = new Vehiclehardware();
+                    $vehicleHardware->vehicle_id  = $vehicle_id;
+                    $vehicleHardware->hardware_id = $selectHardwareTitle->id;
+                    $vehicleHardware->save();
+                }
+            }
+            else{
+                $hardware          = new Hardware();
+                $hardware->user_id = 0;
+                $hardware->title   = $key;
+                $hardware->status  = 'online';
+                $hardware->save();
+
+                $vehicleHardware              = new Vehiclehardware();
+                $vehicleHardware->vehicle_id  = $vehicle_id;
+                $vehicleHardware->hardware_id = $hardware->id;
+                $vehicleHardware->save();
+            }
         }
 
         return redirect(url('/'))/*->with('status','Created successfully')*/;
@@ -249,4 +264,19 @@ class CustomerController extends Controller
         return $events;
     }
 
+    /**
+     * Get to hardware
+     */
+    public function getHardwareTag()
+    {
+        $hardwareTagstitles = Hardware::where('status', 'online')
+            ->select('title')
+            ->get();
+        $hardwareTagsresult   = array();
+        foreach ($hardwareTagstitles as $hardwareTagstitle)
+        {
+            $hardwareTagsresult[] = $hardwareTagstitle->title;
+        }
+        return response()->json(['availableTags' => $hardwareTagsresult, 'assignedTags' => $hardwareTagsresult]);
+    }
 }
