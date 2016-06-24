@@ -44,7 +44,7 @@
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{key.replace("_"," ") | capitalize}}<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                    <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{ heading[key] }} <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
                     </th>
                 </tr>
                 </thead>
@@ -69,7 +69,7 @@
                 {{--<input v-model="filterData" placeholder="Filter by..." type="text" class="form-control" autocomplete="off">--}}
             </div>
             <br>
-            <customer-grid  :customers="{{$listCustomers}}"  :columns="gridColumns"  :filter-key="searchQuery"></customer-grid>
+            <customer-grid  :customers="{{$listCustomers}}"  :columns="gridColumns" :heading="colTitles"  :filter-key="searchQuery"></customer-grid>
         </div>
     </div>
 </div>
@@ -85,8 +85,10 @@
         props: {
             customers: Array,
             columns: Array,
-            filterKey: String
+            filterKey: String,
+            heading:Object
         },
+
         data: function () {
             var sortOrders = {}
             this.columns.forEach(function (key) {
@@ -111,7 +113,8 @@
         data: {
             searchQuery: '',
             gridColumns: ['firstname', 'lastname', 'email', 'phone', 'created_on'],
-            gridData: null
+            gridData: null,
+            colTitles: {'firstname':'First Name', 'lastname':'Last Name', 'email':'Email', 'phone':'Phone', 'created_on':'Created At'}
         },
 
         created: function() {
