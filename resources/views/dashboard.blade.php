@@ -38,7 +38,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <h1 class="page-header">Customers List</h1>
+        <h1 class="page-header">Kunden-Übersicht</h1>
         <template id="grid-template">
             <table class="table table-hover table-bordered">
                 <thead>
@@ -62,7 +62,7 @@
         <div id="app">
             <div class="form-group col-md-4">
                 <form id="search" class="form-inline">
-                    <label for="query">Search </label>
+                    <label for="query">Suche </label>
                     <input name="query" class="form-control" v-model="searchQuery">
                 </form>
             </div>
@@ -112,7 +112,7 @@
             searchQuery: '',
             gridColumns: ['erp_id', 'firstname', 'lastname', 'email', 'phone', 'created_on'],
             gridData: null,
-            colTitles: {'erp_id':'Erp ID', 'firstname':'First Name', 'lastname':'Last Name', 'email':'Email', 'phone':'Phone', 'created_on':'Created At'}
+            colTitles: {'erp_id':'KundenNr.', 'firstname':'Vorname', 'lastname':'Nachname', 'email':'E-Mail', 'phone':'Telefon', 'created_on':'Hinzugefügt am'}
         },
 
         created: function() {

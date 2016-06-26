@@ -140,7 +140,7 @@ class CustomerController extends Controller
             $event->customer_id = $customer_id;
             $event->vehicle_id  = $vehicle_id;
             $event->partner_id  = 1149;
-            $event->title       = 'Terminvereinbarung';
+            $event->title       = 'Erst-Termin';
             $event->freetext_external = $request->freetext;
             $event->mileage  = $request->mileage;
             $event->tuning   = $request->tuning;
@@ -206,11 +206,13 @@ class CustomerController extends Controller
                     </div>
                     <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
                         <div class="panel-body">
-                             <div>Vechicle: '.$event->vehicle_id.'</div>
-                             <div>Mileage: '.$event->mileage.'</div>
-                             <div>Tuning: '.$event->tuning.'</div>
-                             <div>Dyno: '.$event->dyno.'</div>
-                             <div>Payment: '.$event->payment.'</div>
+                             <div>Fahrzeug: '.$event->vehicle_id.'</div>
+                             <div>Tuning-Stufe: '.$event->stage.'</div>
+                             <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
+                             <div>Bereits getunt: '.$event->tuning.'</div>
+                             <div>Prüfstandslauf: '.$event->dyno.'</div>
+                             <div>Zahlungsart: '.$event->payment.'</div><br>
+                             <strong>Weitere Details:</strong><br>
                             ' . $event->freetext_external . '
                         </div>
                     </div>
@@ -245,16 +247,15 @@ class CustomerController extends Controller
                     <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
                         <h4 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
-                                <h4>Vehicle - ' . $vehicle->id . '</h4>
+                                <h4>' . $vehicle->id . '</h4>
                             </a>
                         </h4>
                     </div>
                     <div id="collapseV' . $vehicle->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
                         <div class="panel-body">
-                             <div>Vechicle: '.$vehicle->id.'</div>
-                             <div>License Plate: '.$vehicle->mileage.'</div>
-                             <div>Chassis Number: '.$vehicle->tuning.'</div>
-                             <div>Created On: ' . date('m.d.Y H:i', strtotime($vehicle->created_at)).'</div>
+                             <div>Kennzeichen: '.$vehicle->license_plate.'</div>
+                             <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                             <br><div><small>Hinzugefügt am ' . date('m.d.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                         </div>
                     </div>
                 </div>';

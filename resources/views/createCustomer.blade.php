@@ -8,8 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        <h1 class="page-header">Create Customer</h1>
+        <h1 class="page-header">Kunden hinzufügen</h1>
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -23,73 +22,73 @@
             {{ csrf_field() }}
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="name">Company</label>
+                    <label for="name">Firma</label>
                     <input type="text" class="form-control" name="company" value="{{ old('company') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">First name</label>
+                    <label for="name">Vorname</label>
                     <input type="text" class="form-control" name="firstname" value="{{ old('firstname') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Last name</label>
+                    <label for="name">Nachname</label>
                     <input type="text" class="form-control" name="lastname" value="{{ old('lastname') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Email</label>
+                    <label for="name">E-Mail Adresse</label>
                     <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Address</label>
+                    <label for="name">Adresse</label>
                     <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Phone</label>
+                    <label for="name">Telefon</label>
                     <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="payment">Payment</label><br />
-                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Credit card</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="bank">Bank</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">Paypal</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Cash</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Invoice</label>
+                    <label for="payment">Zahlungsweise</label><br />
+                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Barzahlung</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="bank">EC-Karte</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Kreditkarte</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">PayPal</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Rechnung</label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">License Plate</label>
+                    <label for="name">KFZ-Kennzeichen</label>
                     <input type="text" class="form-control" name="license" value="{{ old('license') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Chassis number</label>
+                    <label for="name">Fahrgestellnummer</label>
                     <input type="text" class="form-control" name="chassis" value="{{ old('chassis') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Mileage</label>
+                    <label for="name">Kilometerstand</label>
                     <input type="text" class="form-control" name="mileage" value="{{ old('mileage') }}">
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="tuning">Tuning</label><br />
-                    <label class="radio-inline"><input type="radio" name="tuning" value="yes">Yes</label>
-                    <label class="radio-inline"><input type="radio" name="tuning" value="no" checked="checked">No</label>
+                    <label for="tuning">Tuning bereits vorhanden?</label><br />
+                    <label class="radio-inline"><input type="radio" name="tuning" value="yes">Ja</label>
+                    <label class="radio-inline"><input type="radio" name="tuning" value="no" checked="checked">Nein</label>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="dyno" >Dyno</label><br />
-                    <label class="radio-inline"><input type="radio" name="dyno" value="yes">Yes</label>
-                    <label class="radio-inline"><input type="radio" name="dyno" value="no" checked="checked">No</label>
+                    <label for="dyno" >Prüfstandslauf</label><br />
+                    <label class="radio-inline"><input type="radio" name="dyno" value="yes">Ja</label>
+                    <label class="radio-inline"><input type="radio" name="dyno" value="no" checked="checked">Nein</label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="name">Vehicle Hardware</label>
+                    <label for="name">Bereits verbaute Komponenten</label>
                     <ul class="tag-handler form-control">
                     </ul>
                     <input type="hidden" id="hardwares" name="hardwares" value="">
@@ -97,12 +96,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="name">Freetext</label>
+                    <label for="name">Zusatzinformationen</label>
                     <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Save</button>
+                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Kunde & Termin anlegen</button>
             </div>
             <input type="hidden" name="street_number" id="street_number" value="{{ old('street_number') }}">
             <input type="hidden" name="route" id="route" value="{{ old('route') }}">
@@ -111,7 +110,6 @@
             <input type="hidden" name="country" id="country" value="{{ old('country') }}">
             <input type="hidden" name="postal" id="postal_code" value="{{ old('postal') }}">
         </form>
-    </div>
 @endsection
 
 @push('script')

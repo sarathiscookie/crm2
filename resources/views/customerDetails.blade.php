@@ -4,23 +4,21 @@
 
 @section('content')
 
+    <h1 class="page-header">Kunden-Details</h1>
     <div class="row">
-        <h1 class="page-header">Customer Details</h1>
         <div class="col-md-6">
-            <h2>Customer {{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }}</h2>
-            @if($customer->company)<label>{{ title_case($customer->company) }}</label>@endif <br>
-            <label>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }} </label>
+            <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }}</h2>
+            @if($customer->company)<label>{{ $customer->company }}</label>@endif <br>
             <address>
-                @if($customer->steet){{ $customer->steet }}, @endif
-                    {{ $customer->city }},
-                    @if($customer->state){{ $customer->state }}, @endif
+                @if($customer->street){{ $customer->street }}@endif<br>
+                    @if($customer->postal){{ $customer->postal }}@endif {{ $customer->city }}<br>
                     {{ $customer->country }}
-                    @if($customer->postal) - {{ $customer->postal }}@endif
+
             </address>
-            <label>{{ $customer->email }} </label>
-            <label>{{ $customer->phone }} </label>
+            <label>E-Mail: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br>
+            <label>Telefon: {{ $customer->phone }} </label>
             <hr>
-            <h3>Meetings</h3>
+            <h3>Termine</h3>
             <div class="panel-group" id="accordionEvent" role="tablist" aria-multiselectable="true">
 
                 {!! $events !!}
@@ -28,7 +26,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h2>Customer Cars <button class="btn btn-primary pull-right">Add Car  <span class="badge"><i class="fa fa-plus"></i></span></button></h2>
+            <h2>Fahrzeuge <button class="btn btn-primary pull-right">Neues Fahrzeug hinzufügen</button></h2>
             <div class="panel-group" id="accordionVehicle" role="tablist" aria-multiselectable="true">
 
                 {!! $vehicles !!}
