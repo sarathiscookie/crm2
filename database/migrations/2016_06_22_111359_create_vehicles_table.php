@@ -21,6 +21,7 @@ class CreateVehiclesTable extends Migration
             $table->string('chassis_number', 100)->nullable();
             $table->string('license_plate', 50);
             $table->text('freetext');
+            $table->timestamps();
         });
     }
 

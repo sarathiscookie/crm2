@@ -38,21 +38,20 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <h1 class="page-header">Customers List</h1>
+        <h1 class="page-header">Kunden-Übersicht</h1>
         <template id="grid-template">
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th>Id</th>
-                    <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{key.replace("_"," ") | capitalize}}<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                    <th v-for="key in columns" @click="sortBy(key)" :class="{active: sortKey == key}">@{{ heading[key] }} <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(index, customer) in customers | filterBy filterKey | orderBy sortKey sortOrders[sortKey]">
-                    <td>@{{ index + 1 }}</td>
+                    <td>@{{ customer.erp_id }}</td>
                     <td>@{{customer.firstname}}</td>
-                    <td>@{{customer.lastname}}</td>
+                    <td><a href="{{ url('/customer/details/') }}/@{{ customer.id }}">@{{customer.lastname}}</a></td>
                     <td>@{{customer.email}}</td>
                     <td>@{{customer.phone}}</td>
                     <td>@{{customer.created_on}}</td>
@@ -63,12 +62,12 @@
         <div id="app">
             <div class="form-group col-md-4">
                 <form id="search" class="form-inline">
-                    <label for="query">Search </label>
+                    <label for="query">Suche </label>
                     <input name="query" class="form-control" v-model="searchQuery">
                 </form>
             </div>
             <br>
-            <customer-grid  :customers="{{$listCustomers}}"  :columns="gridColumns"  :filter-key="searchQuery"></customer-grid>
+            <customer-grid  :customers="{{$listCustomers}}"  :columns="gridColumns" :heading="colTitles"  :filter-key="searchQuery"></customer-grid>
         </div>
     </div>
 </div>
@@ -84,8 +83,10 @@
         props: {
             customers: Array,
             columns: Array,
-            filterKey: String
+            filterKey: String,
+            heading:Object
         },
+
         data: function () {
             var sortOrders = {}
             this.columns.forEach(function (key) {
@@ -109,8 +110,9 @@
         el: '#app',
         data: {
             searchQuery: '',
-            gridColumns: ['firstname', 'lastname', 'email', 'phone', 'created_on'],
-            gridData: null
+            gridColumns: ['erp_id', 'firstname', 'lastname', 'email', 'phone', 'created_on'],
+            gridData: null,
+            colTitles: {'erp_id':'KundenNr.', 'firstname':'Vorname', 'lastname':'Nachname', 'email':'E-Mail', 'phone':'Telefon', 'created_on':'Hinzugefügt am'}
         },
 
         created: function() {

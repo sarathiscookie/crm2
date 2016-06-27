@@ -28,6 +28,10 @@
         .fa-btn {
             margin-right: 6px;
         }
+
+        .navbar a {
+            color: #FFF !important;
+        }
     </style>
 </head>
 <body id="app-layout">
@@ -45,7 +49,49 @@
 
 {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>--}}
 {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+<script>
+    //Header Nav bar Search
+    $('#searchkey').keyup( function () {
+        var val = $(this).val();
+        if (val.length >= 2) {
+            $('.srch-loader').toggleClass('invisible');
+            $.get("/search", {key: val})
+                    .done(function (data) {
+                        if (data.result != '') {
+                            $('.srch-loader').toggleClass('invisible');
+                            $('#navSrchBox').html(data.result).show();
+                        }
+                        else {
+                            $('.srch-loader').toggleClass('invisible');
+                            $('#navSrchBox').html('<div class="alert alert-danger" role=alert><span>No results</span></div>').show();
+                        }
+                    });
+        }
+        else {
+            $("#navSrchBox").hide();
+            $("#navSrchBox").html('');
+        }
+    });
 
+    //Toggle search results when clicking inside input holds previous keyword
+    $('#searchkey').click( function () {
+        if($("#navSrchBox").html()!='' && $("#navSrchBox").css('display') == 'none')
+        {
+            $('#navSrchBox').show();
+        }
+    });
+
+    //Toggle search container display on page click
+    $(document).mouseup(function (e)
+    {
+        var container = $("#navSrchBox");
+        // if the target of the click isn't the container...nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0)
+        {
+            container.hide();
+        }
+    });
+</script>
 @stack('script')
 </body>
 </html>

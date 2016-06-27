@@ -8,5 +8,4 @@ class Vehicle extends Model
 {
     protected $table ='vehicles';
     protected $guarded = ['id'];
-    public $timestamps = false;
 }

@@ -24,7 +24,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
         return view('dashboard', compact('listCustomers'));
@@ -141,7 +141,7 @@ class CustomerController extends Controller
             $event->customer_id = $customer_id;
             $event->vehicle_id  = $vehicle_id;
             $event->partner_id  = 1149;
-            $event->title       = 'Terminvereinbarung';
+            $event->title       = 'Erst-Termin';
             $event->freetext_external = $request->freetext;
             $event->stage    = $request->stage;
             $event->mileage  = $request->mileage;
@@ -164,6 +164,107 @@ class CustomerController extends Controller
         $cust_vehicle->customer_id =$customer_id;
         $cust_vehicle->vehicle_id =$vehicle_id;
         $cust_vehicle->save();
+    }
+
+
+    public function showDetails($id)
+    {
+        $customer = Customer::find($id);
+        $events   = $this->getCustomerEvents($id);
+        $vehicles     = $this->getCustomerVehicles($id);
+
+
+
+        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles]);
+    }
+
+
+    protected function getCustomerEvents($customer_id)
+    {
+        $customer_events = Event::where('customer_id', $customer_id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $events ='';
+        $i=1;
+        foreach($customer_events as $event) {
+            if ($i == 1) {
+                $collapse = "in";
+                $a_class = '';
+                $expanded = "true";
+            } else {
+                $collapse = "";
+                $a_class = 'class="collapsed"';
+                $expanded = "false";
+            }
+            $events .= '<div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+                        <h4 class="panel-title">
+                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
+                                <h4>' . $event->title . '</h4>
+                                <p><small>' . date('m.d.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
+                        <div class="panel-body">
+                             <div>Fahrzeug: '.$event->vehicle_id.'</div>
+                             <div>Tuning-Stufe: '.$event->stage.'</div>
+                             <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
+                             <div>Bereits getunt: '.$event->tuning.'</div>
+                             <div>Prüfstandslauf: '.$event->dyno.'</div>
+                             <div>Zahlungsart: '.$event->payment.'</div><br>
+                             <strong>Weitere Details:</strong><br>
+                            ' . $event->freetext_external . '
+                        </div>
+                    </div>
+                </div>';
+            $i++;
+        }
+
+        return $events;
+    }
+
+    protected function getCustomerVehicles($customer_id)
+    {
+        $customer_vehicle = Customervehicle::select('vehicles.*')
+            ->where('customer_id', $customer_id)
+            ->join('vehicles', 'vehicles.id', '=', 'customer_vehicles.vehicle_id')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $events ='';
+        $i=1;
+        foreach($customer_vehicle as $vehicle) {
+            if ($i == 1) {
+                $collapse = "in";
+                $a_class = '';
+                $expanded = "true";
+            } else {
+                $collapse = "";
+                $a_class = 'class="collapsed"';
+                $expanded = "false";
+            }
+            $events .= '<div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
+                        <h4 class="panel-title">
+                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
+                                <h4>' . $vehicle->id . '</h4>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseV' . $vehicle->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
+                        <div class="panel-body">
+                             <div>Kennzeichen: '.$vehicle->license_plate.'</div>
+                             <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                             <br><div><small>Hinzugefügt am ' . date('m.d.Y H:i', strtotime($vehicle->created_at)).'</small></div>
+                        </div>
+                    </div>
+                </div>';
+            $i++;
+        }
+
+        return $events;
     }
 
     /**
