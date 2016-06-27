@@ -30,7 +30,7 @@
                 <!-- Authentication Links -->
                     <li><a href="{{ url('/customer/create') }}">Kunden hinzufügen</a></li>
                     <li><a href="{{ url('/event/create') }}">Termin hinzufügen</a></li>
-
+                    <li><a href="{{ url('/services') }}">Services</a></li>
             </ul>
         </div>
     </div>

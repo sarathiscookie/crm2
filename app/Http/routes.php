@@ -29,25 +29,36 @@ Route::get('/customer/details/{id}', 'CustomerController@showDetails')->where(['
 
 
 
-Route::group(['middleware' => 'web'], function () {
+/*
+ |--------------------------------------------------------------------------
+ | Routes for customers
+ |--------------------------------------------------------------------------
+ |
+ | Create form, List, Store
+*/
 
-    /*
-     |--------------------------------------------------------------------------
-     | Routes for customers
-     |--------------------------------------------------------------------------
-     |
-     | Create form, List, Store
-    */
+/* List customers */
+Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
 
-    /* List customers */
-    Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
+/* Hardware tag Listout */
+Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerController@getHardwareTag']);
 
-    /* Hardware tag Listout */
-    Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerController@getHardwareTag']);
+/* Search vehicles */
+Route::post('/search/vehicle', ['as' => 'searchVehicle', 'uses' => 'CustomerController@searchVehicle']);
 
-    /* Search vehicles */
-    Route::post('/search/vehicle', ['as' => 'searchVehicle', 'uses' => 'CustomerController@searchVehicle']);
-});
+
+/*
+ |--------------------------------------------------------------------------
+ | Routes for services
+ |--------------------------------------------------------------------------
+ |
+ | Create form, List, Store
+*/
+/* List services */
+Route::get('/services', ['as' => 'listServices', 'uses' => 'ServicesController@index']);
+
+/* Store services */
+Route::post('/services/save', ['as' => 'storeServices', 'uses' => 'ServicesController@store']);
 
 
 /*Route::auth();
