@@ -236,20 +236,35 @@ class CustomerController extends Controller
         $events ='';
         $i=1;
         foreach($customer_vehicle as $vehicle) {
-            if ($i == 1) {
-                $collapse = "in";
-                $a_class = '';
-                $expanded = "true";
-            } else {
-                $collapse = "";
-                $a_class = 'class="collapsed"';
-                $expanded = "false";
-            }
-            $events .= '<div class="panel panel-default">
+
+            $vehicle_informations = DB::connection('fes')
+                ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+										(select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+										(SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+									FROM mainpage.ausfuehrung_view_neu av
+									WHERE av.id = '$vehicle->execution_id'");
+
+            foreach($vehicle_informations as $vehicle_information){
+                if ($vehicle_information->motor_power)
+                    $power = $vehicle_information->motor_power;
+                else
+                    $power = $vehicle_information->ps_from_dimsport_kw;
+
+                if ($i == 1) {
+                    $collapse = "in";
+                    $a_class = '';
+                    $expanded = "true";
+                } else {
+                    $collapse = "";
+                    $a_class = 'class="collapsed"';
+                    $expanded = "false";
+                }
+                $events .= '<div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
                         <h4 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $vehicle->id . '</h4>
+                                <h4>' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '</h4>
                             </a>
                         </h4>
                     </div>
@@ -261,6 +276,7 @@ class CustomerController extends Controller
                         </div>
                     </div>
                 </div>';
+            }
             $i++;
         }
 
@@ -293,12 +309,12 @@ class CustomerController extends Controller
       if (isset($request->keywords) && strlen(str_replace(" ", "", $request->keywords)) >= 2) {
           $help = str_replace("vw", "volkswagen", $request->keywords);
           $keywords = explode(" ", $help);
-          $count_keywords = count($keywords);
-          $ft_keywords = "";
+
           foreach ($keywords as $key => $keyword) {
               $string .= " AND search ILIKE '%" . $keyword . "%'";
           }
-        $select_new = DB::connection('fes')->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+        $select_new = DB::connection('fes')
+            ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
 										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
 										(select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
 										(SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
