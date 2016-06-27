@@ -5,6 +5,28 @@
 @section('style')
     <link rel="stylesheet" href="/assets/css/jquery.taghandler.css">
     <link rel="stylesheet" href="/assets/css/editor.css">
+    <style>
+        #search-result{
+            background: transparent none repeat scroll 0% 0%;
+            position: absolute;
+            display: block;
+            left: 15px;
+            top: 62px;
+            z-index: 1;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+        #search-result .insearch {
+            background: #FFF;
+            box-shadow: 0 20px 15px rgba(0,0,0,.2);
+            border: solid 1px #bebebe;
+            border-top: 0;
+            width: 301px;
+            padding: 10px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -59,6 +81,23 @@
                     <label class="radio-inline"><input type="radio" name="payment" value="paypal">Paypal</label>
                     <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Cash</label>
                     <label class="radio-inline"><input type="radio" name="payment" value="invoice">Invoice</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="name">Vehicle</label>
+                    <div id="vehicleInputBox">
+                        <input type="text" class="form-control" name="vehicle" id="vehicle"  onkeydown="down()" onkeyup="up()" autocomplete="off" value="">
+                        <div id="search-result" class="col-md-6 search-box"></div>
+                    </div>
+                    <div id="vehicleAppendDiv" style="display:none">
+                        <input type="hidden" id="pgsqlVehicleId" name="vehicle" value="">
+                        <div class="well well-sm" id="vehicleAppend"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Stage</label>
+                    <input type="text" class="form-control" name="stage" value="">
                 </div>
             </div>
             <div class="row">
@@ -213,5 +252,43 @@
                 $("#hardwares").val($(".tag-handler").tagHandler("getSerializedTags"));
             }
         });
+
+        /* Search vehicles */
+        var timer;
+        function up(){
+            timer = setTimeout(function(){
+                var keywords = $("#vehicle").val();
+
+                if(keywords.length >0){
+                    $.post("/search/vehicle", {keywords: keywords}, function(response){
+                        $("#search-result").html(response);
+                        $("#search-result").fadeIn("fast");
+
+                        $(".list-group-item").on("click", function(){
+                            $("#vehicleInputBox").hide();
+                            $("#pgsqlVehicleId").attr("value", $(this).attr("data-id"));
+                            $("#vehicleAppend").html($(this).attr("data-model")+'<span class="glyphicon glyphicon glyphicon-remove pull-right" aria-hidden="true" style="cursor: pointer;"></span>');
+                            $("#vehicleAppendDiv").show();
+
+                            $(".glyphicon-remove").on("click", function(){
+                                $("#vehicleInputBox").show();
+                                $("#vehicleAppendDiv").hide();
+                            });
+                        });
+                        //$('#loadings').fadeOut('slow');
+                    });
+                }
+                if(keywords.length == 0){
+                    /* $(".searchPanelBody").hide();
+                     $('#loadings').fadeOut('slow');*/
+                     $("#search-result").fadeOut("fast");
+                }
+            }, 500);
+        }
+
+        function down(){
+            /*$('#loadings').html('<img src="/assets/img/loading.gif" alt="loading" class="media-middle loadingIcn" width="24px">').fadeIn('slow');*/
+            clearTimeout(timer);
+        }
     </script>
 @endpush

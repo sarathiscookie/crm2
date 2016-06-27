@@ -123,6 +123,7 @@ class CustomerController extends Controller
         $vehicle = new Vehicle();
         $vehicle->chassis_number = $request->chassis;
         $vehicle->license_plate = $request->license;
+        $vehicle->execution_id = $request->vehicle;
         $vehicle->save();
         return $vehicle->id;
     }
@@ -142,6 +143,7 @@ class CustomerController extends Controller
             $event->partner_id  = 1149;
             $event->title       = 'Terminvereinbarung';
             $event->freetext_external = $request->freetext;
+            $event->stage    = $request->stage;
             $event->mileage  = $request->mileage;
             $event->tuning   = $request->tuning;
             $event->dyno     = $request->dyno;
@@ -178,5 +180,67 @@ class CustomerController extends Controller
             $hardwareTagsresult[] = $hardwareTagstitle->title;
         }
         return response()->json(['availableTags' => $hardwareTagsresult, 'assignedTags' => $hardwareTagsresult]);
+    }
+
+    /**
+     * Search Vehicle
+     */
+    public function searchVehicle(Request $request)
+    {
+      $string = '';
+      echo '<div class="insearch">';
+      if (isset($request->keywords) && strlen(str_replace(" ", "", $request->keywords)) >= 2) {
+          $help = str_replace("vw", "volkswagen", $request->keywords);
+          $keywords = explode(" ", $help);
+          $count_keywords = count($keywords);
+          $ft_keywords = "";
+          foreach ($keywords as $key => $keyword) {
+              $string .= " AND search ILIKE '%" . $keyword . "%'";
+          }
+        $select_new = DB::connection('fes')->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+										(select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+										(SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+									FROM mainpage.ausfuehrung_view_neu av
+									WHERE " . substr($string, 4) . " AND visible = 't' 
+									ORDER BY vehicletype_sorting, marke_name, modell_name, kraftstoff, sort_leistung
+									LIMIT 20
+					 ");
+         $numrows = count($select_new);
+
+            if ($numrows == 0)
+                echo '<div class="alert alert-danger" style="margin-bottom:0;" role="alert"><strong>Ihr Fahrzeug wurde nicht gefunden!</strong> Bitte prüfen Sie Ihren Suchbegriff oder durchsuchen Sie die Fahrzeug Datenbank <a class="alert-link" href="/chiptuning">hier</a> manuell.</div>';
+
+            if ($numrows != 0) {
+                echo '<div class="list-group">';
+                $count = 0;
+                $tuning_id = "";
+                foreach($select_new as $fetch) {
+                    // besser lösung suchen
+                    if ($tuning_id == $fetch->tuning_id)
+                        continue;
+                    $tuning_id = $fetch->tuning_id;
+
+                    $text = "<small>" . $fetch->marke_name . " " . $fetch->modell_name . "</small><br>" . $fetch->tpbezeichnung;
+
+                    /*if ($_REQUEST["mode"] == "link")
+                        $url = "/chiptuning/" . strtolower($fetch["vehicletype_title"]) . "/" . $this->tp->cdb->setMyAlias($fetch["marke_alias"]) . "/" . $this->tp->cdb->setMyAlias($fetch["modell_alias"]) . "/" . $fetch["id"];
+                    elseif ($_REQUEST["mode"] == "set")
+                        $url = "javascript:setCar(" . $fetch["id"] . ")";*/
+
+
+                    if ($fetch->motor_power)
+                        $power = $fetch->motor_power;
+                    else
+                        $power = $fetch->ps_from_dimsport_kw;
+
+                    echo '<a class="list-group-item listgroup_'.$fetch->id.'" data-id="'.$fetch->id.'" data-model="'.$fetch->marke_name. " " .$fetch->modell_name. " ".$fetch->tpbezeichnung. " " . "mit " . $power.'PS">' . substr(utf8_encode($text), 0, 55) . '<br><small>mit ' . $power . 'PS</small></a>';
+                    $count++;
+                }
+                echo '</div>';
+            }
+          echo '<span style="clear: both"></span>';
+        }
+      echo '</div>';
     }
 }

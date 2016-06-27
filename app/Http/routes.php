@@ -36,6 +36,9 @@ Route::group(['middleware' => 'web'], function () {
 
     /* Hardware tag Listout */
     Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerController@getHardwareTag']);
+
+    /* Search vehicles */
+    Route::post('/search/vehicle', ['as' => 'searchVehicle', 'uses' => 'CustomerController@searchVehicle']);
 });
 
 
