@@ -71,7 +71,7 @@ class CustomerController extends Controller
         $customer_id = $customer->id;
 
         Mail::send('emails.newCustomerNotification', ['firstname' => $customer->firstname, 'lastname' => $customer->lastname, 'email' => $customer->email, 'phone' => $customer->phone, 'created_at' => $customer->created_at ], function ($message) use ($customer) {
-            $message->to('iamsarath1986@gmail.com')->subject('New customer created');
+            $message->to(env('NOTIFY_MAIL', ''))->subject('New customer created');
         });
 
         $vehicle_id = $this->saveVehicle($request);
@@ -323,12 +323,6 @@ class CustomerController extends Controller
                     $tuning_id = $fetch->tuning_id;
 
                     $text = "<small>" . $fetch->marke_name . " " . $fetch->modell_name . "</small><br>" . $fetch->tpbezeichnung;
-
-                    /*if ($_REQUEST["mode"] == "link")
-                        $url = "/chiptuning/" . strtolower($fetch["vehicletype_title"]) . "/" . $this->tp->cdb->setMyAlias($fetch["marke_alias"]) . "/" . $this->tp->cdb->setMyAlias($fetch["modell_alias"]) . "/" . $fetch["id"];
-                    elseif ($_REQUEST["mode"] == "set")
-                        $url = "javascript:setCar(" . $fetch["id"] . ")";*/
-
 
                     if ($fetch->motor_power)
                         $power = $fetch->motor_power;
