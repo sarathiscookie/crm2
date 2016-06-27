@@ -66,13 +66,13 @@ return [
             'engine' => null,
         ],
 
-        'pgsql' => [
+        'fes' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_PGSQL_HOST', 'localhost'),
+            'port' => env('DB_PGSQL_PORT', 'forge'),
+            'database' => env('DB_PGSQL_DATABASE', 'forge'),
+            'username' => env('DB_PGSQL_USERNAME', 'forge'),
+            'password' => env('DB_PGSQL_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
