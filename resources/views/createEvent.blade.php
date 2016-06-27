@@ -3,12 +3,13 @@
 @section('title',' Create Event')
 
 @section('style')
+    <link rel="stylesheet" href="/assets/css/jquery.taghandler.css">
     <link rel="stylesheet" href="/assets/css/editor.css">
     <link rel="stylesheet" href="/assets/css/daterangepicker.css">
 @endsection
 
 @section('content')
-        <h1 class="page-header">Create Event</h1>
+        <h1 class="page-header">Termin hinzufügen</h1>
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -21,14 +22,15 @@
         <form id="addEventFrm" action="{{ url('/event/save') }}" method="post">
             {{ csrf_field() }}
             <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="name">Customer</label>
-                    <input type="text" class="form-control" name="customer" value="{{ old('customer') }}">
+                <div class="form-inline col-md-6">
+                    <label class="control-label">Customer : </label>
+                    <p class="form-control-static">{{ $customer_name }}</p>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="name">Car</label>
-                    <input type="text" class="form-control" name="vehicle" value="{{ old('vehicle') }}">
+                <div class="form-inline col-md-6">
+                    <label class="control-label">Car : </label>
+                    <p class="form-control-static">{{ $car_name }}</p>
                 </div>
+                <br /><br />
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
@@ -56,9 +58,20 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
+                    <label for="name">Stage</label>
+                    <select class="form-control" name="stage">
+                        <option value="">Choose Stage</option>
+                        @for($i=1;$i<=5;$i++)
+                            <option @if($i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
                     <label for="name">Kilometerstand</label>
                     <input type="text" class="form-control" name="mileage" value="{{ old('mileage') }}">
                 </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-md-3">
                     <label for="tuning">Tuning bereits vorhanden?</label><br />
                     <label class="radio-inline"><input type="radio" name="tuning" value="yes">Ja</label>
@@ -69,8 +82,6 @@
                     <label class="radio-inline"><input type="radio" name="dyno" value="yes">Ja</label>
                     <label class="radio-inline"><input type="radio" name="dyno" value="no" checked="checked">Nein</label>
                 </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="name">Begin_at - End_at</label>
                     <div class="input-group">
@@ -78,15 +89,21 @@
                         <span class="input-group-addon" id="cal-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="name">Price</label>
                     <input type="text" class="form-control" name="price" value="{{ old('price') }}">
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Bereits verbaute Komponenten</label>
+                    <ul class="tag-handler form-control">
+                    </ul>
+                    <input type="hidden" id="hardwares" name="hardwares" value="{{ implode(",", json_decode($assignedTags)) }}">
+                </div>
             </div>
-            <div class="row">
-
-
-            </div>
+            <input type="hidden" name="customer_id" value="{{ $customer_id }}">
+            <input type="hidden" name="vehicle_id" value="{{ $vehicle_id }}">
             <div class="form-group">
                 <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Create Event</button>
             </div>
@@ -96,7 +113,6 @@
 @push('script')
     <script src="/assets/js/jquery.taghandler.js"></script>
     <script src="/assets/js/editor.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="/assets/js/moment.min.js"></script>
     <script src="/assets/js/daterangepicker.js"></script>
     <script>
@@ -168,6 +184,8 @@
             $("#txtEditor_i").html($("#txtEditor_i").Editor("getText"));
             $("#addEventFrm").submit();
         });
+
+        //Date picker
         $('#eventrange').daterangepicker({
                     timePicker:true,
                     timePickerIncrement:30,
@@ -176,10 +194,27 @@
             locale: {
                 "format": "DD-MM-YYYY H:mm",
                 "separator": " To ",
-
-
             },
-
         });
+
+        /* Tag handler */
+        var tagValues = {!!  $assignedTags !!}
+        $(".tag-handler").tagHandler({
+            getURL: '/tag/hardware',
+            autocomplete: true,
+            initLoad: false,
+            autoUpdate: true,
+            assignedTags: tagValues,
+            onAdd: function (tag) {
+                assignedTags: [ tag ],
+                        $('#hardwares').val(function(i,val) {
+                            return val + (!val ? '' : ',') + tag;
+                        });
+            },
+            afterDelete: function (tag) {
+                $("#hardwares").val($(".tag-handler").tagHandler("getSerializedTags"));
+            }
+        });
+
     </script>
 @endpush
