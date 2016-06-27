@@ -27,6 +27,12 @@ Route::get('/search', 'SearchController@search');
 /*Cutomer Details */
 Route::get('/customer/details/{id}', 'CustomerController@showDetails')->where(['id' => '[0-9]+']);
 
+/* Create event */
+Route::get('/event/create/{customer}/{car}', 'EventController@create')->where('customer', '[0-9]+')->where('car', '[0-9]+');
+
+/* Store event */
+Route::post('/event/save', 'EventController@save');    
+
 
 
 /*

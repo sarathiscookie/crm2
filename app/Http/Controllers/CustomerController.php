@@ -233,7 +233,7 @@ class CustomerController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $events ='';
+        $vehicles ='';
         $i=1;
         foreach($customer_vehicle as $vehicle) {
 
@@ -260,13 +260,16 @@ class CustomerController extends Controller
                     $a_class = 'class="collapsed"';
                     $expanded = "false";
                 }
-                $events .= '<div class="panel panel-default">
+                $vehicles .= '<div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
-                        <h4 class="panel-title">
+                        <h3 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '</h4>
-                            </a>
-                        </h4>
+                                ' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '
+                            </a> 
+                            <a role="button" class="btn btn-info pull-right" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
+                            <div class="clearfix"></div>
+                        </h3>
+                        
                     </div>
                     <div id="collapseV' . $vehicle->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
                         <div class="panel-body">
@@ -280,7 +283,7 @@ class CustomerController extends Controller
             $i++;
         }
 
-        return $events;
+        return $vehicles;
     }
 
     /**
