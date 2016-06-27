@@ -109,7 +109,7 @@ class CustomerController extends Controller
             }
         }
 
-        return redirect(url('/'))/*->with('status','Created successfully')*/;
+        return redirect(url('/'));
     }
 
 
