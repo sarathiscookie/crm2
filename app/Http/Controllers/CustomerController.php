@@ -79,37 +79,39 @@ class CustomerController extends Controller
         $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
         /* Save data in to hardware table and vehicle_hardwares */
-        $tags = explode(',', $request->hardwares);
+        if($request->hardwares != ""){
+            $tags = explode(',', $request->hardwares);
 
-        foreach($tags as $key) {
+            foreach($tags as $key) {
 
-            $selectHardwareTitle = Hardware::where('title', $key)
-                ->select('id', 'title')
-                ->first();
+                $selectHardwareTitle = Hardware::where('title', $key)
+                    ->select('id', 'title')
+                    ->first();
 
-            if(count($selectHardwareTitle) > 0){
-                if($selectHardwareTitle->title == $key){
+                if(count($selectHardwareTitle) > 0){
+                    if($selectHardwareTitle->title == $key){
+                        $vehicleHardware              = new Vehiclehardware();
+                        $vehicleHardware->vehicle_id  = $vehicle_id;
+                        $vehicleHardware->hardware_id = $selectHardwareTitle->id;
+                        $vehicleHardware->save();
+                    }
+                }
+                else{
+                    $hardware          = new Hardware();
+                    $hardware->user_id = 0;
+                    $hardware->title   = $key;
+                    $hardware->status  = 'online';
+                    $hardware->save();
+
                     $vehicleHardware              = new Vehiclehardware();
                     $vehicleHardware->vehicle_id  = $vehicle_id;
-                    $vehicleHardware->hardware_id = $selectHardwareTitle->id;
+                    $vehicleHardware->hardware_id = $hardware->id;
                     $vehicleHardware->save();
                 }
             }
-            else{
-                $hardware          = new Hardware();
-                $hardware->user_id = 0;
-                $hardware->title   = $key;
-                $hardware->status  = 'online';
-                $hardware->save();
-
-                $vehicleHardware              = new Vehiclehardware();
-                $vehicleHardware->vehicle_id  = $vehicle_id;
-                $vehicleHardware->hardware_id = $hardware->id;
-                $vehicleHardware->save();
-            }
         }
 
-        return redirect(url('/'))/*->with('status','Created successfully')*/;
+        return redirect(url('/'));
     }
 
 
