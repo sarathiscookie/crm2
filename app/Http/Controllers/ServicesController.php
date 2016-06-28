@@ -21,7 +21,9 @@ class ServicesController extends Controller
      */
     public function index()
     {
-        return view('services');
+        $listServices = Service::select('id', 'title', 'hours', 'rate')
+            ->get();
+        return view('services', compact('listServices'));
     }
 
     /**
@@ -85,9 +87,11 @@ class ServicesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ServicesRequest $request, $id)
     {
-        //
+        Service::where('id', $id)
+            ->update(['title' => $request->title, 'hours' => $request->hours, 'rate' => $request->rate]);
+        return response()->json(["success" => true]);
     }
 
     /**
