@@ -198,13 +198,14 @@
         });
 
         /* Tag handler */
-        var tagValues = {!!  $assignedTags !!}
+        var vehicle = {{ $vehicle_id }}
+
         $(".tag-handler").tagHandler({
+            getData: {vehicleid: vehicle},
             getURL: '/tag/hardware',
             autocomplete: true,
-            initLoad: false,
             autoUpdate: true,
-            assignedTags: tagValues,
+            minChars: 2,
             onAdd: function (tag) {
                 assignedTags: [ tag ],
                         $('#hardwares').val(function(i,val) {

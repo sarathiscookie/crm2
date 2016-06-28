@@ -15,6 +15,12 @@ use DB;
 
 class EventController extends Controller
 {
+    /**
+     * Create an event - show form
+     * @param $customer_id
+     * @param $car_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create($customer_id, $car_id)
     {
         $customer = Customer::select('id', 'firstname', 'lastname')->find($customer_id);
@@ -51,6 +57,11 @@ class EventController extends Controller
         return view('createEvent', ['customer_name' =>$customer_name, 'car_name' => $car_name, 'customer_id' =>$customer_id, 'vehicle_id' => $car_id, 'assignedTags' =>json_encode($assignedTags)]);
     }
 
+    /**
+     * Save event
+     * @param EventRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function save(EventRequest $request)
     {
         $date_split = explode(" To ",$request->eventrange);
@@ -78,7 +89,10 @@ class EventController extends Controller
         return redirect(url('/customer/details/'.$request->customer_id));
     }
 
-
+    /**
+     * Save hardwares and vehicle hardwares - Tag module
+     * @param $request
+     */
     protected function saveHardwares($request)
     {
         /* Save data in to hardware table and vehicle_hardwares */

@@ -18,6 +18,8 @@ class CreateVehiclesTable extends Migration
             $table->string('producer', 100)->nullable();
             $table->string('model', 100)->nullable();
             $table->string('motor', 100)->nullable();
+            $table->integer('power')->nullable();
+            $table->integer('torque')->nullable();
             $table->string('chassis_number', 100)->nullable();
             $table->string('license_plate', 50);
             $table->text('freetext');

@@ -154,7 +154,7 @@
 @push('script')
     <script src="/assets/js/jquery.taghandler.js"></script>
     <script src="/assets/js/editor.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBbZst8ih34yxe9TZYH6Em8IQN0zGHU-Y&libraries=places"></script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -184,6 +184,7 @@
                 $('#locality').val('');
                 $('#country').val('');
                 $('#postal_code').val('');
+                $('#administrative_area_level_1').val('');
                 var place = autocomplete.getPlace();
                 for (var i = 0; i < place.address_components.length; i++) {
                     var addressType = place.address_components[i].types[0];
@@ -238,8 +239,8 @@
         $(".tag-handler").tagHandler({
             getURL: '/tag/hardware',
             autocomplete: true,
-            initLoad: false,
             autoUpdate: true,
+            minChars:2,
             onAdd: function (tag) {
                 assignedTags: [ tag ],
                         $('#hardwares').val(function(i,val) {
