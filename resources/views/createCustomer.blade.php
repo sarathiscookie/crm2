@@ -96,7 +96,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="name">Stage</label>
-                    <input type="text" class="form-control" name="stage" value="">
+                    <input type="text" class="form-control" name="stage" value="{{ old('stage') }}">
                 </div>
             </div>
             <div class="row">

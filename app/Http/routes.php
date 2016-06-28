@@ -66,6 +66,8 @@ Route::get('/services', ['as' => 'listServices', 'uses' => 'ServicesController@i
 /* Store services */
 Route::post('/services/save', ['as' => 'storeServices', 'uses' => 'ServicesController@store']);
 
+/* Update services */
+Route::post('/services/{id}', ['as' => 'updateServices', 'uses' => 'ServicesController@update'])->where(['id' => '[0-9]+']);
 
 /*Route::auth();
 
