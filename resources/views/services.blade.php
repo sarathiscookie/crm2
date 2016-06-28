@@ -30,6 +30,7 @@
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-default btn-primary" id="createServices">Create Service</button>
+                <div id="loadings" class="pull-right" style="position:relative; top:5px;"></div>
             </div>
             <br>
             <div id="update-form-errors"></div>
@@ -83,17 +84,19 @@
         $('[data-toggle="tooltip"]').tooltip();
 
         /*Store service*/
-        $("#createServices").on("click", function(e){
-            //e.preventDefault();
+        $("#createServices").on("click", function(){
+            $('#loadings').html('<img src="/assets/img/loading.gif" alt="loading" class="media-middle loadingIcn" width="24px">').fadeIn('slow');
             var title = $("#title").val();
             var hours = $("#hours").val();
             var rate  = $("#rate").val();
             $.post("/services/save", {title: title, hours: hours, rate: rate}, function(response){
+                $('#loadings').fadeOut('slow');
                 location.reload();
                 $("#title").val("");
                 $("#hours").val("");
                 $("#rate").val("");
             }).fail(function(response) {
+                $('#loadings').fadeOut('slow');
                 var errors = response.responseJSON;
                 errorsHtml = '<div class="alert alert-danger"><ul>';
 
