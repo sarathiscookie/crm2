@@ -32,7 +32,8 @@
                 <button type="button" class="btn btn-default btn-primary" id="createServices">Create Service</button>
                 <div id="loadings" class="pull-right" style="position:relative; top:5px;"></div>
             </div>
-            <br>
+            <br />
+            <br />
             <div id="update-form-errors"></div>
             <br>
             <table class="table table-hover table-bordered">
@@ -136,7 +137,7 @@
                 errorsHtml = '<div class="alert alert-danger"><ul>';
 
                 $.each( errors, function( key, value ) {
-                    errorsHtml += '<li>' + value[0] + '</li>'; //showing only the first error.
+                    errorsHtml += '<li>' + value[0] + '</li>';
                 });
                 errorsHtml += '</ul></di>';
                 $("#update-form-errors").html(errorsHtml);
