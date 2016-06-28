@@ -166,19 +166,25 @@ class CustomerController extends Controller
         $cust_vehicle->save();
     }
 
-
+    /**
+     * Show customer Details page
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showDetails($id)
     {
         $customer = Customer::find($id);
         $events   = $this->getCustomerEvents($id);
         $vehicles     = $this->getCustomerVehicles($id);
 
-
-
         return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles]);
     }
 
-
+    /**
+     * get list of customer's events
+     * @param $customer_id
+     * @return string
+     */
     protected function getCustomerEvents($customer_id)
     {
         $customer_events = Event::where('customer_id', $customer_id)
@@ -225,6 +231,11 @@ class CustomerController extends Controller
         return $events;
     }
 
+    /**
+     * get list of customer's vehicles
+     * @param $customer_id
+     * @return string
+     */
     protected function getCustomerVehicles($customer_id)
     {
         $customer_vehicle = Customervehicle::select('vehicles.*')
@@ -233,7 +244,7 @@ class CustomerController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $vehicles ='';
+        $vehicleList ='';
         $i=1;
         foreach($customer_vehicle as $vehicle) {
 
@@ -260,7 +271,7 @@ class CustomerController extends Controller
                     $a_class = 'class="collapsed"';
                     $expanded = "false";
                 }
-                $vehicles .= '<div class="panel panel-default">
+                $vehicleList .= '<div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
                         <h3 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
@@ -283,13 +294,13 @@ class CustomerController extends Controller
             $i++;
         }
 
-        return $vehicles;
+        return $vehicleList;
     }
 
     /**
      * Get to hardware
      */
-    public function getHardwareTag()
+    public function getHardwareTag(Request $request)
     {
         $hardwareTagstitles = Hardware::where('status', 'online')
             ->select('title')
@@ -299,7 +310,20 @@ class CustomerController extends Controller
         {
             $hardwareTagsresult[] = $hardwareTagstitle->title;
         }
-        return response()->json(['availableTags' => $hardwareTagsresult, 'assignedTags' => $hardwareTagsresult]);
+
+        $assignedTagsresult = array();
+        if(isset($request->vehicleid)) {
+            $vechicleHardwares = Hardware::select('title')
+                ->join('vehicle_hardwares as VH', 'VH.hardware_id', '=', 'hardwares.id')
+                ->where('VH.vehicle_id', $request->vehicleid)
+                ->get();
+
+            foreach ($vechicleHardwares as $assigned)
+            {
+                $assignedTagsresult[] = $assigned->title;
+            }
+        }
+        return response()->json(['availableTags' => $hardwareTagsresult, 'assignedTags' => $assignedTagsresult]);
     }
 
     /**
