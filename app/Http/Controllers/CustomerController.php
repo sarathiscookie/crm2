@@ -382,5 +382,7 @@ class CustomerController extends Controller
           echo '<span style="clear: both"></span>';
         }
       echo '</div>';
-    }
+    }   
+    
+    
 }

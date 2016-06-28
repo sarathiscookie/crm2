@@ -184,6 +184,7 @@
                 $('#locality').val('');
                 $('#country').val('');
                 $('#postal_code').val('');
+                $('#administrative_area_level_1').val('');
                 var place = autocomplete.getPlace();
                 for (var i = 0; i < place.address_components.length; i++) {
                     var addressType = place.address_components[i].types[0];

@@ -31,7 +31,13 @@ Route::get('/customer/details/{id}', 'CustomerController@showDetails')->where(['
 Route::get('/event/create/{customer}/{car}', 'EventController@create')->where('customer', '[0-9]+')->where('car', '[0-9]+');
 
 /* Store event */
-Route::post('/event/save', 'EventController@save');    
+Route::post('/event/save', 'EventController@save'); 
+    
+/* Store Vehicle */
+Route::post('/vehicle/save', 'VehicleController@saveVehicle');
+
+/* Check vehicle already added */
+Route::get('/vehicle/check/{customer}/{exe_id}', 'VehicleController@getStatus')->where('customer', '[0-9]+')->where('exe_id', '[0-9]+');
 
 
 
