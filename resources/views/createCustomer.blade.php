@@ -90,7 +90,7 @@
                         <div id="search-result" class="col-md-6 search-box"></div>
                     </div>
                     <div id="vehicleAppendDiv" style="display:none">
-                        <input type="hidden" id="pgsqlVehicleId" name="vehicle" value="">
+                        <input type="hidden" id="remoteVehicleId" name="vehicle" value="">
                         <div class="well well-sm" id="vehicleAppend"></div>
                     </div>
                 </div>
@@ -264,13 +264,14 @@
 
                         $(".list-group-item").on("click", function(){
                             $("#vehicleInputBox").hide();
-                            $("#pgsqlVehicleId").attr("value", $(this).attr("data-id"));
+                            $("#remoteVehicleId").attr("value", $(this).attr("data-id"));
                             $("#vehicleAppend").html($(this).attr("data-model")+'<span class="glyphicon glyphicon glyphicon-remove pull-right" aria-hidden="true" style="cursor: pointer;"></span>');
                             $("#vehicleAppendDiv").show();
 
                             $(".glyphicon-remove").on("click", function(){
                                 $("#vehicleInputBox").show();
                                 $("#vehicleAppendDiv").hide();
+                                $("#remoteVehicleId").val('');
                             });
                         });
                         //$('#loadings').fadeOut('slow');
