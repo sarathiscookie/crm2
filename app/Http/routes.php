@@ -15,19 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/* Create customers */
+/* Create customer form */
 Route::get('/customer/create', 'CustomerController@create');
 
 /* Store customers */
 Route::post('/customer/save', 'CustomerController@save');
 
-/*Search */
+/*Search on navbar*/
 Route::get('/search', 'SearchController@search');
 
 /*Cutomer Details */
 Route::get('/customer/details/{id}', 'CustomerController@showDetails')->where(['id' => '[0-9]+']);
 
-/* Create event */
+/* Create event form */
 Route::get('/event/create/{customer}/{car}', 'EventController@create')->where('customer', '[0-9]+')->where('car', '[0-9]+');
 
 /* Store event */
@@ -36,8 +36,8 @@ Route::post('/event/save', 'EventController@save');
 /* Store Vehicle */
 Route::post('/vehicle/save', 'VehicleController@saveVehicle');
 
-/* Check vehicle already added */
-Route::get('/vehicle/check/{customer}/{exe_id}', 'VehicleController@getStatus')->where('customer', '[0-9]+')->where('exe_id', '[0-9]+');
+/* Check vehicle already added for customer */
+Route::post('/vehicle/check', 'VehicleController@checkVehicle');
 
 
 
