@@ -28,8 +28,9 @@
                     <div style="margin-top: -1px;position: absolute; z-index: 100; background: #f8f8f8; padding: 30px; display: none;" id="navSrchBox" class="table-bordered col-md-3"></div>
                 </div>
                 <!-- Authentication Links -->
-                    <li><a href="{{ url('/customer/create') }}">Kunden hinzufügen</a></li>
-                    <li><a href="{{ url('/services') }}">Services</a></li>
+                <li><a href="{{ url('/customer/create') }}">Kunden hinzufügen</a></li>
+                <li><a href="{{ url('/services') }}">Services</a></li>
+                <li><a href="{{ url('/events') }}">Events</a></li>
             </ul>
         </div>
     </div>

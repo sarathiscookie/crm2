@@ -12,9 +12,45 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\EventRequest;
 use DB;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
+    /**
+     * view dashboard
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        return view('events');
+    }
+
+    /**
+     * view dashboard
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view()
+    {
+        $result = "";
+        $listEvents    = Event::select('title', 'begin_at', 'end_at')
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach ($listEvents as $listEvent){
+            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $listEvent->begin_at); //2016-06-28 05:00:00
+            $dt->addHours(2);
+            $resultSet = array (
+                'title' => $listEvent->title,
+                'start' => $listEvent->begin_at,
+                'end' => $dt->format('Y-m-d H:i:s'),
+                'class' => "bg-complete-lighter",
+                "other" => array()
+            );
+            $result[] = $resultSet;
+        }
+        return $result;
+    }
+
+
     /**
      * Create an event - show form
      * @param $customer_id

@@ -75,6 +75,24 @@ Route::post('/services/save', ['as' => 'storeServices', 'uses' => 'ServicesContr
 /* Update services */
 Route::post('/services/{id}', ['as' => 'updateServices', 'uses' => 'ServicesController@update'])->where(['id' => '[0-9]+']);
 
+/*
+ |--------------------------------------------------------------------------
+ | Routes for events
+ |--------------------------------------------------------------------------
+ |
+ | Show page, List events
+*/
+/* Show events page*/
+Route::get('/events', ['as' => 'showEventsPage', 'uses' => 'EventController@index']);
+
+/* Show events page*/
+Route::get('/events/list', ['as' => 'listEvents', 'uses' => 'EventController@view']);
+
+
+
+
+
+
 /*Route::auth();
 
 Route::get('/home', 'HomeController@index');*/
