@@ -191,14 +191,31 @@ class CustomerController extends Controller
      */
     protected function getCustomerEvents($customer_id)
     {
-        $customer_events = Event::select('id', 'vehicle_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
+        $customer_events = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
+            ->join('vehicles', 'vehicles.id', '=', 'events.vehicle_id')
             ->where('customer_id', $customer_id)
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('events.created_at', 'DESC')
             ->get();
 
         $events ='';
         $i=1;
         foreach($customer_events as $event) {
+            $vehicle_title ='';
+            $vehicle_informations = DB::connection('fes')
+                ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+										(select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+										(SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+									FROM mainpage.ausfuehrung_view_neu av
+									WHERE av.id = '$event->execution_id'");
+
+            foreach($vehicle_informations as $vehicle_information) {
+                if ($vehicle_information->motor_power)
+                    $power = $vehicle_information->motor_power;
+                else
+                    $power = $vehicle_information->ps_from_dimsport_kw;
+                $vehicle_title = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
+            }
             if ($i == 1) {
                 $collapse = "in";
                 $a_class = '';
@@ -219,7 +236,7 @@ class CustomerController extends Controller
                     </div>
                     <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
                         <div class="panel-body">
-                             <div>Fahrzeug: '.$event->vehicle_id.'</div>
+                             <div>Fahrzeug: '.$vehicle_title.'</div>
                              <div>Tuning-Stufe: '.$event->stage.'</div>
                              <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
                              <div>Bereits getunt: '.$event->tuning.'</div>
