@@ -86,11 +86,11 @@
                         </div>
                         <div class="form-group col-md-9">
                             <label for="name">Fahrgestellnummer</label>
-                            <input type="text" class="form-control" id="chassis" name="chassis" value="">
+                            <input type="text" class="form-control txtInput" id="chassis" name="chassis" value="">
                         </div>
                         <div class="form-group col-md-9">
                             <label for="name">KFZ-Kennzeichen</label>
-                            <input type="text" class="form-control" id="license" name="license" value="">
+                            <input type="text" class="form-control txtInput" id="license" name="license" value="">
                         </div>
                         <div class="form-group col-md-12">
                             <label for="name">Zusatzinformationen</label>
@@ -113,27 +113,29 @@
 @push('script')
 <script src="/assets/js/editor.js"></script>
 <script>
+    /*CSRF _token for ajax post methods*/
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
     /* Search vehicles */
     var timer;
     function up(){
         timer = setTimeout(function(){
             var keywords = $("#vehicle").val();
-
             if(keywords.length >0){
                 $.post("/search/vehicle", {keywords: keywords}, function(response){
                     $("#search-result").html(response);
                     $("#search-result").fadeIn("fast");
 
                     $(".list-group-item").on("click", function(){
+                        var customer_id  = '{{ $customer->id }}';
                         var execution_id = $(this).attr("data-id");
-                        var data_model = $(this).attr("data-model");
-                        $.get('/vehicle/check/{{ $customer->id }}/'+ execution_id, function (data) {
-                            if(data==0){
+                        var data_model   = $(this).attr("data-model");
+                        $.post("/vehicle/check", {customer:customer_id, execution_id:execution_id}, function (data) {
+                            if(data===0){
                                 $('#errMsg').hide();
                                 $("#vehicleInputBox").hide();
                                 $("#executionId").attr("value", execution_id);
@@ -150,8 +152,8 @@
                                 });
                             }
                             else {
-                                $('#errMsg').html('<strong>Error!</strong> Vehicle already exists');
-                                $('#errMsg').show();
+                                $('#errMsg').html('<strong>Error!</strong> ' + data);
+                                $('#errMsg').fadeIn();
                                 return false;
                             }
                         });
@@ -163,61 +165,47 @@
             }
         }, 500);
     }
-
+    /*On Key down event*/
     function down(){
         clearTimeout(timer);
     }
 
-    //WYSIWYG Editor
+    /*WYSIWYG Editor Init*/
     $(document).ready(function() {
         $("#txtEditor").Editor({
-            'l_align':false,
-            'r_align':false,
-            'c_align':false,
-            'justify':false,
-            'insert_link':false,
-            'unlink':false,
-            'insert_img':false,
-            'hr_line':false,
-            'block_quote':false,
-            'source':false,
-            'strikeout':true,
-            'indent':false,
-            'outdent':false,
-            'fonts':false,
-            'styles':false,
-            'print':false,
-            'rm_format':false,
-            'status_bar':false,
-            'font_size':false,
-            'color':false,
-            'splchars':false,
-            'insert_table':false,
-            'select_all':false,
-            'togglescreen':false
+            'l_align':false, 'r_align':false, 'c_align':false,
+            'justify':false, 'insert_link':false, 'unlink':false,
+            'insert_img':false, 'hr_line':false, 'block_quote':false,
+            'source':false, 'strikeout':true, 'indent':false,
+            'outdent':false, 'fonts':false, 'styles':false,
+            'print':false, 'rm_format':false, 'status_bar':false,
+            'font_size':false, 'color':false, 'splchars':false,
+            'insert_table':false, 'select_all':false, 'togglescreen':false
         });
 
         $("#txtEditor").Editor("setText", $("#txtEditor").text());
     });
 
-    //Submit Form- button action
+    /*Submit Form- button action*/
     $('#btnSave').click( function () {
         $('#errMsg').html('');
-        $('#errMsg').hide();
+        $('#errMsg').fadeOut("fast");
         $("#txtEditor").html($("#txtEditor").Editor("getText"));
         if($.trim($('#executionId').val())=='' || $('#executionId').val()==0){
             $('#errMsg').html('<strong>Error!</strong> Vehicle should not be empty');
-            $('#errMsg').show();
+            $('#errMsg').fadeIn("fast");
             return false;
         }
         else if($.trim($('#chassis').val())==''){
             $('#errMsg').html('<strong>Error!</strong> Fahrgestellnummer should not be empty');
-            $('#errMsg').show();
+            $('#errMsg').fadeIn("fast");
+            $('#chassis').focus();
             return false;
         }
         else if($.trim($('#license').val())==''){
             $('#errMsg').html('<strong>Error!</strong> KFZ-Kennzeichen should not be empty');
-            $('#errMsg').show();
+            $('#errMsg').fadeIn("fast");
+            $('#license').focus();
             return false;
         }
         var $btn = $(this).button('loading');
@@ -228,7 +216,7 @@
 
     });
 
-    //modal close event - reset form
+    /*Modal close event action - Reset form and other credentials*/
     $('#addVehicleModal').on('hidden.bs.modal', function () {
         $("#addVehicleFrm")[0].reset();
         $("#txtEditor").Editor("setText", '');
@@ -236,7 +224,13 @@
         $("#vehicleInputBox").show();
         $("#vehicleAppendDiv").hide();
         $("#search-result").fadeOut("fast");
-        $('#errMsg').hide();
+        $('#errMsg').fadeOut("fast");
+    });
+
+    /*Fadeout error message if input not empty*/
+    $('.txtInput').blur( function () {
+        if($.trim($(this).val())!='')
+            $('#errMsg').fadeOut();
     });
 </script>
 @endpush
