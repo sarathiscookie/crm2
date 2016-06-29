@@ -135,7 +135,7 @@
                         var execution_id = $(this).attr("data-id");
                         var data_model   = $(this).attr("data-model");
                         $.post("/vehicle/check", {customer:customer_id, execution_id:execution_id}, function (data) {
-                            if(data===0){
+                            if(data==0){
                                 $('#errMsg').hide();
                                 $("#vehicleInputBox").hide();
                                 $("#executionId").attr("value", execution_id);
