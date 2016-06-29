@@ -31,6 +31,7 @@ class CustomerController extends Controller
     }
 
     /**
+     * Create customer - show form
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
@@ -39,6 +40,7 @@ class CustomerController extends Controller
     }
 
     /**
+     * Save customer details
      * @param CustomerRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -177,7 +179,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $events   = $this->getCustomerEvents($id);
-        $vehicles     = $this->getCustomerVehicles($id);
+        $vehicles = $this->getCustomerVehicles($id);
 
         return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles]);
     }
@@ -189,7 +191,8 @@ class CustomerController extends Controller
      */
     protected function getCustomerEvents($customer_id)
     {
-        $customer_events = Event::where('customer_id', $customer_id)
+        $customer_events = Event::select('id', 'vehicle_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
+            ->where('customer_id', $customer_id)
             ->orderBy('created_at', 'DESC')
             ->get();
 
@@ -240,9 +243,9 @@ class CustomerController extends Controller
      */
     protected function getCustomerVehicles($customer_id)
     {
-        $customer_vehicle = Customervehicle::select('vehicles.*')
+        $customer_vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.created_at')
             ->where('customer_id', $customer_id)
-            ->join('vehicles', 'vehicles.id', '=', 'customer_vehicles.vehicle_id')
+            ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
             ->get();
 
@@ -330,6 +333,7 @@ class CustomerController extends Controller
 
     /**
      * Search Vehicle
+     * @param Request $request
      */
     public function searchVehicle(Request $request)
     {
