@@ -12,7 +12,7 @@
 <link href="/assets/css/dialog.ie.css" rel="stylesheet" type="text/css" media="screen" />
 <![endif]-->
 
-@section('content')
+@section('contents')
     <!-- START PAGE-CONTAINER -->
     <div class="page-container bg-white full-height">
         <!-- START PAGE CONTENT WRAPPER -->
@@ -125,6 +125,7 @@
                     //Web Service
                     events: data,
                     view:"week",
+                    slotDuration: '15',
                     onViewRenderComplete: function() {
                         //You can Do a Simple AJAX here and update
                     },
