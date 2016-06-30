@@ -72,13 +72,14 @@ class CustomerController extends Controller
         $customer->save();
         $customer_id = $customer->id;
 
-        Mail::send('emails.newCustomerNotification', ['firstname' => $customer->firstname, 'lastname' => $customer->lastname, 'email' => $customer->email, 'phone' => $customer->phone, 'created_at' => $customer->created_at ], function ($message) use ($customer) {
+        $vehicle_id = $this->saveVehicle($request);
+        $events     = $this->saveEvent($customer_id, $vehicle_id, $request);
+        $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
+
+
+        Mail::send('emails.newCustomerNotification', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message) use ($customer) {
             $message->to(env('NOTIFY_MAIL', ''))->subject('New customer created');
         });
-
-        $vehicle_id = $this->saveVehicle($request);
-        $this->saveEvent($customer_id, $vehicle_id, $request);
-        $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
         /* Save data in to hardware table and vehicle_hardwares */
         if($request->hardwares != ""){
@@ -155,12 +156,15 @@ class CustomerController extends Controller
             $event->begin_at = Carbon::now();
             $event->save();
         }
+
+        return $this->getEventData($event->id);
     }
 
     /**
      * Save to customer_vehicle
      * @param $customer_id
      * @param $vehicle_id
+     * @return string
      */
     protected function saveCustomerVehicle($customer_id, $vehicle_id)
     {
@@ -168,6 +172,8 @@ class CustomerController extends Controller
         $cust_vehicle->customer_id =$customer_id;
         $cust_vehicle->vehicle_id =$vehicle_id;
         $cust_vehicle->save();
+
+        return $this->getVehicleData($vehicle_id);
     }
 
     /**
@@ -230,7 +236,7 @@ class CustomerController extends Controller
                         <h4 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
                                 <h4>' . $event->title . '</h4>
-                                <p><small>' . date('m.d.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                                <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
                             </a>
                         </h4>
                     </div>
@@ -308,7 +314,7 @@ class CustomerController extends Controller
                         <div class="panel-body">
                              <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                              <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
-                             <br><div><small>Hinzugefügt am ' . date('m.d.Y H:i', strtotime($vehicle->created_at)).'</small></div>
+                             <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                         </div>
                     </div>
                 </div>';
@@ -403,7 +409,104 @@ class CustomerController extends Controller
           echo '<span style="clear: both"></span>';
         }
       echo '</div>';
-    }   
+    }
+
+
+
+    public function getEventData($event_id)
+    {
+        $event = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
+            ->join('vehicles', 'vehicles.id', '=', 'events.vehicle_id')
+            ->where('events.id', $event_id)
+            ->orderBy('events.created_at', 'DESC')
+            ->first();
+
+        $vehicle_title ='';
+        $vehicle_informations = DB::connection('fes')
+            ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+                                    (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+                                    (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+                                    (SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+                                FROM mainpage.ausfuehrung_view_neu av
+                                WHERE av.id = '$event->execution_id'");
+
+        foreach($vehicle_informations as $vehicle_information) {
+            if ($vehicle_information->motor_power)
+                $power = $vehicle_information->motor_power;
+            else
+                $power = $vehicle_information->ps_from_dimsport_kw;
+            $vehicle_title = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
+        }
+        $eventHtml = '<div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+                    <h4 class="panel-title">
+                        <a role="button" style="outline: none; text-decoration: none">
+                            <h4>' . $event->title . '</h4>
+                            <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse' . $event->id . '" class="panel-collapse" role="tabpanel" aria-labelledby="heading' . $event->id . '">
+                    <div class="panel-body">
+                         <div>Fahrzeug: '.$vehicle_title.'</div>
+                         <div>Tuning-Stufe: '.$event->stage.'</div>
+                         <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
+                         <div>Bereits getunt: '.$event->tuning.'</div>
+                         <div>Prüfstandslauf: '.$event->dyno.'</div>
+                         <div>Zahlungsart: '.$event->payment.'</div><br>
+                         <strong>Weitere Details:</strong><br>
+                        ' . $event->freetext_external . '
+                    </div>
+                </div>
+            </div>';
+
+        return $eventHtml;
+    }
+
+
+    public function getVehicleData($vehicle_id)
+    {
+        $vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.created_at')
+            ->where('VC.id', $vehicle_id)
+            ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        $vehicleList ='';
+
+        $vehicle_informations = DB::connection('fes')
+            ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+                                    (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+                                    (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+                                    (SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+                                FROM mainpage.ausfuehrung_view_neu av
+                                WHERE av.id = '$vehicle->execution_id'");
+
+        foreach($vehicle_informations as $vehicle_information){
+            if ($vehicle_information->motor_power)
+                $power = $vehicle_information->motor_power;
+            else
+                $power = $vehicle_information->ps_from_dimsport_kw;
+
+            $vehicleList = '<div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
+                    <h3 class="panel-title">
+                        <a  role="button" style="outline: none; text-decoration: none">
+                            ' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '
+                        </a>                         
+                    </h3>                    
+                </div>
+                <div class="panel-collapse" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
+                    <div class="panel-body">
+                         <div>Kennzeichen: '.$vehicle->license_plate.'</div>
+                         <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                         <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
+                    </div>
+                </div>
+            </div>';
+        }
+        return $vehicleList;
+    }
     
     
 }

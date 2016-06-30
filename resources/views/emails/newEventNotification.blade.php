@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 </head>
 <body>
-<b>A new Customer has been created.</b><br><br>
+<b>A new Event has been created.</b><br><br>
 <table>
     <tr>
         <td>

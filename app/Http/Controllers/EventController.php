@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\EventRequest;
 use DB;
+use Illuminate\Support\Facades\Mail;
 
 class EventController extends Controller
 {
@@ -64,6 +65,7 @@ class EventController extends Controller
      */
     public function save(EventRequest $request)
     {
+        $customerObj = new CustomerController();
         $date_split = explode(" To ",$request->eventrange);
         $begin_at   = date('Y-m-d H:i', strtotime($date_split[0]));
         $end_at = date('Y-m-d H:i', strtotime($date_split[1]));
@@ -85,6 +87,13 @@ class EventController extends Controller
         $event->price   = $request->price;
         $event->save();
         $this->saveHardwares($request);
+
+        $events   = $customerObj->getEventData($event->id);
+        $vehicles = $customerObj->getVehicleData($request->vehicle_id);
+
+        Mail::send('emails.newEventNotification', [ 'customer' => Customer::find($request->customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message)  {
+            $message->to(env('NOTIFY_MAIL', ''))->subject('New Event created');
+        });
 
         return redirect(url('/customer/details/'.$request->customer_id));
     }
