@@ -23,14 +23,14 @@
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
                 <div class="form-group navbar-form navbar-right" role="search">
-                    <input type="text" id="searchkey" class="form-control" placeholder="Suche">
+                    <input type="text" id="searchkey" class="form-control" placeholder="{{ trans('messages.headerTabSearchBoxPlaceholder') }}">
                     <img src="/assets/img/loading.gif" class="media-middle srch-loader invisible" width="24px" alt="loading" >
                     <div style="margin-top: -1px;position: absolute; z-index: 100; background: #f8f8f8; padding: 30px; display: none;" id="navSrchBox" class="table-bordered col-md-3"></div>
                 </div>
                 <!-- Authentication Links -->
-                <li><a href="{{ url('/customer/create') }}">Kunden hinzufügen</a></li>
-                <li><a href="{{ url('/services') }}">Services</a></li>
-                <li><a href="{{ url('/events') }}">Events</a></li>
+                <li><a href="{{ url('/customer/create') }}">{{ trans('messages.headerTabAddCustomers') }}</a></li>
+                <li><a href="{{ url('/services') }}">{{ trans('messages.headerTabServices') }}</a></li>
+                <li><a href="{{ url('/events') }}">{{ trans('messages.headerTabEvents') }}</a></li>
             </ul>
         </div>
     </div>
