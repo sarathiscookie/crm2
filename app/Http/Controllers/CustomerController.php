@@ -21,13 +21,15 @@ use HTML2PDF_exception;
 
 class CustomerController extends Controller
 {
+    public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
+    public $customerTitle = [1 =>'Herr', 2 => 'Frau', 3 => 'Firma'];
     /**
      * Listing gearbox types
      * For select box
      */
     public function gearbox()
     {
-        $gearboxeTypes = array('1' => 'Manual', '2' => 'Automatic');
+        $gearboxeTypes = $this->gearbox;
         return $gearboxeTypes;
     }
 
@@ -42,7 +44,7 @@ class CustomerController extends Controller
         return $customerStatus;
     }
 
-    public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
+    
 
     /**
      * view dashboard
