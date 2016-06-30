@@ -22,6 +22,7 @@ class CreateVehiclesTable extends Migration
             $table->integer('torque')->nullable();
             $table->string('chassis_number', 100)->nullable();
             $table->string('license_plate', 50);
+            $table->tinyInteger('gearbox');
             $table->text('freetext');
             $table->timestamps();
         });
