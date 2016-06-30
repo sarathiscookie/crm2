@@ -29,6 +29,8 @@
     </style>
 @endsection
 
+@inject('typesCustomerAndGearbox', 'App\Http\Controllers\CustomerController')
+
 @section('content')
         <h1 class="page-header">Kunden hinzufügen</h1>
         @if (count($errors) > 0)
@@ -96,7 +98,14 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="name">Stage</label>
-                    <input type="text" class="form-control" name="stage" value="{{ old('stage') }}">
+                    <select class="form-control" name="stage" id="stage">
+                        <option value="">Choose Stage</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </div>
             </div>
             <div class="row">
@@ -112,7 +121,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="name">Kilometerstand</label>
-                    <input type="text" class="form-control" name="mileage" value="{{ old('mileage') }}">
+                    <input type="text" class="form-control mileageNumber" name="mileage" value="{{ old('mileage') }}">
                 </div>
                 <div class="form-group col-md-3">
                     <label for="tuning">Tuning bereits vorhanden?</label><br />
@@ -123,6 +132,25 @@
                     <label for="dyno" >Prüfstandslauf</label><br />
                     <label class="radio-inline"><input type="radio" name="dyno" value="yes">Ja</label>
                     <label class="radio-inline"><input type="radio" name="dyno" value="no" checked="checked">Nein</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="gearbox">Gearbox</label>
+                    <select class="form-control" name="gearbox" id="gearbox">
+                        @foreach($typesCustomerAndGearbox->gearbox() as $key=>$gearboxeTypes)
+                            <option value="{{ $key }}">{{ $gearboxeTypes }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="gearbox">Customer Status</label>
+                    <select class="form-control" name="customerstatus" id="customerstatus">
+                        <option value="">Choose customer status</option>
+                        @foreach($typesCustomerAndGearbox->customerStatus() as $key=>$custStatus)
+                            <option value="{{ $key }}">{{ $custStatus }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row">
@@ -161,6 +189,22 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        //Add thousand seperator in mileage field
+        $('input.mileageNumber').keyup(function(event) {
+
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                        .replace(/\D/g, "")
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        ;
+            });
+        });
+
         //Customer Address - google places auto-complete
         $("#addCustomerFrm").ready( function () {
             var inputID = "address";

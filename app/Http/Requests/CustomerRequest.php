@@ -33,7 +33,8 @@ class CustomerRequest extends Request
             'chassis'    => 'required|max:100',
             'mileage'    => 'required|numeric',
             'vehicle'    => 'required',
-            'stage'      => 'required|numeric|min:1|max:6',
+            'stage'      => 'required|numeric|min:1|max:5',
+            'customerstatus' => 'required',
         ];
     }
 }

@@ -27,7 +27,7 @@ class CreateCustomersTable extends Migration
             $table->string('country', 255)->nullable();
             $table->string('phone', 30);           
             $table->text('freetext')->nullable();
-            $table->enum('status', ['customer','prospect','vip','reseller','blocked','deleted'])->default('customer');
+            $table->enum('status', ['customer','prospect','vip','reseller','blocked','deleted']);
             $table->timestamps();
         });
     }

@@ -19,6 +19,27 @@ use DB;
 class CustomerController extends Controller
 {
     /**
+     * Listing gearbox types
+     * For select box
+     */
+    public function gearbox()
+    {
+        $gearboxeTypes = array('1' => 'Manual', '2' => 'Automatic');
+        return $gearboxeTypes;
+    }
+
+    /**
+     * Listing customer types
+     * For select box
+     */
+
+    public function customerStatus()
+    {
+        $customerStatus = array('customer' => 'Customer', 'prospect' => 'Prospect', 'vip' => 'Vip', 'reseller' => 'Reseller', 'blocked' => 'Blocked', 'deleted' => 'Deleted');
+        return $customerStatus;
+    }
+
+    /**
      * view dashboard
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -69,6 +90,7 @@ class CustomerController extends Controller
         $customer->city = $request->city;
         $customer->state = $request->state;
         $customer->country = $request->country;
+        $customer->status = $request->customerstatus;
         $customer->save();
         $customer_id = $customer->id;
 
@@ -127,8 +149,9 @@ class CustomerController extends Controller
     {
         $vehicle = new Vehicle();
         $vehicle->chassis_number = $request->chassis;
-        $vehicle->license_plate = $request->license;
-        $vehicle->execution_id = $request->vehicle;
+        $vehicle->license_plate  = $request->license;
+        $vehicle->execution_id   = $request->vehicle;
+        $vehicle->gearbox        = $request->gearbox;
         $vehicle->save();
         return $vehicle->id;
     }
@@ -149,7 +172,7 @@ class CustomerController extends Controller
             $event->title       = 'Erst-Termin';
             $event->freetext_external = $request->freetext;
             $event->stage    = $request->stage;
-            $event->mileage  = $request->mileage;
+            $event->mileage  = str_replace(".", "", $request->mileage);
             $event->tuning   = $request->tuning;
             $event->dyno     = $request->dyno;
             $event->payment  = $request->payment;
