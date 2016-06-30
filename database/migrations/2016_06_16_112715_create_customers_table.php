@@ -21,7 +21,7 @@ class CreateCustomersTable extends Migration
             $table->tinyInteger('title');
             $table->string('firstname', 100);
             $table->string('lastname', 100);
-            $table->string('email', 255)->unique();
+            $table->string('email', 255);
             $table->string('additional_address',100)->nullable();
             $table->string('street', 255)->nullable();
             $table->string('postal', 10)->nullable();
