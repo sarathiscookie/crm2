@@ -254,7 +254,7 @@ class CustomerController extends Controller
                     <div class="panel-heading" role="tab" id="heading' . $event->id . '">
                         <h4 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $event->title . '</h4>
+                                <h4>' . $event->title . ' ( '.$event->id.' )</h4>
                                 <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
                             </a>
                         </h4>
@@ -461,7 +461,7 @@ class CustomerController extends Controller
                 <div class="panel-heading" role="tab" id="heading' . $event->id . '">
                     <h4 class="panel-title">
                         <a role="button" style="outline: none; text-decoration: none">
-                            <h4>' . $event->title . '</h4>
+                            <h4>' . $event->title . ' ( '.$event->id.' )</h4>
                             <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
                         </a>
                     </h4>
