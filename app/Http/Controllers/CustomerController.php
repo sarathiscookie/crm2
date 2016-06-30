@@ -88,16 +88,20 @@ class CustomerController extends Controller
         $customer = new Customer();
         $customer->erp_id = rand(1,999);
         $customer->company = $request->company;
+        $customer->title = $request->title;
         $customer->firstname = $request->firstname;
         $customer->lastname = $request->lastname;
         $customer->email = $request->email;
         $customer->phone_1 = $request->phone;
+        $customer->phone_2 = $request->phone_2;
+        $customer->phone_mobile = $request->phone_mobile;
+        $customer->additional_address = $request->additional_address;
         $customer->street = $street;
         $customer->postal = $request->postal;
         $customer->city = $request->city;
         $customer->state = $request->state;
-        $customer->status = $request->customerstatus;
         $customer->country_long = $request->country;
+        $customer->status = $request->customerstatus;
         $customer->save();
         $customer_id = $customer->id;
 
@@ -108,7 +112,7 @@ class CustomerController extends Controller
 
         $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
         try {
-            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', 0);
+            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', [10,0,10,0]);
             $html2pdf->pdf->SetDisplayMode('fullpage');
             $html2pdf->setDefaultFont("Helvetica");
             $html2pdf->writeHTML($eventHtml);

@@ -51,10 +51,11 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="name">Title</label>
-                    <select>
-
+                    <select name="title" class="form-control">
+                        @foreach($typesCustomerAndGearbox->customerTitle as $titleKay =>$titleLabel)
+                            <option @if($titleKay==1 || $titleKay==old('title')) selected="selected" @endif value="{{ $titleKay }}">{{ $titleLabel }}</option>
+                        @endforeach
                     </select>
-                    <input type="text" class="form-control" name="title" value="{{ old('company') }}">
                 </div>
             </div>
             <div class="row">
@@ -79,16 +80,20 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Telefon</label>
+                    <label for="name">Zusätzliche Adresse</label>
+                    <input type="text" class="form-control" id="additional_address" name="additional_address" value="{{ old('additional_address') }}">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="name">Telefon - 1</label>
                     <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="payment">Zahlungsweise</label><br />
-                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Barzahlung</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="bank">EC-Karte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Kreditkarte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">PayPal</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Rechnung</label>
+                <div class="form-group col-md-2">
+                    <label for="name">Telefon - 2</label>
+                    <input type="text" class="form-control" name="phone_2" value="{{ old('phone_2') }}">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="name">Telefon - Mobile</label>
+                    <input type="text" class="form-control" name="phone_mobile" value="{{ old('phone_mobile') }}">
                 </div>
             </div>
             <div class="row">
@@ -104,6 +109,16 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
+                    <label for="payment">Zahlungsweise</label><br />
+                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Barzahlung</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="bank">EC-Karte</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Kreditkarte</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">PayPal</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Rechnung</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
                     <label for="name">Stage</label>
                     <select class="form-control" name="stage" id="stage">
                         <option value="">Choose Stage</option>
@@ -114,13 +129,11 @@
                         <option value="5">5</option>
                     </select>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <label for="name">KFZ-Kennzeichen</label>
                     <input type="text" class="form-control" name="license" value="{{ old('license') }}">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <label for="name">Fahrgestellnummer</label>
                     <input type="text" class="form-control" name="chassis" value="{{ old('chassis') }}">
                 </div>
