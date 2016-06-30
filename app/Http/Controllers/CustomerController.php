@@ -16,6 +16,9 @@ use App\Http\Requests\CustomerRequest;
 use Mail;
 use DB;
 
+use HTML2PDF;
+use HTML2PDF_exception;
+
 class CustomerController extends Controller
 {
     public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
@@ -41,7 +44,7 @@ class CustomerController extends Controller
         return $customerStatus;
     }
 
-    
+
 
     /**
      * view dashboard
@@ -542,6 +545,7 @@ class CustomerController extends Controller
                     <div class="panel-body">
                          <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                          <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                         <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
                          <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                     </div>
                 </div>
