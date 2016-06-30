@@ -37,9 +37,10 @@
 <body id="app-layout">
 @include('includes.header')
 
-    <div class="container" >
+    <div class="container">
     @yield('content')
     </div>
+    @yield('contents')
 
 <!-- JavaScripts -->
 <script src="/assets/js/jquery.min.js"></script>
