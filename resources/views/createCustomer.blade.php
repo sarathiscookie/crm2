@@ -156,7 +156,7 @@
                     <label for="gearbox">Gearbox</label>
                     <select class="form-control" name="gearbox" id="gearbox">
                         @foreach($typesCustomerAndGearbox->gearbox() as $key=>$gearboxeTypes)
-                            <option @if($key ==1 || $key== old('gearbox')) selected="selected" @endif value="{{ $key }}">{{ $gearboxeTypes }}</option>
+                            <option @if($key == 1 || $key == old('gearbox')) selected="selected" @endif value="{{ $key }}">{{ $gearboxeTypes }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -164,7 +164,7 @@
                     <label for="gearbox">Customer Status</label>
                     <select class="form-control" name="customerstatus" id="customerstatus">
                         @foreach($typesCustomerAndGearbox->customerStatus() as $key=>$custStatus)
-                            <option @if($key =='customer' || $key== old('customerstatus')) selected="selected" @endif value="{{ $key }}">{{ $custStatus }}</option>
+                            <option @if($key == 'customer' || $key == old('customerstatus')) selected="selected" @endif value="{{ $key }}">{{ $custStatus }}</option>
                         @endforeach
                     </select>
                 </div>
