@@ -79,7 +79,7 @@ class CustomerController extends Controller
         $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
 
-        Mail::send('emails.newCustomerNotification', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message) use ($customer) {
+        Mail::send('emails.newEventNotification', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message) use ($customer) {
             $message->to(env('NOTIFY_MAIL', ''))->subject('New customer created');
         });
 
