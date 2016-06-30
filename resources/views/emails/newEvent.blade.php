@@ -26,9 +26,10 @@
                 <tr>
                     <td>
                         <address>
+                            @if($customer->additional_address){{ $customer->additional_address }}@endif<br>
                             @if($customer->street){{ $customer->street }}@endif<br>
                             @if($customer->postal){{ $customer->postal }}@endif {{ $customer->city }}<br>
-                            {{ $customer->country }}
+                            {{ $customer->country_long }}
                         </address><br>
                     </td>
                 </tr>
@@ -36,8 +37,18 @@
                     <td><label>E-Mail: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br></td>
                 </tr>
                 <tr>
-                    <td><label>Telefon: {{ $customer->phone }} </label></td>
+                    <td><label>Telefon: {{ $customer->phone_1 }} </label></td>
                 </tr>
+                @if($customer->phone_2)
+                    <tr>
+                        <td><label>Telefon 2: {{ $customer->phone_2 }} </label></td>
+                    </tr>
+                @endif
+                @if($customer->phone_mobile)
+                    <tr>
+                        <td><label>Mobile: {{ $customer->phone_mobile }} </label></td>
+                    </tr>
+                @endif
                 <tr>
                     <td><hr></td>
                 </tr>

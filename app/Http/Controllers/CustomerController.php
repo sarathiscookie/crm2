@@ -29,7 +29,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
         return view('dashboard', compact('listCustomers'));
@@ -68,12 +68,12 @@ class CustomerController extends Controller
         $customer->firstname = $request->firstname;
         $customer->lastname = $request->lastname;
         $customer->email = $request->email;
-        $customer->phone = $request->phone;
+        $customer->phone_1 = $request->phone;
         $customer->street = $street;
         $customer->postal = $request->postal;
         $customer->city = $request->city;
         $customer->state = $request->state;
-        $customer->country = $request->country;
+        $customer->country_long = $request->country;
         $customer->save();
         $customer_id = $customer->id;
 

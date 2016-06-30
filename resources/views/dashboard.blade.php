@@ -53,7 +53,7 @@
                     <td>@{{customer.firstname}}</td>
                     <td><a href="{{ url('/customer/details/') }}/@{{ customer.id }}">@{{customer.lastname}}</a></td>
                     <td>@{{customer.email}}</td>
-                    <td>@{{customer.phone}}</td>
+                    <td>@{{customer.phone_1}}</td>
                     <td>@{{customer.status}}</td>
                     <td>@{{customer.created_on}}</td>
                 </tr>
@@ -111,9 +111,9 @@
         el: '#app',
         data: {
             searchQuery: '',
-            gridColumns: ['erp_id', 'firstname', 'lastname', 'email', 'phone', 'status', 'created_on'],
+            gridColumns: ['erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', 'created_on'],
             gridData: null,
-            colTitles: {'erp_id':'KundenNr.', 'firstname':'Vorname', 'lastname':'Nachname', 'email':'E-Mail', 'phone':'Telefon', 'status':'Status', 'created_on':'Hinzugefügt am'}
+            colTitles: {'erp_id':'KundenNr.', 'firstname':'Vorname', 'lastname':'Nachname', 'email':'E-Mail', 'phone_1':'Telefon', 'status':'Status', 'created_on':'Hinzugefügt am'}
         },
 
         created: function() {
