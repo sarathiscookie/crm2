@@ -60,9 +60,8 @@
                 <div class="form-group col-md-6">
                     <label for="name">Stage</label>
                     <select class="form-control" name="stage">
-                        <option value="">Choose Stage</option>
                         @for($i=1;$i<=5;$i++)
-                            <option @if($i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
+                            <option @if($i ==1 || $i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
                         @endfor
                     </select>
                 </div>

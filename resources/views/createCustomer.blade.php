@@ -121,19 +121,16 @@
                 <div class="form-group col-md-6">
                     <label for="name">Stage</label>
                     <select class="form-control" name="stage" id="stage">
-                        <option value="">Choose Stage</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                        @for($i=1;$i<=5;$i++)
+                            <option @if($i ==1 || $i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
+                        @endfor
                     </select>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                     <label for="name">KFZ-Kennzeichen</label>
                     <input type="text" class="form-control" name="license" value="{{ old('license') }}">
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label for="name">Fahrgestellnummer</label>
                     <input type="text" class="form-control" name="chassis" value="{{ old('chassis') }}">
                 </div>
@@ -159,16 +156,15 @@
                     <label for="gearbox">Gearbox</label>
                     <select class="form-control" name="gearbox" id="gearbox">
                         @foreach($typesCustomerAndGearbox->gearbox() as $key=>$gearboxeTypes)
-                            <option value="{{ $key }}">{{ $gearboxeTypes }}</option>
+                            <option @if($key ==1 || $key== old('gearbox')) selected="selected" @endif value="{{ $key }}">{{ $gearboxeTypes }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="gearbox">Customer Status</label>
                     <select class="form-control" name="customerstatus" id="customerstatus">
-                        <option value="">Choose customer status</option>
                         @foreach($typesCustomerAndGearbox->customerStatus() as $key=>$custStatus)
-                            <option value="{{ $key }}">{{ $custStatus }}</option>
+                            <option @if($key =='customer' || $key== old('customerstatus')) selected="selected" @endif value="{{ $key }}">{{ $custStatus }}</option>
                         @endforeach
                     </select>
                 </div>
