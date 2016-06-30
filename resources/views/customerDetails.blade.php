@@ -33,16 +33,19 @@
     <h1 class="page-header">Kunden-Details</h1>
     <div class="row">
         <div class="col-md-6">
-            <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }}</h2>
+            <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }} ( {{ $customer->erp_id }} )</h2>
             @if($customer->company)<label>{{ $customer->company }}</label>@endif <br>
             <address>
+                @if($customer->additional_address){{ $customer->additional_address }}@endif<br>
                 @if($customer->street){{ $customer->street }}@endif<br>
                     @if($customer->postal){{ $customer->postal }}@endif {{ $customer->city }}<br>
-                    {{ $customer->country }}
+                    {{ $customer->country_long }}
 
             </address>
             <label>E-Mail: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br>
-            <label>Telefon: {{ $customer->phone }} </label>
+            <label>Telefon: {{ $customer->phone_1 }} </label>
+            @if($customer->phone_2) <br><label>Telefon 2: {{ $customer->phone_2 }} </label> @endif
+            @if($customer->phone_mobile) <br><label>Mobile: {{ $customer->phone_mobile }} </label> @endif
             <hr>
             <h3>Termine</h3>
             <div class="panel-group" id="accordionEvent" role="tablist" aria-multiselectable="true">
@@ -91,6 +94,14 @@
                         <div class="form-group col-md-9">
                             <label for="name">KFZ-Kennzeichen</label>
                             <input type="text" class="form-control txtInput" id="license" name="license" value="">
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label for="name">Gearbox</label>
+                            <select class="form-control" id="gearbox" name="gearbox">
+                                @foreach($gears as $optKey => $optLabel)
+                                    <option @if($optKey==1) selected="selected" @endif value="{{ $optKey }}">{{ $optLabel }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-12">
                             <label for="name">Zusatzinformationen</label>

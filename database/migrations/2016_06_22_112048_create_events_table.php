@@ -3,6 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+
 class CreateEventsTable extends Migration
 {
     /**
@@ -35,7 +36,10 @@ class CreateEventsTable extends Migration
 
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
+
         });
+        $statement = "ALTER TABLE events AUTO_INCREMENT = 10000;";
+        DB::unprepared($statement);
     }
 
     /**

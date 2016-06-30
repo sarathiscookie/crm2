@@ -16,6 +16,9 @@ use App\Http\Requests\CustomerRequest;
 use Mail;
 use DB;
 
+use HTML2PDF;
+use HTML2PDF_exception;
+
 class CustomerController extends Controller
 {
     /**
@@ -39,13 +42,15 @@ class CustomerController extends Controller
         return $customerStatus;
     }
 
+    public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
+
     /**
      * view dashboard
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
         return view('dashboard', compact('listCustomers'));
@@ -84,13 +89,13 @@ class CustomerController extends Controller
         $customer->firstname = $request->firstname;
         $customer->lastname = $request->lastname;
         $customer->email = $request->email;
-        $customer->phone = $request->phone;
+        $customer->phone_1 = $request->phone;
         $customer->street = $street;
         $customer->postal = $request->postal;
         $customer->city = $request->city;
         $customer->state = $request->state;
-        $customer->country = $request->country;
         $customer->status = $request->customerstatus;
+        $customer->country_long = $request->country;
         $customer->save();
         $customer_id = $customer->id;
 
@@ -99,9 +104,22 @@ class CustomerController extends Controller
         $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
 
-        Mail::send('emails.newCustomerNotification', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message) use ($customer) {
-            $message->to(env('NOTIFY_MAIL', ''))->subject('New customer created');
-        });
+        $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
+        try {
+            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', 0);
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            $html2pdf->setDefaultFont("Helvetica");
+            $html2pdf->writeHTML($eventHtml);
+            $newEventData = $html2pdf->Output('', true);
+
+            Mail::send('emails.newEventNotification', [], function ($message) use($newEventData) {
+                $message->to(env('NOTIFY_MAIL', ''))
+                    ->subject('New Event created')
+                    ->attachData($newEventData, 'newEvent.pdf');
+            });
+        } catch (HTML2PDF_exception $e) {
+            exit;
+        }
 
         /* Save data in to hardware table and vehicle_hardwares */
         if($request->hardwares != ""){
@@ -209,8 +227,9 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         $events   = $this->getCustomerEvents($id);
         $vehicles = $this->getCustomerVehicles($id);
+        $gears = $this->gearbox;
 
-        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles]);
+        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears]);
     }
 
     /**
@@ -258,7 +277,7 @@ class CustomerController extends Controller
                     <div class="panel-heading" role="tab" id="heading' . $event->id . '">
                         <h4 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $event->title . '</h4>
+                                <h4>' . $event->title . ' ( '.$event->id.' )</h4>
                                 <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
                             </a>
                         </h4>
@@ -289,7 +308,7 @@ class CustomerController extends Controller
      */
     protected function getCustomerVehicles($customer_id)
     {
-        $customer_vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.created_at')
+        $customer_vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.gearbox', 'VC.created_at')
             ->where('customer_id', $customer_id)
             ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
@@ -337,6 +356,7 @@ class CustomerController extends Controller
                         <div class="panel-body">
                              <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                              <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
                              <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                         </div>
                     </div>
@@ -464,7 +484,7 @@ class CustomerController extends Controller
                 <div class="panel-heading" role="tab" id="heading' . $event->id . '">
                     <h4 class="panel-title">
                         <a role="button" style="outline: none; text-decoration: none">
-                            <h4>' . $event->title . '</h4>
+                            <h4>' . $event->title . ' ( '.$event->id.' )</h4>
                             <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
                         </a>
                     </h4>
@@ -489,7 +509,7 @@ class CustomerController extends Controller
 
     public function getVehicleData($vehicle_id)
     {
-        $vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.created_at')
+        $vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.gearbox', 'VC.created_at')
             ->where('VC.id', $vehicle_id)
             ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
@@ -523,6 +543,7 @@ class CustomerController extends Controller
                     <div class="panel-body">
                          <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                          <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                         <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
                          <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                     </div>
                 </div>
