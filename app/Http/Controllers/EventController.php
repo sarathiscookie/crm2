@@ -14,6 +14,8 @@ use App\Http\Requests\EventRequest;
 use DB;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use HTML2PDF;
+use HTML2PDF_exception;
 
 class EventController extends Controller
 {
@@ -127,9 +129,24 @@ class EventController extends Controller
         $events   = $customerObj->getEventData($event->id);
         $vehicles = $customerObj->getVehicleData($request->vehicle_id);
 
-        Mail::send('emails.newEventNotification', [ 'customer' => Customer::find($request->customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message)  {
-            $message->to(env('NOTIFY_MAIL', ''))->subject('New Event created');
-        });
+
+        $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($request->customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
+        try {
+            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', [10,0,10,0]);
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            $html2pdf->setDefaultFont("Helvetica");
+            $html2pdf->writeHTML($eventHtml);
+            $newEventData = $html2pdf->Output('', true);
+
+            Mail::send('emails.newEventNotification', [], function ($message) use($newEventData) {
+                $message->to(env('NOTIFY_MAIL', ''))
+                    ->subject('New Event created')
+                    ->attachData($newEventData, 'newEvent.pdf');
+            });
+        } catch (HTML2PDF_exception $e) {            
+            exit;
+        }
+
 
         return redirect(url('/customer/details/'.$request->customer_id));
     }

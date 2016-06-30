@@ -16,6 +16,9 @@ use App\Http\Requests\CustomerRequest;
 use Mail;
 use DB;
 
+use HTML2PDF;
+use HTML2PDF_exception;
+
 class CustomerController extends Controller
 {
     public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
@@ -79,9 +82,22 @@ class CustomerController extends Controller
         $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
 
-        Mail::send('emails.newEventNotification', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles], function ($message) use ($customer) {
-            $message->to(env('NOTIFY_MAIL', ''))->subject('New customer created');
-        });
+        $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
+        try {
+            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', 0);
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            $html2pdf->setDefaultFont("Helvetica");
+            $html2pdf->writeHTML($eventHtml);
+            $newEventData = $html2pdf->Output('', true);
+
+            Mail::send('emails.newEventNotification', [], function ($message) use($newEventData) {
+                $message->to(env('NOTIFY_MAIL', ''))
+                    ->subject('New Event created')
+                    ->attachData($newEventData, 'newEvent.pdf');
+            });
+        } catch (HTML2PDF_exception $e) {
+            exit;
+        }
 
         /* Save data in to hardware table and vehicle_hardwares */
         if($request->hardwares != ""){
