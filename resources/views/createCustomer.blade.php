@@ -51,10 +51,11 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="name">Title</label>
-                    <select>
-
+                    <select name="title" class="form-control">
+                        @foreach($typesCustomerAndGearbox->customerTitle as $titleKay =>$titleLabel)
+                            <option @if($titleKay==1 || $titleKay==old('title')) selected="selected" @endif value="{{ $titleKay }}">{{ $titleLabel }}</option>
+                        @endforeach
                     </select>
-                    <input type="text" class="form-control" name="title" value="{{ old('company') }}">
                 </div>
             </div>
             <div class="row">
@@ -79,16 +80,20 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Telefon</label>
+                    <label for="name">Zusätzliche Adresse</label>
+                    <input type="text" class="form-control" id="additional_address" name="additional_address" value="{{ old('additional_address') }}">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="name">Telefon - 1</label>
                     <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="payment">Zahlungsweise</label><br />
-                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Barzahlung</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="bank">EC-Karte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Kreditkarte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">PayPal</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Rechnung</label>
+                <div class="form-group col-md-2">
+                    <label for="name">Telefon - 2</label>
+                    <input type="text" class="form-control" name="phone_2" value="{{ old('phone_2') }}">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="name">Telefon - Mobile</label>
+                    <input type="text" class="form-control" name="phone_mobile" value="{{ old('phone_mobile') }}">
                 </div>
             </div>
             <div class="row">
@@ -104,23 +109,28 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Stage</label>
-                    <select class="form-control" name="stage" id="stage">
-                        <option value="">Choose Stage</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+                    <label for="payment">Zahlungsweise</label><br />
+                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Barzahlung</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="bank">EC-Karte</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Kreditkarte</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">PayPal</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Rechnung</label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
+                    <label for="name">Stage</label>
+                    <select class="form-control" name="stage" id="stage">
+                        @for($i=1;$i<=5;$i++)
+                            <option @if($i ==1 || $i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
                     <label for="name">KFZ-Kennzeichen</label>
                     <input type="text" class="form-control" name="license" value="{{ old('license') }}">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="name">Fahrgestellnummer</label>
                     <input type="text" class="form-control" name="chassis" value="{{ old('chassis') }}">
                 </div>
@@ -146,16 +156,15 @@
                     <label for="gearbox">Gearbox</label>
                     <select class="form-control" name="gearbox" id="gearbox">
                         @foreach($typesCustomerAndGearbox->gearbox() as $key=>$gearboxeTypes)
-                            <option value="{{ $key }}">{{ $gearboxeTypes }}</option>
+                            <option @if($key == 1 || $key == old('gearbox')) selected="selected" @endif value="{{ $key }}">{{ $gearboxeTypes }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="gearbox">Customer Status</label>
                     <select class="form-control" name="customerstatus" id="customerstatus">
-                        <option value="">Choose customer status</option>
                         @foreach($typesCustomerAndGearbox->customerStatus() as $key=>$custStatus)
-                            <option value="{{ $key }}">{{ $custStatus }}</option>
+                            <option @if($key == 'customer' || $key == old('customerstatus')) selected="selected" @endif value="{{ $key }}">{{ $custStatus }}</option>
                         @endforeach
                     </select>
                 </div>
