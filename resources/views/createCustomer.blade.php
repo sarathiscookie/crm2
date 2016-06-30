@@ -32,7 +32,7 @@
 @inject('typesCustomerAndGearbox', 'App\Http\Controllers\CustomerController')
 
 @section('content')
-        <h1 class="page-header">Kunden hinzufügen</h1>
+        <h1 class="page-header">{{ trans('messages.customerCreateFormHeadingLabel') }}</h1>
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -46,11 +46,11 @@
             {{ csrf_field() }}
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Firma</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelCompany') }}</label>
                     <input type="text" class="form-control" name="company" value="{{ old('company') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Title</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelTitle') }}</label>
                     <select name="title" class="form-control">
                         @foreach($typesCustomerAndGearbox->customerTitle as $titleKay =>$titleLabel)
                             <option @if($titleKay==1 || $titleKay==old('title')) selected="selected" @endif value="{{ $titleKay }}">{{ $titleLabel }}</option>
@@ -60,45 +60,45 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Vorname</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelFirstName') }}</label>
                     <input type="text" class="form-control" name="firstname" value="{{ old('firstname') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Nachname</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelLastName') }}</label>
                     <input type="text" class="form-control" name="lastname" value="{{ old('lastname') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">E-Mail Adresse</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelEmail') }}</label>
                     <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Adresse</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelAddress') }}</label>
                     <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Zusätzliche Adresse</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelAdditionalAddress') }}</label>
                     <input type="text" class="form-control" id="additional_address" name="additional_address" value="{{ old('additional_address') }}">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="name">Telefon - 1</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelPhone1') }}</label>
                     <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="name">Telefon - 2</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelPhone2') }}</label>
                     <input type="text" class="form-control" name="phone_2" value="{{ old('phone_2') }}">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="name">Telefon - Mobile</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelPhone') }}</label>
                     <input type="text" class="form-control" name="phone_mobile" value="{{ old('phone_mobile') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Vehicle</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelVehicle') }}</label>
                     <div id="vehicleInputBox">
                         <input type="text" class="form-control" name="vehicle" id="vehicle"  onkeydown="down()" onkeyup="up()" autocomplete="off" value="">
                         <div id="search-result" class="col-md-6 search-box"></div>
@@ -109,17 +109,17 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="payment">Zahlungsweise</label><br />
-                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">Barzahlung</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="bank">EC-Karte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">Kreditkarte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">PayPal</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">Rechnung</label>
+                    <label for="payment">{{ trans('messages.customerCreateFormLabelPayment') }}</label><br />
+                    <label class="radio-inline"><input type="radio" name="payment" value="cash" checked="checked">{{ trans('messages.customerCreateFormPaymentLabelCash') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="bank">{{ trans('messages.customerCreateFormPaymentLabelBank') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard">{{ trans('messages.customerCreateFormPaymentLabelCreditcard') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="paypal">{{ trans('messages.customerCreateFormPaymentLabelPaypal') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="invoice">{{ trans('messages.customerCreateFormLabelVehicleInvoice') }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Stage</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelStage') }}</label>
                     <select class="form-control" name="stage" id="stage">
                         @for($i=1;$i<=5;$i++)
                             <option @if($i ==1 || $i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
@@ -127,33 +127,33 @@
                     </select>
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="name">KFZ-Kennzeichen</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelLicensePlate') }}</label>
                     <input type="text" class="form-control" name="license" value="{{ old('license') }}">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="name">Fahrgestellnummer</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelChassis') }}</label>
                     <input type="text" class="form-control" name="chassis" value="{{ old('chassis') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Kilometerstand</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelMileage') }}</label>
                     <input type="text" class="form-control mileageNumber" name="mileage" value="{{ old('mileage') }}">
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="tuning">Tuning bereits vorhanden?</label><br />
-                    <label class="radio-inline"><input type="radio" name="tuning" value="yes">Ja</label>
-                    <label class="radio-inline"><input type="radio" name="tuning" value="no" checked="checked">Nein</label>
+                    <label for="tuning">{{ trans('messages.customerCreateFormLabelTuning') }}</label><br />
+                    <label class="radio-inline"><input type="radio" name="tuning" value="yes">{{ trans('messages.customerCreateFormTuningLabelYes') }}</label>
+                    <label class="radio-inline"><input type="radio" name="tuning" value="no" checked="checked">{{ trans('messages.customerCreateFormTuningLabelNo') }}</label>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="dyno" >Prüfstandslauf</label><br />
-                    <label class="radio-inline"><input type="radio" name="dyno" value="yes">Ja</label>
-                    <label class="radio-inline"><input type="radio" name="dyno" value="no" checked="checked">Nein</label>
+                    <label for="dyno" >{{ trans('messages.customerCreateFormLabelDyno') }}</label><br />
+                    <label class="radio-inline"><input type="radio" name="dyno" value="yes">{{ trans('messages.customerCreateFormDynoLabelYes') }}</label>
+                    <label class="radio-inline"><input type="radio" name="dyno" value="no" checked="checked">{{ trans('messages.customerCreateFormDynoLabelNo') }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="gearbox">Gearbox</label>
+                    <label for="gearbox">{{ trans('messages.customerCreateFormLabelGearbox') }}</label>
                     <select class="form-control" name="gearbox" id="gearbox">
                         @foreach($typesCustomerAndGearbox->gearbox() as $key=>$gearboxeTypes)
                             <option @if($key == 1 || $key == old('gearbox')) selected="selected" @endif value="{{ $key }}">{{ $gearboxeTypes }}</option>
@@ -161,7 +161,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="gearbox">Customer Status</label>
+                    <label for="gearbox">{{ trans('messages.customerCreateFormLabelCustomerStatus') }}</label>
                     <select class="form-control" name="customerstatus" id="customerstatus">
                         @foreach($typesCustomerAndGearbox->customerStatus() as $key=>$custStatus)
                             <option @if($key == 'customer' || $key == old('customerstatus')) selected="selected" @endif value="{{ $key }}">{{ $custStatus }}</option>
@@ -171,7 +171,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="name">Bereits verbaute Komponenten</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelHardwareTag') }}</label>
                     <ul class="tag-handler form-control">
                     </ul>
                     <input type="hidden" id="hardwares" name="hardwares" value="">
@@ -179,12 +179,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-12">
-                    <label for="name">Zusatzinformationen</label>
+                    <label for="name">{{ trans('messages.customerCreateFormLabelFreetext') }}</label>
                     <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Kunde & Termin anlegen</button>
+                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">{{ trans('messages.customerCreateFormSubmitButton') }}</button>
             </div>
             <input type="hidden" name="street_number" id="street_number" value="{{ old('street_number') }}">
             <input type="hidden" name="route" id="route" value="{{ old('route') }}">

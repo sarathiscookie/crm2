@@ -40,7 +40,7 @@ class CustomerController extends Controller
 
     public function customerStatus()
     {
-        $customerStatus = array('customer' => 'Customer', 'prospect' => 'Prospect', 'vip' => 'Vip', 'reseller' => 'Reseller', 'blocked' => 'Blocked', 'deleted' => 'Deleted');
+        $customerStatus = array('customer' => trans("messages.customerCreateFormStatusLabelCustomer"), 'prospect' => trans("messages.customerCreateFormStatusLabelProspect"), 'vip' => trans("messages.customerCreateFormStatusLabelVip"), 'reseller' => trans("messages.customerCreateFormStatusLabelReseller"), 'blocked' => trans("messages.customerCreateFormStatusLabelBlocked"), 'deleted' => trans("messages.customerCreateFormStatusLabelDeleted"));
         return $customerStatus;
     }
 
