@@ -33,7 +33,7 @@
     <h1 class="page-header">Kunden-Details</h1>
     <div class="row">
         <div class="col-md-6">
-            <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }}</h2>
+            <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }} ( {{ $customer->erp_id }} )</h2>
             @if($customer->company)<label>{{ $customer->company }}</label>@endif <br>
             <address>
                 @if($customer->street){{ $customer->street }}@endif<br>
@@ -91,6 +91,14 @@
                         <div class="form-group col-md-9">
                             <label for="name">KFZ-Kennzeichen</label>
                             <input type="text" class="form-control txtInput" id="license" name="license" value="">
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label for="name">Gearbox</label>
+                            <select class="form-control" id="gearbox" name="gearbox">
+                                @foreach($gears as $optKey => $optLabel)
+                                    <option @if($optKey==1) selected="selected" @endif value="{{ $optKey }}">{{ $optLabel }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-12">
                             <label for="name">Zusatzinformationen</label>

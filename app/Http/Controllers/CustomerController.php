@@ -18,13 +18,15 @@ use DB;
 
 class CustomerController extends Controller
 {
+    public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
+
     /**
      * view dashboard
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone',  DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
         return view('dashboard', compact('listCustomers'));
@@ -186,8 +188,9 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         $events   = $this->getCustomerEvents($id);
         $vehicles = $this->getCustomerVehicles($id);
+        $gears = $this->gearbox;
 
-        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles]);
+        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears]);
     }
 
     /**
@@ -266,7 +269,7 @@ class CustomerController extends Controller
      */
     protected function getCustomerVehicles($customer_id)
     {
-        $customer_vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.created_at')
+        $customer_vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.gearbox', 'VC.created_at')
             ->where('customer_id', $customer_id)
             ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
@@ -314,6 +317,7 @@ class CustomerController extends Controller
                         <div class="panel-body">
                              <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                              <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
                              <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                         </div>
                     </div>
@@ -466,7 +470,7 @@ class CustomerController extends Controller
 
     public function getVehicleData($vehicle_id)
     {
-        $vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.created_at')
+        $vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.gearbox', 'VC.created_at')
             ->where('VC.id', $vehicle_id)
             ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
@@ -500,6 +504,7 @@ class CustomerController extends Controller
                     <div class="panel-body">
                          <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                          <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
+                         <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
                          <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                     </div>
                 </div>

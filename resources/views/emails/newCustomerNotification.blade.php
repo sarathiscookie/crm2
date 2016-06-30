@@ -4,13 +4,12 @@
     <meta charset="utf-8">
 </head>
 <body>
-<b>A new Customer has been created.</b><br><br>
-<table>
+<table style="width: 100%">
     <tr>
-        <td>
+        <td style="width: 50%">
             <table>
                 <tr>
-                    <td><h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }}</h2></td>
+                    <td><h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }} ( {{ $customer->erp_id }} )</h2></td>
                 </tr>
                 @if($customer->company)
                 <tr>
@@ -34,7 +33,6 @@
                 </tr>
                 <hr>
                 <tr>
-
                     <td>
                         <table>
                             <tr>
@@ -52,7 +50,7 @@
                 </tr>
             </table>
         </td>
-        <td style="vertical-align: top">
+        <td style="vertical-align: top; width: 50%;">
             <table>
                 <tr>
                     <td>

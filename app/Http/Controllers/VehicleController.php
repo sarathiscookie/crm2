@@ -21,6 +21,7 @@ class VehicleController extends Controller
         $vehicle->execution_id   = $request->vehicle;
         $vehicle->chassis_number = $request->chassis;
         $vehicle->license_plate  = $request->license;
+        $vehicle->gearbox        = $request->gearbox;
         $vehicle->freetext       = $request->freetext;
         $vehicle->save();
         $id = $vehicle->id;
