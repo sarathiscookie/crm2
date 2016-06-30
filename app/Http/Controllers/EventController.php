@@ -116,7 +116,7 @@ class EventController extends Controller
         $event->freetext_external = $request->freetext_external;
         $event->freetext_internal = $request->freetext_internal;
         $event->stage    = $request->stage;
-        $event->mileage  = $request->mileage;
+        $event->mileage  = str_replace(".", "", $request->mileage);
         $event->tuning   = $request->tuning;
         $event->dyno     = $request->dyno;
         $event->payment  = $request->payment;

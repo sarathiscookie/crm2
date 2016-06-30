@@ -67,7 +67,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="name">Kilometerstand</label>
-                    <input type="text" class="form-control" name="mileage" value="{{ old('mileage') }}">
+                    <input type="text" class="form-control mileageNumber" name="mileage" value="{{ old('mileage') }}">
                 </div>
             </div>
             <div class="row">
@@ -216,5 +216,19 @@
             }
         });
 
+        //Add thousand seperator in mileage field
+        $('input.mileageNumber').keyup(function(event) {
+
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40) return;
+
+            // format number
+            $(this).val(function(index, value) {
+                return value
+                        .replace(/\D/g, "")
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        ;
+            });
+        });
     </script>
 @endpush
