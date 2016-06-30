@@ -61,7 +61,7 @@
                     <label for="name">Stage</label>
                     <select class="form-control" name="stage">
                         @for($i=1;$i<=5;$i++)
-                            <option @if($i ==1 || $i== old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
+                            <option @if($i == 1 || $i == old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
                         @endfor
                     </select>
                 </div>
