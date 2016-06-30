@@ -45,9 +45,16 @@
         <form id="addCustomerFrm" action="{{ url('/customer/save') }}" method="post">
             {{ csrf_field() }}
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label for="name">Firma</label>
                     <input type="text" class="form-control" name="company" value="{{ old('company') }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Title</label>
+                    <select>
+
+                    </select>
+                    <input type="text" class="form-control" name="title" value="{{ old('company') }}">
                 </div>
             </div>
             <div class="row">
