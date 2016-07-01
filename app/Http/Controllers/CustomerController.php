@@ -367,13 +367,16 @@ class CustomerController extends Controller
                              <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
                              <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div><br>
                              <div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
-                             <div><br>
-                             <h4>Documents</h4>
-                             <div class="list-group" id="fileList_' . $vehicle->id . '">'. $documents .'</div>
-                             <form id="uploadFrm_' . $vehicle->id . '" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="vehicleNr" value="' . $vehicle->id . '">
-                                <input type="file" class="upload-input" id="uploadInput_' . $vehicle->id . '" name="vehicle_docs[]" multiple>
-                             </form>
+                             <div>
+                                 <h4>Documents</h4>
+                                 <div class="list-group" id="fileList_' . $vehicle->id . '">'. $documents .'</div>
+                                 <div class="row col-md-10">
+                                 <form id="uploadFrm_' . $vehicle->id . '" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="vehicleNr" value="' . $vehicle->id . '">
+                                    <input type="file" class="upload-input" id="uploadInput_' . $vehicle->id . '" name="vehicle_docs[]" multiple>
+                                 </form>
+                                 </div>
+                                 <img src="/assets/img/loading.gif" class="media-middle file-loader invisible" width="24px" alt="loading" >
                              </div>
                         </div>
                     </div>                    
@@ -570,7 +573,7 @@ class CustomerController extends Controller
     }
 
 
-    protected function getDocuments($vehicle)
+    public function getDocuments($vehicle)
     {
         $documents ='';
         $dir      = storage_path('app').'/documents/'.$vehicle;

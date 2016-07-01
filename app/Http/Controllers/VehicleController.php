@@ -65,24 +65,27 @@ class VehicleController extends Controller
 
     public function uploadDocuments(Request $request)
     {
+        $customerObj = new CustomerController();
         $error = 0;
         $response ='';
         $files = $request->file('vehicle_docs');
+        $vehicleID = $request->vehicleNr;
 
         foreach($files as $file) {
-            $path = 'documents/' . $request->vehicleNr;
+            $path = 'documents/' . $vehicleID;
             $orgName = $file->getClientOriginalName();
             if($orgName!='') {
-                Storage::disk('local')->makeDirectory($path, 0777);
-                Storage::disk('local')->put($path . '/' . $orgName, File::get($file));
-                $response .= '<a href="javascript:void(0)" class="list-group-item">'.$orgName.'</a>';
+                Storage::disk('local')->makeDirectory($path, 0777, true);
+                Storage::disk('local')->put($path . '/' . $orgName, File::get($file));                
             }
             else{
                 $error++;
             }
         }
-        if($error==0)
-            return response( $response );
+        if($error==0) {
+            $response = $customerObj->getDocuments($vehicleID);
+            return response($response);
+        }
         else
             return response('<div class="alert alert-danger">Error uploading '.$error.' file(s)</div>');
     }

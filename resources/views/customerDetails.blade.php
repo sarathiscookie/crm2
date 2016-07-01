@@ -60,7 +60,6 @@
 
                 {!! $vehicles !!}
 
-
             </div>
         </div>
     </div>
@@ -247,10 +246,11 @@
 
 
     /*Vehicle documents - File upload*/
-    $('body').on('change', '.upload-input', function(e){
-        var elementID = $(this).attr('id').split('_')[1];
+    $('#accordionVehicle').on('change', '.upload-input', function(e){
         e.preventDefault();
         var formData = new FormData($(this).parents('form')[0]);
+        var elementID = $(this).attr('id').split('_')[1];
+        $('.file-loader').toggleClass('invisible');
 
         $.ajax({
             url: '/vehicle/upload',
@@ -260,7 +260,8 @@
                 return myXhr;
             },
             success: function (data) {
-                $('#fileList_'+elementID).append(data);
+                $('.file-loader').toggleClass('invisible');
+                $('#fileList_'+elementID).html(data);
                 $('.upload-input').val('');
             },
             data: formData,
