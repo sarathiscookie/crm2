@@ -49,7 +49,7 @@ class CronjobController extends Controller
                 $i=0;
                 if ($event->email != '') {
                     try {
-                        $event->email = 'avb.priya@gmail.com';
+                        // For testing $event->email = '';
                         Mail::send('emails.eventReminder', ['event' => $event, 'vehicle' =>$vehicle_title, 'title' =>$title], function ($message) use ($event) {
                             $message->to($event->email, $event->firstname . ' ' . $event->lastname)
                                 ->subject('Event Reminder');
