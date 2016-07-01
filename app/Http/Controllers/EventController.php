@@ -92,7 +92,6 @@ class EventController extends Controller
             $assignedTags[] = $tag->title;
         }
 
-
         return view('createEvent', ['customer_name' =>$customer_name, 'car_name' => $car_name, 'customer_id' =>$customer_id, 'vehicle_id' => $car_id, 'assignedTags' =>json_encode($assignedTags)]);
     }
 

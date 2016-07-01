@@ -62,7 +62,11 @@ class VehicleController extends Controller
         }
     }
 
-
+    /**
+     * Upload documents
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function uploadDocuments(Request $request)
     {
         $customerObj = new CustomerController();
@@ -88,5 +92,24 @@ class VehicleController extends Controller
         }
         else
             return response('<div class="alert alert-danger">Error uploading '.$error.' file(s)</div>');
+    }
+
+    /**
+     * Download document
+     * @param $vehicle_id
+     * @param $path
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function getDocumentDownload($vehicle_id, $path)
+    {
+        $customer = Customervehicle::select('customer_id')->where('vehicle_id', $vehicle_id)->first();
+        $path = urldecode($path);
+        $file = storage_path('app'). '/documents/'.$vehicle_id.'/' .$path;
+
+        if(Storage::disk('local')->exists('documents/'.$vehicle_id.'/' .$path)) {
+            return response()->download($file, $path);
+        }
+        else
+            return redirect('/customer/details/'.$customer->customer_id);
     }
 }

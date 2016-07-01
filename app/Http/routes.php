@@ -42,6 +42,11 @@ Route::post('/vehicle/check', 'VehicleController@checkVehicle');
 /*Vehicle documents upload*/    
 Route::post('/vehicle/upload', 'VehicleController@uploadDocuments');
 
+/*Document download*/
+Route::get('/document/download/{id}/{path}', 'VehicleController@getDocumentDownload')
+    ->where('id', '[0-9]+');
+
+
 
 
 /*

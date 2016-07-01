@@ -24,7 +24,10 @@ class CustomerController extends Controller
 {
     public $gearbox = array();
     public $customerTitle = array();
-    
+
+    /**
+     * CustomerController constructor.
+     */
     public function __construct()
     {
         $this->gearbox = [
@@ -489,7 +492,11 @@ class CustomerController extends Controller
     }
 
 
-
+    /**
+     * Get event details to Notification email
+     * @param $event_id
+     * @return string
+     */
     public function getEventData($event_id)
     {
         $event = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
@@ -540,7 +547,11 @@ class CustomerController extends Controller
         return $eventHtml;
     }
 
-
+    /**
+     * Get Vehicle details to Notification email
+     * @param $vehicle_id
+     * @return string
+     */
     public function getVehicleData($vehicle_id)
     {
         $vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.gearbox', 'VC.created_at')
@@ -586,7 +597,11 @@ class CustomerController extends Controller
         return $vehicleList;
     }
 
-
+    /**
+     * Get list of document names
+     * @param $vehicle
+     * @return string
+     */
     public function getDocuments($vehicle)
     {
         $documents ='';
@@ -595,7 +610,7 @@ class CustomerController extends Controller
             $contents = preg_grep('/^([^.])/', scandir($dir));
             if (count($contents) > 0) {
                 foreach ($contents as $file) {
-                    $documents .= '<a href="javascript:void(0)" class="list-group-item">'.$file.'</a>';
+                    $documents .= '<a href="'.url('/document/download/'.$vehicle.'/'.urlencode($file)).'" class="list-group-item">'.$file.'</a>';
                 }
             }
         }
