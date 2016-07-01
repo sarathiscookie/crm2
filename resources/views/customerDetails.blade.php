@@ -60,6 +60,7 @@
 
                 {!! $vehicles !!}
 
+
             </div>
         </div>
     </div>
@@ -242,6 +243,32 @@
     $('.txtInput').blur( function () {
         if($.trim($(this).val())!='')
             $('#errMsg').fadeOut();
+    });
+
+
+    /*Vehicle documents - File upload*/
+    $('body').on('change', '.upload-input', function(e){
+        var elementID = $(this).attr('id').split('_')[1];
+        e.preventDefault();
+        var formData = new FormData($(this).parents('form')[0]);
+
+        $.ajax({
+            url: '/vehicle/upload',
+            type: 'POST',
+            xhr: function() {
+                var myXhr = $.ajaxSettings.xhr();
+                return myXhr;
+            },
+            success: function (data) {
+                $('#fileList_'+elementID).append(data);
+                $('.upload-input').val('');
+            },
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+        return false;
     });
 </script>
 @endpush

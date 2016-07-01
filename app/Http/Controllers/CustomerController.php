@@ -15,6 +15,7 @@ use App\Http\Requests;
 use App\Http\Requests\CustomerRequest;
 use Mail;
 use DB;
+use Storage;
 
 use HTML2PDF;
 use HTML2PDF_exception;
@@ -324,6 +325,8 @@ class CustomerController extends Controller
         $i=1;
         foreach($customer_vehicle as $vehicle) {
 
+            $documents = $this->getDocuments($vehicle->id);
+
             $vehicle_informations = DB::connection('fes')
                 ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
 										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
@@ -362,10 +365,18 @@ class CustomerController extends Controller
                         <div class="panel-body">
                              <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                              <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
-                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
-                             <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
+                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div><br>
+                             <div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
+                             <div><br>
+                             <h4>Documents</h4>
+                             <div class="list-group" id="fileList_' . $vehicle->id . '">'. $documents .'</div>
+                             <form id="uploadFrm_' . $vehicle->id . '" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="vehicleNr" value="' . $vehicle->id . '">
+                                <input type="file" class="upload-input" id="uploadInput_' . $vehicle->id . '" name="vehicle_docs[]" multiple>
+                             </form>
+                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>';
             }
             $i++;
@@ -557,6 +568,23 @@ class CustomerController extends Controller
         }
         return $vehicleList;
     }
+
+
+    protected function getDocuments($vehicle)
+    {
+        $documents ='';
+        $dir      = storage_path('app').'/documents/'.$vehicle;
+        if(Storage::exists('/documents/'.$vehicle)) {
+            $contents = preg_grep('/^([^.])/', scandir($dir));
+            if (count($contents) > 0) {
+                foreach ($contents as $file) {
+                    $documents .= '<a href="javascript:void(0)" class="list-group-item">'.$file.'</a>';
+                }
+            }
+        }
+        return $documents;
+    }
+
     
     
 }

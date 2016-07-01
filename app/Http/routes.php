@@ -38,6 +38,9 @@ Route::post('/vehicle/save', 'VehicleController@saveVehicle');
 
 /* Check vehicle already added for customer */
 Route::post('/vehicle/check', 'VehicleController@checkVehicle');
+    
+/*Vehicle documents upload*/    
+Route::post('/vehicle/upload', 'VehicleController@uploadDocuments');
 
 
 

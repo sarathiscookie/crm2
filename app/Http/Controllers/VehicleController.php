@@ -7,6 +7,7 @@ use App\Vehicle;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Storage, File;
 
 class VehicleController extends Controller
 {
@@ -59,5 +60,30 @@ class VehicleController extends Controller
         else {
             return response('Vehicle already exists');
         }
+    }
+
+
+    public function uploadDocuments(Request $request)
+    {
+        $error = 0;
+        $response ='';
+        $files = $request->file('vehicle_docs');
+
+        foreach($files as $file) {
+            $path = 'documents/' . $request->vehicleNr;
+            $orgName = $file->getClientOriginalName();
+            if($orgName!='') {
+                Storage::disk('local')->makeDirectory($path, 0777);
+                Storage::disk('local')->put($path . '/' . $orgName, File::get($file));
+                $response .= '<a href="javascript:void(0)" class="list-group-item">'.$orgName.'</a>';
+            }
+            else{
+                $error++;
+            }
+        }
+        if($error==0)
+            return response( $response );
+        else
+            return response('<div class="alert alert-danger">Error uploading '.$error.' file(s)</div>');
     }
 }
