@@ -22,8 +22,22 @@ use HTML2PDF_exception;
 
 class CustomerController extends Controller
 {
-    public $gearbox = [1 =>'Manual', 2 => 'Automatic'];
-    public $customerTitle = [1 =>'Herr', 2 => 'Frau', 3 => 'Firma'];
+    public $gearbox = array();
+    public $customerTitle = array();
+    
+    public function __construct()
+    {
+        $this->gearbox = [
+            1 => trans("messages.customerCreateFormGearboxManualLabel"),
+            2 => trans("messages.customerCreateFormGearboxAutomaticLabel")
+        ];
+        $this->customerTitle =[
+            1 => trans("messages.customerCreateFormTitleLabelMr"),
+            2 => trans("messages.customerCreateFormTitleLabelMrs"),
+            3 => trans("messages.customerCreateFormTitleLabelCompany")
+        ];
+    }
+
     /**
      * Listing gearbox types
      * For select box
