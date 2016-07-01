@@ -46,7 +46,7 @@ Route::post('/vehicle/upload', 'VehicleController@uploadDocuments');
 Route::get('/document/download/{id}/{path}', 'VehicleController@getDocumentDownload')
     ->where('id', '[0-9]+');
 
-
+Route::get('/temp_reminder','CronjobController@sendEventReminder');
 
 
 /*
