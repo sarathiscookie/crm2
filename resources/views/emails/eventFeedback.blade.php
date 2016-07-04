@@ -7,5 +7,5 @@ Event details: <br /><br />
 Vehicle : {{ $vehicle }} <br><br>
 License plate: {{ $event->license_plate }} <br><br>
 
-Please <a href="#">Click here</a> to give your feedback.
+Please <a href="https://www.turboperformance.de/kundenmeinung">Click here</a> to give your feedback.
 
