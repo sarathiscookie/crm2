@@ -33,6 +33,7 @@ class CreateEventsTable extends Migration
             $table->decimal('price', 10,2);
             $table->decimal('discount', 10,2);
             $table->dateTime('reminded_at')->nullable();
+            $table->dateTime('feedback_at')->nullable();
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers');
