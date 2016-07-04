@@ -96,7 +96,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="name">Bereits verbaute Komponenten</label>
-                    <ul class="tag-handler form-control">
+                    <ul class="tag-handler form-control" style="margin: 0">
                     </ul>
                     <input type="hidden" id="hardwares" name="hardwares" value="{{ implode(",", json_decode($assignedTags)) }}">
                 </div>
@@ -118,59 +118,27 @@
         //WYSIWYG Editor
         $(document).ready(function() {
             $("#txtEditor_x").Editor({
-                'l_align':false,
-                'r_align':false,
-                'c_align':false,
-                'justify':false,
-                'insert_link':false,
-                'unlink':false,
-                'insert_img':false,
-                'hr_line':false,
-                'block_quote':false,
-                'source':false,
-                'strikeout':true,
-                'indent':false,
-                'outdent':false,
-                'fonts':false,
-                'styles':false,
-                'print':false,
-                'rm_format':false,
-                'status_bar':false,
-                'font_size':false,
-                'color':false,
-                'splchars':false,
-                'insert_table':false,
-                'select_all':false,
-                'togglescreen':false
+                'l_align':false, 'r_align':false, 'c_align':false,
+                'justify':false, 'insert_link':false, 'unlink':false,
+                'insert_img':false, 'hr_line':false, 'block_quote':false,
+                'source':false, 'strikeout':true, 'indent':false,
+                'outdent':false, 'fonts':false, 'styles':false,
+                'print':false, 'rm_format':false, 'status_bar':false,
+                'font_size':false, 'color':false, 'splchars':false,
+                'insert_table':false, 'select_all':false, 'togglescreen':false
             });
 
             $("#txtEditor_x").Editor("setText", $("#txtEditor_x").text());
 
             $("#txtEditor_i").Editor({
-                'l_align':false,
-                'r_align':false,
-                'c_align':false,
-                'justify':false,
-                'insert_link':false,
-                'unlink':false,
-                'insert_img':false,
-                'hr_line':false,
-                'block_quote':false,
-                'source':false,
-                'strikeout':true,
-                'indent':false,
-                'outdent':false,
-                'fonts':false,
-                'styles':false,
-                'print':false,
-                'rm_format':false,
-                'status_bar':false,
-                'font_size':false,
-                'color':false,
-                'splchars':false,
-                'insert_table':false,
-                'select_all':false,
-                'togglescreen':false
+                'l_align':false, 'r_align':false, 'c_align':false,
+                'justify':false, 'insert_link':false, 'unlink':false,
+                'insert_img':false, 'hr_line':false, 'block_quote':false,
+                'source':false, 'strikeout':true, 'indent':false,
+                'outdent':false, 'fonts':false, 'styles':false,
+                'print':false, 'rm_format':false, 'status_bar':false,
+                'font_size':false, 'color':false, 'splchars':false,
+                'insert_table':false, 'select_all':false, 'togglescreen':false
             });
 
             $("#txtEditor_i").Editor("setText", $("#txtEditor_i").text());

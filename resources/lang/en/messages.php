@@ -73,6 +73,7 @@ return [
     'customerCreateFormStatusLabelBlocked' => 'Blocked',
     'customerCreateFormStatusLabelDeleted' => 'Deleted',
     'customerCreateFormLabelHardwareTag' => 'Already built components',
-    'customerCreateFormLabelFreetext' => 'Additional information',
+    'customerCreateFormLabelFreetext' => 'Freetext External',
+    'customerCreateFormLabelFreetextInternal' => 'Freetext Internal',
     'customerCreateFormSubmitButton' => 'Create Customer',
     ];

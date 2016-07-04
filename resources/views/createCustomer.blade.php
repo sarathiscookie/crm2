@@ -5,6 +5,7 @@
 @section('style')
     <link rel="stylesheet" href="/assets/css/jquery.taghandler.css">
     <link rel="stylesheet" href="/assets/css/editor.css">
+    <link rel="stylesheet" href="/assets/css/daterangepicker.css">
     <style>
         #search-result{
             background: transparent none repeat scroll 0% 0%;
@@ -170,17 +171,28 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label for="name">{{ trans('messages.customerCreateFormLabelHardwareTag') }}</label>
-                    <ul class="tag-handler form-control">
+                    <ul class="tag-handler form-control" style="margin: 0">
                     </ul>
                     <input type="hidden" id="hardwares" name="hardwares" value="">
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Begin_at - End_at</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="eventrange" name="eventrange" value="{{ old('eventrange') }}" readonly aria-describedby="cal-addon">
+                        <span class="input-group-addon" id="cal-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label for="name">{{ trans('messages.customerCreateFormLabelFreetext') }}</label>
                     <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">{{ trans('messages.customerCreateFormLabelFreetextInternal') }}</label>
+                    <textarea id="txtEditor_i" name="freetext_internal">{{ old('freetext_internal') }}</textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -198,6 +210,8 @@
 @push('script')
     <script src="/assets/js/jquery.taghandler.js"></script>
     <script src="/assets/js/editor.js"></script>
+    <script src="/assets/js/moment.min.js"></script>
+    <script src="/assets/js/daterangepicker.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBbZst8ih34yxe9TZYH6Em8IQN0zGHU-Y&libraries=places"></script>
     <script>
         $.ajaxSetup({
@@ -259,39 +273,37 @@
         //WYSIWYG Editor
         $(document).ready(function() {
             $("#txtEditor").Editor({
-                'l_align':false,
-                'r_align':false,
-                'c_align':false,
-                'justify':false,
-                'insert_link':false,
-                'unlink':false,
-                'insert_img':false,
-                'hr_line':false,
-                'block_quote':false,
-                'source':false,
-                'strikeout':true,
-                'indent':false,
-                'outdent':false,
-                'fonts':false,
-                'styles':false,
-                'print':false,
-                'rm_format':false,
-                'status_bar':false,
-                'font_size':false,
-                'color':false,
-                'splchars':false,
-                'insert_table':false,
-                'select_all':false,
-                'togglescreen':false
+                'l_align':false, 'r_align':false, 'c_align':false,
+                'justify':false, 'insert_link':false, 'unlink':false,
+                'insert_img':false, 'hr_line':false, 'block_quote':false,
+                'source':false, 'strikeout':true, 'indent':false,
+                'outdent':false, 'fonts':false, 'styles':false,
+                'print':false, 'rm_format':false, 'status_bar':false,
+                'font_size':false, 'color':false, 'splchars':false,
+                'insert_table':false, 'select_all':false, 'togglescreen':false
             });
 
             $("#txtEditor").Editor("setText", $("#txtEditor").text());
+
+            $("#txtEditor_i").Editor({
+                'l_align':false, 'r_align':false, 'c_align':false,
+                'justify':false, 'insert_link':false, 'unlink':false,
+                'insert_img':false, 'hr_line':false, 'block_quote':false,
+                'source':false, 'strikeout':true, 'indent':false,
+                'outdent':false, 'fonts':false, 'styles':false,
+                'print':false, 'rm_format':false, 'status_bar':false,
+                'font_size':false, 'color':false, 'splchars':false,
+                'insert_table':false, 'select_all':false, 'togglescreen':false
+            });
+
+            $("#txtEditor_i").Editor("setText", $("#txtEditor_i").text());
 
         });
 
         //Submit Form- button action
         $('#btnCreate').click( function () {
             $("#txtEditor").html($("#txtEditor").Editor("getText"));
+            $("#txtEditor_i").html($("#txtEditor_i").Editor("getText"));
             $("#addCustomerFrm").submit();
         });
 
@@ -350,5 +362,19 @@
             /*$('#loadings').html('<img src="/assets/img/loading.gif" alt="loading" class="media-middle loadingIcn" width="24px">').fadeIn('slow');*/
             clearTimeout(timer);
         }
+
+        //Date picker
+        $('#eventrange').daterangepicker({
+            timePicker:true,
+            timePickerIncrement:15,
+            timePicker24Hour: true,
+            drops: 'up',
+            startDate: '{{ $begin_at }}',
+            endDate: '{{ $end_at }}',
+            locale: {
+                "format": "DD-MM-YYYY H:mm",
+                "separator": " To ",
+            },
+        });
     </script>
 @endpush
