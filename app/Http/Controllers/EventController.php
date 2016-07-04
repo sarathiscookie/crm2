@@ -188,4 +188,20 @@ class EventController extends Controller
             }
         }
     }
+
+    public function getInfo(Request $request)
+    {
+        if(!$request->ajax()){
+            return response()->json(['mes' => 'bad request']);
+        }
+        $id = $request->event_id;
+        $event = Event::select('freetext_internal')->find($id);
+
+        if(count($event)>0){
+            return response()->json(['mes'=>'done', 'response' => $event ]);
+        }
+        else {
+            return response()->json(['mes'=>'No info found']);
+        }
+    }
 }

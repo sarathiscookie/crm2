@@ -119,6 +119,26 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     {{--Add car Modal End--}}
+
+    {{--Hidden info Modal--}}
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="infoModalLabel">Hidden Info</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="/assets/img/loading.gif" class="media-middle info-loader hidden" width="32px" alt="loading" >
+                    <div id="infoContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{--Hidden info Modal End--}}
 @endsection
 
 @push('script')
@@ -270,6 +290,27 @@
             processData: false
         });
         return false;
+    });
+
+    /*Fetch hidden info - Modal loading*/
+    $('#infoModal').on('shown.bs.modal', function (e) {
+        $('.info-loader').toggleClass('hidden');
+        var id = e.relatedTarget.id;
+        var content='';
+        $.get( "/event/info", { event_id: id }, function( data ) {
+            $('.info-loader').toggleClass('hidden');
+            if(data.mes=='done') {
+                content = '<label>{{ trans('messages.customerCreateFormLabelFreetextInternal') }} : </label>' + data.response.freetext_internal;
+                $('#infoContent').html(content);
+            }
+            else {
+                content = '<div class="alert alert-danger">' + data.mes + '</div>';
+                $('#infoContent').html(content);
+            }
+        }, 'json');
+    });
+    $('#infoModal').on('hidden.bs.modal', function (e) {
+        $('#infoContent').html('');
     });
 </script>
 @endpush
