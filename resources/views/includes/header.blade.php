@@ -28,6 +28,7 @@
                     <div style="margin-top: -1px;position: absolute; z-index: 100; background: #f8f8f8; padding: 30px; display: none;" id="navSrchBox" class="table-bordered col-md-3"></div>
                 </div>
                 <!-- Authentication Links -->
+                <li><a href="{{ url('/customers') }}">{{ trans('messages.headerTabCustomersList') }}</a></li>
                 <li><a href="{{ url('/customer/create') }}">{{ trans('messages.headerTabAddCustomers') }}</a></li>
                 <li><a href="{{ url('/services') }}">{{ trans('messages.headerTabServices') }}</a></li>
                 <li><a href="{{ url('/events') }}">{{ trans('messages.headerTabEvents') }}</a></li>

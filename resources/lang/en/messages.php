@@ -7,6 +7,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
+    'headerTabCustomersList' => 'Customers List',
     'headerTabAddCustomers' => 'Add customers',
     'headerTabServices' => 'Services',
     'headerTabEvents' => 'Events',
