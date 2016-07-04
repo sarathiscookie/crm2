@@ -366,7 +366,7 @@
         //Date picker
         $('#eventrange').daterangepicker({
             timePicker:true,
-            timePickerIncrement:30,
+            timePickerIncrement:15,
             timePicker24Hour: true,
             drops: 'up',
             startDate: '{{ $begin_at }}',
