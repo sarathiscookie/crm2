@@ -325,6 +325,8 @@ class CustomerController extends Controller
                              <div>Zahlungsart: '.$event->payment.'</div><br>
                              <strong>Weitere Details:</strong><br>
                             ' . $event->freetext_external . '
+                            <br>
+                            <button type="button" class="btn btn-primary get-info" id="' . $event->id . '" data-toggle="modal" data-target="#infoModal">Hidden Info</button>
                         </div>
                     </div>
                 </div>';
