@@ -373,7 +373,7 @@ class CustomerController extends Controller
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
                                 ' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '
                             </a> 
-                            <a role="button" class="btn btn-info pull-right" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
+                            <a role="button" class="btn btn-primary pull-right" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
                             <div class="clearfix"></div>
                         </h3>
                         

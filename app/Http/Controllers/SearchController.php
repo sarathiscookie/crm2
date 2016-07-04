@@ -38,7 +38,7 @@ class SearchController extends Controller
         $result_customer ='';
         $customers             = Customer::select('customers.id', 'firstname', 'lastname')
             ->leftjoin('customer_vehicles AS CV', 'CV.customer_id','=','customers.id' )
-            ->join('vehicles AS V', 'V.id','=','CV.vehicle_id' )
+            ->leftjoin('vehicles AS V', 'V.id','=','CV.vehicle_id' )
             ->where(function ($query) use($keyword) {
                 $query->where('firstname', 'LIKE', '%'.$keyword.'%')
                     ->orWhere('lastname', 'LIKE', '%'.$keyword.'%')
