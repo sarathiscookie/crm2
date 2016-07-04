@@ -56,14 +56,14 @@
                     <p class="list-group-item-text">{{$listTodayEvent->erp_id}}</p>
                     @foreach($listTodayTomorrowEvents->getCarName($listTodayEvent->execution_id) as $carDetails)
                         <?php
-                        $text = "<small>" . $carDetails->marke_name . " " . $carDetails->modell_name . "</small>" . $carDetails->tpbezeichnung;
+                        $text = "<small>" . $carDetails->marke_name . " " . $carDetails->modell_name . "</small> " . $carDetails->tpbezeichnung;
 
                         if ($carDetails->motor_power)
                         $power = $carDetails->motor_power;
                         else
                         $power = $carDetails->ps_from_dimsport_kw;
 
-                        echo '<p class="list-group-item-text">' . substr(utf8_encode($text), 0, 55) . '<small>mit ' . $power . 'PS</small></p>';
+                        echo '<p class="list-group-item-text">' . substr(utf8_encode($text), 0, 55) . '<small> mit ' . $power . 'PS</small></p>';
                         ?>
                     @endforeach
                 </a>
@@ -86,14 +86,14 @@
                     <p class="list-group-item-text">{{$listTomorrowEvent->erp_id}}</p>
                     @foreach($listTodayTomorrowEvents->getCarName($listTomorrowEvent->execution_id) as $carDetails)
                         <?php
-                        $text = "<small>" . $carDetails->marke_name . " " . $carDetails->modell_name . "</small>" . $carDetails->tpbezeichnung;
+                        $text = "<small>" . $carDetails->marke_name . " " . $carDetails->modell_name . "</small> " . $carDetails->tpbezeichnung;
 
                         if ($carDetails->motor_power)
                             $power = $carDetails->motor_power;
                         else
                             $power = $carDetails->ps_from_dimsport_kw;
 
-                        echo '<p class="list-group-item-text">' . substr(utf8_encode($text), 0, 55) . '<small>mit ' . $power . 'PS</small></p>';
+                        echo '<p class="list-group-item-text">' . substr(utf8_encode($text), 0, 55) . '<small> mit ' . $power . 'PS</small></p>';
                         ?>
                     @endforeach
                 </a>
