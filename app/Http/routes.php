@@ -60,7 +60,7 @@ Route::get('/temp_feedback','CronjobController@sendFeedbackLink');
 */
 
 /* List customers */
-Route::get('/', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
+Route::get('/customers', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
 
 /* Hardware tag Listout */
 Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerController@getHardwareTag']);
@@ -98,7 +98,16 @@ Route::get('/events', ['as' => 'showEventsPage', 'uses' => 'EventController@inde
 /* Show events page*/
 Route::get('/events/list', ['as' => 'listEvents', 'uses' => 'EventController@view']);
 
+/*
+ |--------------------------------------------------------------------------
+ | Routes for dashboard
+ |--------------------------------------------------------------------------
+ |
+ | List
+*/
 
+/* List customers on dashboard*/
+Route::get('/', ['as' => 'listLimitedCustomers', 'uses' => 'DashboardController@index']);
 
 
 

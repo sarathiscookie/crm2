@@ -65,7 +65,7 @@ class CustomerController extends Controller
 
 
     /**
-     * view dashboard
+     * view customer list
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
@@ -73,7 +73,7 @@ class CustomerController extends Controller
         $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
-        return view('dashboard', compact('listCustomers'));
+        return view('customers', compact('listCustomers'));
     }
 
     /**
