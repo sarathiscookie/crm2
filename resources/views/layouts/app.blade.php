@@ -58,26 +58,23 @@
             $('.srch-loader').toggleClass('invisible');
             $.get("/search", {key: val})
                     .done(function (data) {
+                        $('.srch-loader').toggleClass('invisible');
                         if (data.result != '') {
-                            $('.srch-loader').toggleClass('invisible');
                             $('#navSrchBox').html(data.result).show();
                         }
                         else {
-                            $('.srch-loader').toggleClass('invisible');
                             $('#navSrchBox').html('<div class="alert alert-danger" role=alert><span>No results</span></div>').show();
                         }
                     });
         }
         else {
-            $("#navSrchBox").hide();
-            $("#navSrchBox").html('');
+            $("#navSrchBox").html('').hide();
         }
     });
 
     //Toggle search results when clicking inside input holds previous keyword
     $('#searchkey').click( function () {
-        if($("#navSrchBox").html()!='' && $("#navSrchBox").css('display') == 'none')
-        {
+        if($("#navSrchBox").html()!='' && $("#navSrchBox").css('display') == 'none') {
             $('#navSrchBox').show();
         }
     });
@@ -87,8 +84,7 @@
     {
         var container = $("#navSrchBox");
         // if the target of the click isn't the container...nor a descendant of the container
-        if (!container.is(e.target) && container.has(e.target).length === 0)
-        {
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
             container.hide();
         }
     });
