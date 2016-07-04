@@ -59,8 +59,11 @@ Route::get('/temp_feedback','CronjobController@sendFeedbackLink');
  | Create form, List, Store
 */
 
-/* List customers */
+/* List customers page*/
 Route::get('/customers', ['as' => 'listCustomersPage', 'uses' => 'CustomerController@index']);
+
+/* List customers*/
+Route::get('/list/customers', ['as' => 'listCustomers', 'uses' => 'CustomerController@listCustomers']);
 
 /* Hardware tag Listout */
 Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerController@getHardwareTag']);

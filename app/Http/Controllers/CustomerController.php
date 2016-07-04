@@ -70,10 +70,11 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+        /*$listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
             ->orderBy('id', 'desc')
             ->get();
-        return view('customers', compact('listCustomers'));
+        return view('customers', compact('listCustomers'));*/
+        return view('customers');
     }
 
     /**
@@ -617,6 +618,25 @@ class CustomerController extends Controller
         return $documents;
     }
 
-    
+    public function listCustomers()
+    {
+        $results =  Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
+            ->orderBy('id', 'desc')
+            ->paginate(25);
+
+        $response = [
+            'pagination' => [
+                'total' => $results->total(),
+                'per_page' => $results->perPage(),
+                'current_page' => $results->currentPage(),
+                'last_page' => $results->lastPage(),
+                'from' => $results->firstItem(),
+                'to' => $results->lastItem()
+            ],
+            'data' => $results
+        ];
+
+        return $response;
+    }
     
 }
