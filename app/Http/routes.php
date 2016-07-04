@@ -112,9 +112,6 @@ Route::get('/events/list', ['as' => 'listEvents', 'uses' => 'EventController@vie
 /* List customers on dashboard*/
 Route::get('/', ['as' => 'listLimitedCustomers', 'uses' => 'DashboardController@index']);
 
-
-
-
 /*Route::auth();
 
 Route::get('/home', 'HomeController@index');*/
