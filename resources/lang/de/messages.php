@@ -73,6 +73,7 @@ return [
     'customerCreateFormStatusLabelBlocked' => 'Blockiert',
     'customerCreateFormStatusLabelDeleted' => 'Gelöscht',
     'customerCreateFormLabelHardwareTag' => 'Bereits verbaute Komponenten',
-    'customerCreateFormLabelFreetext' => 'Zusatzinformationen',
+    'customerCreateFormLabelFreetext' => 'Freitext Extern',
+    'customerCreateFormLabelFreetextInternal' => 'Freitext Innen',
     'customerCreateFormSubmitButton' => 'Kunde & Termin anlegen',
     ];

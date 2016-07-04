@@ -83,7 +83,9 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('createCustomer');
+        $begin_at = date('d-m-Y H:i', strtotime(Carbon::now()));
+        $end_at   = date('d-m-Y H:i', strtotime(Carbon::now()->addHours(3)));
+        return view('createCustomer', ['begin_at' => $begin_at, 'end_at' => $end_at]);
     }
 
     /**
@@ -207,6 +209,10 @@ class CustomerController extends Controller
      */
     protected function saveEvent($customer_id, $vehicle_id, $request)
     {
+        $date_split = explode(" To ",$request->eventrange);
+        $begin_at   = date('Y-m-d H:i', strtotime($date_split[0]));
+        $end_at     = date('Y-m-d H:i', strtotime($date_split[1]));
+
         if($customer_id>0 && $vehicle_id>0) {
             $event = new Event();
             $event->customer_id = $customer_id;
@@ -214,12 +220,14 @@ class CustomerController extends Controller
             $event->partner_id  = 1149;
             $event->title       = 'Erst-Termin';
             $event->freetext_external = $request->freetext;
+            $event->freetext_internal = $request->freetext_internal;
             $event->stage    = $request->stage;
             $event->mileage  = str_replace(".", "", $request->mileage);
             $event->tuning   = $request->tuning;
             $event->dyno     = $request->dyno;
             $event->payment  = $request->payment;
-            $event->begin_at = Carbon::now();
+            $event->begin_at = $begin_at;
+            $event->end_at   = $end_at;
             $event->save();
         }
 
