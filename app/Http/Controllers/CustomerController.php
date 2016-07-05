@@ -20,6 +20,10 @@ use Storage;
 use HTML2PDF;
 use HTML2PDF_exception;
 
+use SoapClient;
+use Exception;
+
+
 class CustomerController extends Controller
 {
     public $gearbox = array();
@@ -126,27 +130,10 @@ class CustomerController extends Controller
         $customer->save();
         $customer_id = $customer->id;
 
+
         $vehicle_id = $this->saveVehicle($request);
         $events     = $this->saveEvent($customer_id, $vehicle_id, $request);
         $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
-
-
-        $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
-        try {
-            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', [10,0,10,0]);
-            $html2pdf->pdf->SetDisplayMode('fullpage');
-            $html2pdf->setDefaultFont("Helvetica");
-            $html2pdf->writeHTML($eventHtml);
-            $newEventData = $html2pdf->Output('', true);
-
-            Mail::send('emails.newEventNotification', [], function ($message) use($newEventData) {
-                $message->to(env('NOTIFY_MAIL', ''))
-                    ->subject('New Event created')
-                    ->attachData($newEventData, 'newEvent.pdf');
-            });
-        } catch (HTML2PDF_exception $e) {
-            exit;
-        }
 
         /* Save data in to hardware table and vehicle_hardwares */
         if($request->hardwares != ""){
@@ -179,6 +166,25 @@ class CustomerController extends Controller
                     $vehicleHardware->save();
                 }
             }
+        }
+        /*save customer in actindo warehouse*/
+        $this->createCustomerActindo($customer_id);
+
+        $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
+        try {
+            $html2pdf = new HTML2PDF('P', 'A4', 'de', TRUE, 'UTF-8', [10,0,10,0]);
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            $html2pdf->setDefaultFont("Helvetica");
+            $html2pdf->writeHTML($eventHtml);
+            $newEventData = $html2pdf->Output('', true);
+
+            Mail::send('emails.newEventNotification', [], function ($message) use($newEventData) {
+                $message->to(env('NOTIFY_MAIL', ''))
+                    ->subject('New Event created')
+                    ->attachData($newEventData, 'newEvent.pdf');
+            });
+        } catch (HTML2PDF_exception $e) {
+            exit;
         }
 
         return redirect(url('/'));
@@ -647,6 +653,70 @@ class CustomerController extends Controller
         ];
 
         return $response;
+    }
+
+    /**
+     * creating customer in warehouse.
+     * @param $customer_id
+     */
+    protected function createCustomerActindo($customer_id)
+    {
+        $customer = Customer::select('company', 'title', 'firstname', 'lastname', 'street', 'additional_address', 'city', 'country_long', 'postal', 'email', 'phone_1', 'phone_mobile')
+            ->where('id',$customer_id)
+            ->first();
+
+        $title ='';
+        if (!empty($customer)) {
+            if ($customer->title == 1) {
+                $title = 'Herr';
+            } elseif ($customer->title == 2) {
+                $title = 'Frau';
+            } elseif ($customer->title == 3) {
+                $title = 'Firma';
+            }
+
+            $params = [
+                'deb_kred_id' => NULL,
+                'anrede'      => $title,
+                'firma'       => $customer->company,
+                'kurzname'    => $customer->firstname . ' ' . $customer->lastname,
+                'name'        => $customer->lastname,
+                'vorname'     => $customer->firstname,
+                'land '       => 'D',
+            ];
+            if ($customer->street != '')
+                $params['adresse'] = $customer->street;
+
+            if ($customer->additional_address != '')
+                $params['adresse2'] = $customer->additional_address;
+
+            if ($customer->postal != '')
+                $params['plz'] = $customer->postal;
+
+            if ($customer->city != '')
+                $params['ort'] = $customer->city;
+
+            if ($customer->phone_mobile != '')
+                $params['mobiltel'] = $customer->phone_mobile;
+
+            $params['email'] = $customer->email;
+            $params['tel'] = $customer->phone_1;
+
+            $soap = new SoapClient('https://www.actindo.biz/actindo/soap.php?WSDL', ['encoding' => 'utf-8']);
+            try {
+                $sid = $soap->auth__login('shdevelopment', 'W.H*dhtj*w', 38372, 'NOID', 'NOSERIAL');
+
+                $insert = $soap->dk__create($sid, 'deb', $params);
+
+                $erp_id = $insert["deb_kred_id"];
+                if ($erp_id > 0)
+                    Customer::where('id', $customer_id)->update(['erp_id' => $erp_id]);
+
+                $soap->auth__logout($sid);
+            } catch (Exception $e) {
+
+            }
+        }
     }
     
 }
