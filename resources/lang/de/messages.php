@@ -1,13 +1,25 @@
 <?php
 return [
-
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in dashboard page (dashboard)
+    |--------------------------------------------------------------------------
+    |
+    */
+    'dashboardItemHeaderCustomersList' => 'Customer List',
+    'dashboardItemHeaderNoCustomerMessage' => 'No new customers',
+    'dashboardItemHeaderTodayList' => 'Today',
+    'dashboardItemHeaderNoTodayListMessage' => 'No events today',
+    'dashboardItemHeaderTomorrowList' => 'Tomorrow',
+    'dashboardItemHeaderNoTomorrowListMessage' => 'No events tomorrow',
+    /*
     /*
     |--------------------------------------------------------------------------
     | Messages in header page (include-header)
     |--------------------------------------------------------------------------
     |
     */
-    'headerTabCustomersList' => 'Customers List',
+    'headerTabCustomersList' => 'Customers',
     'headerTabAddCustomers' => 'Kunden hinzufügen',
     'headerTabServices' => 'Services',
     'headerTabEvents' => 'Events',

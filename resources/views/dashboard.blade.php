@@ -13,7 +13,7 @@
         <div class="list-group">
             <a href="/customers" class="list-group-item active">
                 <span class="badge">{{ count($listCustomers) }}</span>
-                Customer List
+                {{ trans('messages.dashboardItemHeaderCustomersList') }}
             </a>
             @forelse ($listCustomers as $listCustomer)
                 <a href="#" class="list-group-item">
@@ -23,7 +23,7 @@
                     <p class="list-group-item-text">@if($listCustomer->created_at == "") {{ "Nill" }} @else {{ date('d.m.Y H:i', strtotime($listCustomer->created_at)) }} @endif</p>
                 </a>
             @empty
-                <a href="#" class="list-group-item">No new customers</a>
+                <a href="#" class="list-group-item">{{ trans('messages.dashboardItemHeaderNoCustomerMessage') }}</a>
             @endforelse
         </div>
         @endif
@@ -46,7 +46,7 @@
         <div class="list-group">
             <a href="#" class="list-group-item active">
                 <span class="badge">{{ count($listTodayTomorrowEvents->getTodayEvents()) }}</span>
-                Today
+                {{ trans('messages.dashboardItemHeaderTodayList') }}
             </a>
             @forelse($listTodayTomorrowEvents->getTodayEvents() as $listTodayEvent)
                 <a href="#" class="list-group-item">
@@ -68,15 +68,15 @@
                     @endforeach
                 </a>
             @empty
-                <a href="#" class="list-group-item">No events today</a>
+                <a href="#" class="list-group-item">{{ trans('messages.dashboardItemHeaderNoTodayListMessage') }}</a>
             @endforelse
         </div>
         <br>
 
         <div class="list-group">
             <a href="#" class="list-group-item active">
-                <span class="badge">{{ count($listTodayTomorrowEvents->getTodayEvents()) }}</span>
-                Tomorrow
+                <span class="badge">{{ count($listTodayTomorrowEvents->getTomorrowEvents()) }}</span>
+                {{ trans('messages.dashboardItemHeaderTomorrowList') }}
             </a>
             @forelse($listTodayTomorrowEvents->getTomorrowEvents() as $listTomorrowEvent)
                 <a href="#" class="list-group-item">
@@ -98,7 +98,7 @@
                     @endforeach
                 </a>
             @empty
-                <a href="#" class="list-group-item">No events tomorrow</a>
+                <a href="#" class="list-group-item">{{ trans('messages.dashboardItemHeaderNoTomorrowListMessage') }}</a>
             @endforelse
         </div>
     </div>
