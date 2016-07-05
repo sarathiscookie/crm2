@@ -15,7 +15,7 @@ class CreateFormValuesTable extends Migration
         Schema::create('form_values', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('form_field_id')->unsigned();
-            $table->text('value');
+            $table->text('value')->nullable();
             $table->integer('parent_id')->comment('id of customers and events');
             $table->timestamps();
 

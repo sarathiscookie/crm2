@@ -8,6 +8,9 @@ use App\Vehiclehardware;
 use App\Customervehicle;
 use App\Event;
 use App\Vehicle;
+use App\Formgroup;
+use App\Formfield;
+use App\Formvalue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -125,6 +128,26 @@ class CustomerController extends Controller
         $customer->status = $request->customerstatus;
         $customer->save();
         $customer_id = $customer->id;
+
+        if($customer_id > 0){
+            // Storing form values begin
+            foreach($request->fieldID as $values){
+                $fieldsIdResult[]   = $values;
+            }
+
+            $j = 0;
+            while($j < count($request->fieldID)) {
+                $IdResult                 = $fieldsIdResult[$j];
+                $ValField                 = 'dynField_'.$IdResult;
+                $formValue                = new Formvalue;
+                $formValue->form_field_id = $IdResult;
+                $formValue->value         = $request->$ValField;
+                $formValue->parent_id     = $customer_id;
+                $formValue->save();
+                $j++;
+            }
+            // Storing form values end
+        }
 
         $vehicle_id = $this->saveVehicle($request);
         $events     = $this->saveEvent($customer_id, $vehicle_id, $request);
@@ -648,5 +671,29 @@ class CustomerController extends Controller
 
         return $response;
     }
-    
+
+    /**
+     * show create facility view
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showFormFields($groupId)
+    {
+        $formFields = Formfield::select('id' , 'title', 'description', 'placeholder', 'type', 'options' , 'form_group_id', 'validation')
+            ->where('form_group_id', $groupId)
+            ->where('relation', 'event')
+            ->get();
+        return $formFields;
+    }
+
+
+    /**
+     * show create facility view
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showFormGroup()
+    {
+        $formGroups = Formgroup::select('id', 'title', 'description', 'sort_id')
+            ->get();
+        return $formGroups;
+    }
 }

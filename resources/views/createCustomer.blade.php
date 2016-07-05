@@ -195,6 +195,65 @@
                     <textarea id="txtEditor_i" name="freetext_internal">{{ old('freetext_internal') }}</textarea>
                 </div>
             </div>
+            @foreach($typesCustomerAndGearbox->showFormGroup() as $formGroup)
+                <h4 class="page-header">{{ $formGroup->title }}</h4>
+                @foreach($typesCustomerAndGearbox->showFormFields($formGroup->id) as $formField)
+                    @if ($formField->type == 'input')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="{{ $formField->title }}">{{ $formField->title }}</label>
+                                <input type="text" class="form-control" name="dynField_{{$formField->id}}" id="fieldInput" placeholder="{{ $formField->placeholder }}" value="{{ old('dynField_'.$formField->id) }}" maxlength="100">
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'textarea')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="{{ $formField->title }}">{{ $formField->title }}</label>
+                                <textarea class="form-control" name="dynField_{{$formField->id}}" rows="3" id="fieldTextarea" placeholder="{{ $formField->placeholder }}" maxlength="255">{{ old('dynField_'.$formField->id) }}</textarea>
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'checkbox')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" name="dynField_{{$formField->id}}" id="fieldCheckbox{{$formField->id}}" placeholder="{{ $formField->placeholder }}">
+                                <label for="fieldCheckbox{{$formField->id}}">{{ $formField->title }}</label>
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'select')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="Lbl{{ $formField->id }}">{{ $formField->title }}</label>
+                                <select name="dynField_{{$formField->id}}" id="Lbl{{ $formField->id }}" class="form-control">
+                                    @forelse(explode("|",$formField->options) as $options)
+                                        <option value="{{ explode(":",$options)[0] }}">{{ explode(":",$options)[1] }}</option>
+                                    @empty
+                                        <option value="">No options available</option>
+                                    @endforelse
+                                </select>
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'radio')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <span class="bold text-uppercase small">{{ $formField->title }}</span>
+                                @foreach(explode("|",$formField->options) as $options)
+                                    <input type="radio" name="dynField_{{$formField->id}}" value="{{ explode(":",$options)[0] }}" id="dynField_{{explode(":",$options)[1]}}">
+                                    <label for="dynField_{{explode(":",$options)[1]}}">{{ explode(":",$options)[1] }}</label>
+                                @endforeach
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @endforeach
             <div class="form-group">
                 <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">{{ trans('messages.customerCreateFormSubmitButton') }}</button>
             </div>
