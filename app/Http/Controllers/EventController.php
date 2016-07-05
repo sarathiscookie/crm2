@@ -35,7 +35,7 @@ class EventController extends Controller
     public function view()
     {
         $result = "";
-        $listEvents    = Event::select('title', 'begin_at', 'end_at')
+        $listEvents    = Event::select('customer_id', 'title', 'begin_at', 'end_at')
             ->orderBy('id', 'desc')
             ->get();
         foreach ($listEvents as $listEvent){
@@ -46,7 +46,7 @@ class EventController extends Controller
                 'start' => $listEvent->begin_at,
                 'end' => $dt->format('Y-m-d H:i:s'),
                 'class' => "bg-complete-lighter",
-                "other" => array()
+                "other" => array('id' => $listEvent->customer_id)
             );
             $result[] = $resultSet;
         }

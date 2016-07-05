@@ -129,15 +129,18 @@
                     onViewRenderComplete: function() {
                         //You can Do a Simple AJAX here and update
                     },
-                    /*onEventClick: function(event) {
+                    onEventClick: function(event) {
+                        var id  = event.other.id;
+                        var url = "<?php echo url('/customer/details'); ?>";
+                        window.location.href = url+'/'+id;
                         //Open Pages Custom Quick View
-                        if (!$('#calendar-event').hasClass('open'))
+                        /*if (!$('#calendar-event').hasClass('open'))
                             $('#calendar-event').addClass('open');
 
 
                         selectedEvent = event;
-                        setEventDetailsToForm(selectedEvent);
-                    },*/
+                        setEventDetailsToForm(selectedEvent);*/
+                    },
                     onEventDragComplete: function(event) {
                         selectedEvent = event;
                         setEventDetailsToForm(selectedEvent);

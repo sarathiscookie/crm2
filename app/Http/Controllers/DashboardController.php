@@ -33,7 +33,7 @@ class DashboardController extends Controller
     public function getTodayEvents()
     {
         $dateToday          = Carbon::now();
-        $listTodayEvents    = Event::select('events.id', 'customers.firstname', 'customers.lastname', 'customers.company', 'customers.erp_id', 'vehicles.execution_id', DB::raw("DATE_FORMAT(events.end_at, '%H:%i') AS end_at"), DB::raw("DATE_FORMAT(events.begin_at, '%H:%i') AS begin_at"))
+        $listTodayEvents    = Event::select('events.id', 'customers.firstname', 'customers.lastname', 'customers.company', 'customers.erp_id', 'vehicles.execution_id', DB::raw("DATE_FORMAT(events.end_at, '%H:%i') AS end_at"), DB::raw("DATE_FORMAT(events.begin_at, '%H:%i') AS begin_at"), 'events.customer_id')
             ->join('customers', 'events.customer_id', '=', 'customers.id')
             ->join('vehicles', 'events.vehicle_id', '=', 'vehicles.id')
             ->where(DB::raw("DATE(events.begin_at)"), $dateToday->toDateString())
@@ -49,7 +49,7 @@ class DashboardController extends Controller
     public function getTomorrowEvents()
     {
         $dateToday             = Carbon::now()->tomorrow();
-        $listTomorrowEvents    = Event::select('events.id', 'customers.firstname', 'customers.lastname', 'customers.company', 'customers.erp_id', 'vehicles.execution_id', DB::raw("DATE_FORMAT(events.end_at, '%H:%i') AS end_at"), DB::raw("DATE_FORMAT(events.begin_at, '%H:%i') AS begin_at"))
+        $listTomorrowEvents    = Event::select('events.id', 'customers.firstname', 'customers.lastname', 'customers.company', 'customers.erp_id', 'vehicles.execution_id', DB::raw("DATE_FORMAT(events.end_at, '%H:%i') AS end_at"), DB::raw("DATE_FORMAT(events.begin_at, '%H:%i') AS begin_at"), 'events.customer_id')
             ->join('customers', 'events.customer_id', '=', 'customers.id')
             ->join('vehicles', 'events.vehicle_id', '=', 'vehicles.id')
             ->where(DB::raw("DATE(events.begin_at)"), $dateToday->toDateString())

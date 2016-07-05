@@ -16,7 +16,7 @@
                 {{ trans('messages.dashboardItemHeaderCustomersList') }}
             </a>
             @forelse ($listCustomers as $listCustomer)
-                <a href="#" class="list-group-item">
+                <a href="/customer/details/{{ $listCustomer->id }}" class="list-group-item">
                     <h5 class="list-group-item-heading">{{$listCustomer->firstname}} {{$listCustomer->lastname}}</h5>
                     <p class="list-group-item-text">{{$listCustomer->company}}</p>
                     <p class="list-group-item-text">{{$listCustomer->erp_id}}</p>
@@ -49,7 +49,7 @@
                 {{ trans('messages.dashboardItemHeaderTodayList') }}
             </a>
             @forelse($listTodayTomorrowEvents->getTodayEvents() as $listTodayEvent)
-                <a href="#" class="list-group-item">
+                <a href="/customer/details/{{$listTodayEvent->customer_id}}" class="list-group-item">
                     <h5 class="list-group-item-text">{{$listTodayEvent->begin_at}} - @if($listTodayEvent->end_at == ""){{ "Nill" }} @else {{$listTodayEvent->end_at}} @endif</h5>
                     <p class="list-group-item-heading">{{$listTodayEvent->firstname}} {{$listTodayEvent->lastname}}</p>
                     <p class="list-group-item-text">{{$listTodayEvent->company}}</p>
@@ -79,7 +79,7 @@
                 {{ trans('messages.dashboardItemHeaderTomorrowList') }}
             </a>
             @forelse($listTodayTomorrowEvents->getTomorrowEvents() as $listTomorrowEvent)
-                <a href="#" class="list-group-item">
+                <a href="/customer/details/{{$listTomorrowEvent->customer_id}}" class="list-group-item">
                     <h5 class="list-group-item-text">{{$listTomorrowEvent->begin_at}} - @if($listTomorrowEvent->end_at == ""){{ "Nill" }} @else {{$listTomorrowEvent->end_at}} @endif</h5>
                     <p class="list-group-item-heading">{{$listTomorrowEvent->firstname}} {{$listTomorrowEvent->lastname}}</p>
                     <p class="list-group-item-text">{{$listTomorrowEvent->company}}</p>
