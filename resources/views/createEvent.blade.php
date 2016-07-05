@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/assets/css/daterangepicker.css">
 @endsection
 
+@inject('dynamicformdetails', 'App\Http\Controllers\EventController')
+
 @section('content')
         <h1 class="page-header">Termin hinzufügen</h1>
         @if (count($errors) > 0)
@@ -101,6 +103,65 @@
                     <input type="hidden" id="hardwares" name="hardwares" value="{{ implode(",", json_decode($assignedTags)) }}">
                 </div>
             </div>
+            @foreach($dynamicformdetails->showFormGroup() as $formGroup)
+                <h4 class="page-header">{{ $formGroup->title }}</h4>
+                @foreach($dynamicformdetails->showFormFields($formGroup->id) as $formField)
+                    @if ($formField->type == 'input')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="{{ $formField->title }}">{{ $formField->title }}</label>
+                                <input type="text" class="form-control" name="dynField_{{$formField->id}}" id="fieldInput" placeholder="{{ $formField->placeholder }}" value="{{ old('dynField_'.$formField->id) }}" maxlength="100">
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'textarea')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="{{ $formField->title }}">{{ $formField->title }}</label>
+                                <textarea class="form-control" name="dynField_{{$formField->id}}" rows="3" id="fieldTextarea" placeholder="{{ $formField->placeholder }}" maxlength="255">{{ old('dynField_'.$formField->id) }}</textarea>
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'checkbox')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" name="dynField_{{$formField->id}}" id="fieldCheckbox{{$formField->id}}" placeholder="{{ $formField->placeholder }}">
+                                <label for="fieldCheckbox{{$formField->id}}">{{ $formField->title }}</label>
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'select')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="Lbl{{ $formField->id }}">{{ $formField->title }}</label>
+                                <select name="dynField_{{$formField->id}}" id="Lbl{{ $formField->id }}" class="form-control">
+                                    @forelse(explode("|",$formField->options) as $options)
+                                        <option value="{{ explode(":",$options)[0] }}">{{ explode(":",$options)[1] }}</option>
+                                    @empty
+                                        <option value="">No options available</option>
+                                    @endforelse
+                                </select>
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if ($formField->type == 'radio')
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <span class="bold text-uppercase small">{{ $formField->title }}</span>
+                                @foreach(explode("|",$formField->options) as $options)
+                                    <input type="radio" name="dynField_{{$formField->id}}" value="{{ explode(":",$options)[0] }}" id="dynField_{{explode(":",$options)[1]}}">
+                                    <label for="dynField_{{explode(":",$options)[1]}}">{{ explode(":",$options)[1] }}</label>
+                                @endforeach
+                                <input type="hidden" value="{{ $formField->id }}" name="fieldID[]">
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @endforeach
             <input type="hidden" name="customer_id" value="{{ $customer_id }}">
             <input type="hidden" name="vehicle_id" value="{{ $vehicle_id }}">
             <div class="form-group">

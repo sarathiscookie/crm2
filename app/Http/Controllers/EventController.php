@@ -7,6 +7,9 @@ use App\Event;
 use App\Hardware;
 use App\Vehicle;
 use App\Vehiclehardware;
+use App\Formgroup;
+use App\Formfield;
+use App\Formvalue;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -125,6 +128,27 @@ class EventController extends Controller
         $event->save();
         $this->saveHardwares($request);
 
+        $event_customer_id = $event->customer_id;
+        if($event_customer_id > 0){
+            // Storing form values begin
+            foreach($request->fieldID as $values){
+                $fieldsIdResult[]   = $values;
+            }
+
+            $j = 0;
+            while($j < count($request->fieldID)) {
+                $IdResult                 = $fieldsIdResult[$j];
+                $ValField                 = 'dynField_'.$IdResult;
+                $formValue                = new Formvalue;
+                $formValue->form_field_id = $IdResult;
+                $formValue->value         = $request->$ValField;
+                $formValue->parent_id     = $event_customer_id;
+                $formValue->save();
+                $j++;
+            }
+            // Storing form values end
+        }
+
         $events   = $customerObj->getEventData($event->id);
         $vehicles = $customerObj->getVehicleData($request->vehicle_id);
 
@@ -203,5 +227,29 @@ class EventController extends Controller
         else {
             return response()->json(['mes'=>'No info found']);
         }
+    }
+
+    /**
+     * List form fields
+     */
+    public function showFormFields($groupId)
+    {
+        $formFields = Formfield::select('id' , 'title', 'description', 'placeholder', 'type', 'options' , 'form_group_id', 'validation')
+            ->where('form_group_id', $groupId)
+            ->where('relation', 'event')
+            ->get();
+        return $formFields;
+    }
+
+
+    /**
+     * List form group
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showFormGroup()
+    {
+        $formGroups = Formgroup::select('id', 'title', 'description', 'sort_id')
+            ->get();
+        return $formGroups;
     }
 }

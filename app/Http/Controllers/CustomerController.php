@@ -744,21 +744,20 @@ class CustomerController extends Controller
     
 
     /**
-     * show create facility view
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * List form fields
      */
     public function showFormFields($groupId)
     {
         $formFields = Formfield::select('id' , 'title', 'description', 'placeholder', 'type', 'options' , 'form_group_id', 'validation')
             ->where('form_group_id', $groupId)
-            ->where('relation', 'event')
+            ->where('relation', 'customer')
             ->get();
         return $formFields;
     }
 
 
     /**
-     * show create facility view
+     * List form group
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showFormGroup()
