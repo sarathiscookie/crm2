@@ -288,12 +288,13 @@ class CustomerController extends Controller
      */
     public function showDetails($id)
     {
-        $customer = Customer::find($id);
-        $events   = $this->getCustomerEvents($id);
-        $vehicles = $this->getCustomerVehicles($id);
-        $gears = $this->gearbox;
+        $customer           = Customer::find($id);
+        $events             = $this->getCustomerEvents($id);
+        $vehicles           = $this->getCustomerVehicles($id);
+        $gears              = $this->gearbox;
+        $customerFormValues = $this->customerFormDetails($id);
 
-        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears]);
+        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears, 'customerFormValues' => $customerFormValues]);
     }
 
     /**
@@ -303,16 +304,16 @@ class CustomerController extends Controller
      */
     protected function getCustomerEvents($customer_id)
     {
-        $customer_events = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
+        $customer_events = Event::select('events.id', 'vehicles.execution_id', 'customer_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
             ->join('vehicles', 'vehicles.id', '=', 'events.vehicle_id')
             ->where('customer_id', $customer_id)
             ->orderBy('events.created_at', 'DESC')
             ->get();
 
-        $events ='';
+        $events = '';
         $i=1;
         foreach($customer_events as $event) {
-            $vehicle_title ='';
+            $vehicle_title = '';
             $vehicle_informations = DB::connection('fes')
                 ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
 										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
@@ -321,12 +322,12 @@ class CustomerController extends Controller
 									FROM mainpage.ausfuehrung_view_neu av
 									WHERE av.id = '$event->execution_id'");
 
-            foreach($vehicle_informations as $vehicle_information) {
+            foreach ($vehicle_informations as $vehicle_information) {
                 if ($vehicle_information->motor_power)
                     $power = $vehicle_information->motor_power;
                 else
                     $power = $vehicle_information->ps_from_dimsport_kw;
-                $vehicle_title = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
+                $vehicle_title = $vehicle_information->marke_name . " " . $vehicle_information->modell_name . " " . $vehicle_information->tpbezeichnung . " " . "mit " . $power . "PS";
             }
             if ($i == 1) {
                 $collapse = "in";
@@ -337,23 +338,24 @@ class CustomerController extends Controller
                 $a_class = 'class="collapsed"';
                 $expanded = "false";
             }
+
             $events .= '<div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="heading' . $event->id . '">
                         <h4 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $event->title . ' ( '.$event->id.' )</h4>
+                                <h4>' . $event->title . ' ( ' . $event->id . ' )</h4>
                                 <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
                             </a>
                         </h4>
                     </div>
                     <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
                         <div class="panel-body">
-                             <div>Fahrzeug: '.$vehicle_title.'</div>
-                             <div>Tuning-Stufe: '.$event->stage.'</div>
-                             <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
-                             <div>Bereits getunt: '.$event->tuning.'</div>
-                             <div>Prüfstandslauf: '.$event->dyno.'</div>
-                             <div>Zahlungsart: '.$event->payment.'</div><br>
+                             <div>Fahrzeug: ' . $vehicle_title . '</div>
+                             <div>Tuning-Stufe: ' . $event->stage . '</div>
+                             <div>Kilometerstand: ' . number_format($event->mileage, 0, ',', '.') . ' km</div>
+                             <div>Bereits getunt: ' . $event->tuning . '</div>
+                             <div>Prüfstandslauf: ' . $event->dyno . '</div>
+                             <div>Zahlungsart: ' . $event->payment . '</div><br>
                              <strong>Weitere Details:</strong><br>
                             ' . $event->freetext_external . '
                             <br>
@@ -362,6 +364,7 @@ class CustomerController extends Controller
                     </div>
                 </div>';
             $i++;
+
         }
 
         return $events;
@@ -768,5 +771,19 @@ class CustomerController extends Controller
             ->groupBy('form_groups.title')
             ->get();
         return $formGroups;
+    }
+
+    /**
+     * Get customer form values
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function customerFormDetails($id)
+    {
+        $customerDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title')
+            ->join('form_fields', 'form_values.form_field_id', '=', 'form_fields.id')
+            ->where('form_values.parent_id', $id)
+            ->where('form_fields.relation', 'customer')
+            ->get();
+        return $customerDynamicFormDetails;
     }
 }

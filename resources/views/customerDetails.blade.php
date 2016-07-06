@@ -45,7 +45,12 @@
             <label>E-Mail: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br>
             <label>Telefon: {{ $customer->phone_1 }} </label>
             @if($customer->phone_2) <br><label>Telefon 2: {{ $customer->phone_2 }} </label> @endif
-            @if($customer->phone_mobile) <br><label>Mobile: {{ $customer->phone_mobile }} </label> @endif
+            @if($customer->phone_mobile) <br><label>Mobile: {{ $customer->phone_mobile }} </label> @endif<br>
+            @if(isset($customerFormValues))
+                @foreach($customerFormValues as $customerFormValue)
+                    <label>{{ $customerFormValue->title }}: {{ $customerFormValue->value }}</label><br>
+                @endforeach
+            @endif
             <hr>
             <h3>Termine</h3>
             <div class="panel-group" id="accordionEvent" role="tablist" aria-multiselectable="true">
