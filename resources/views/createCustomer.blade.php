@@ -243,7 +243,7 @@
                     @if ($formField->type == 'radio')
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <span class="bold text-uppercase small">{{ $formField->title }}</span>
+                                <label>{{ $formField->title }}</label>
                                 @foreach(explode("|",$formField->options) as $options)
                                     <input type="radio" name="dynField_{{$formField->id}}" value="{{ explode(":",$options)[0] }}" id="dynField_{{explode(":",$options)[1]}}">
                                     <label for="dynField_{{explode(":",$options)[1]}}">{{ explode(":",$options)[1] }}</label>

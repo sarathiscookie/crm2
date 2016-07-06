@@ -129,24 +129,26 @@ class EventController extends Controller
         $this->saveHardwares($request);
 
         $event_customer_id = $event->customer_id;
-        if($event_customer_id > 0){
-            // Storing form values begin
-            foreach($request->fieldID as $values){
-                $fieldsIdResult[]   = $values;
-            }
+        if($request->fieldID != ''){
+            if($event_customer_id > 0){
+                // Storing form values begin
+                foreach($request->fieldID as $values){
+                    $fieldsIdResult[]   = $values;
+                }
 
-            $j = 0;
-            while($j < count($request->fieldID)) {
-                $IdResult                 = $fieldsIdResult[$j];
-                $ValField                 = 'dynField_'.$IdResult;
-                $formValue                = new Formvalue;
-                $formValue->form_field_id = $IdResult;
-                $formValue->value         = $request->$ValField;
-                $formValue->parent_id     = $event_customer_id;
-                $formValue->save();
-                $j++;
+                $j = 0;
+                while($j < count($request->fieldID)) {
+                    $IdResult                 = $fieldsIdResult[$j];
+                    $ValField                 = 'dynField_'.$IdResult;
+                    $formValue                = new Formvalue;
+                    $formValue->form_field_id = $IdResult;
+                    $formValue->value         = $request->$ValField;
+                    $formValue->parent_id     = $event_customer_id;
+                    $formValue->save();
+                    $j++;
+                }
+                // Storing form values end
             }
-            // Storing form values end
         }
 
         $events   = $customerObj->getEventData($event->id);
@@ -248,7 +250,10 @@ class EventController extends Controller
      */
     public function showFormGroup()
     {
-        $formGroups = Formgroup::select('id', 'title', 'description', 'sort_id')
+        $formGroups = Formgroup::select('form_groups.id', 'form_groups.title')
+            ->join('form_fields', 'form_groups.id', '=', 'form_fields.form_group_id')
+            ->where('form_fields.relation', 'event')
+            ->groupBy('form_groups.title')
             ->get();
         return $formGroups;
     }

@@ -133,24 +133,26 @@ class CustomerController extends Controller
         $customer->save();
         $customer_id = $customer->id;
 
-        if($customer_id > 0){
-            // Storing form values begin
-            foreach($request->fieldID as $values){
-                $fieldsIdResult[]   = $values;
-            }
+        if($request->fieldID != ''){
+            if($customer_id > 0){
+                // Storing form values begin
+                foreach($request->fieldID as $values){
+                    $fieldsIdResult[]   = $values;
+                }
 
-            $j = 0;
-            while($j < count($request->fieldID)) {
-                $IdResult                 = $fieldsIdResult[$j];
-                $ValField                 = 'dynField_'.$IdResult;
-                $formValue                = new Formvalue;
-                $formValue->form_field_id = $IdResult;
-                $formValue->value         = $request->$ValField;
-                $formValue->parent_id     = $customer_id;
-                $formValue->save();
-                $j++;
+                $j = 0;
+                while($j < count($request->fieldID)) {
+                    $IdResult                 = $fieldsIdResult[$j];
+                    $ValField                 = 'dynField_'.$IdResult;
+                    $formValue                = new Formvalue;
+                    $formValue->form_field_id = $IdResult;
+                    $formValue->value         = $request->$ValField;
+                    $formValue->parent_id     = $customer_id;
+                    $formValue->save();
+                    $j++;
+                }
+                // Storing form values end
             }
-            // Storing form values end
         }
 
 
@@ -191,7 +193,7 @@ class CustomerController extends Controller
             }
         }
         /*save customer in actindo warehouse*/
-        $this->createCustomerActindo($customer_id);
+        //$this->createCustomerActindo($customer_id);
 
         $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
         try {
@@ -750,7 +752,6 @@ class CustomerController extends Controller
     {
         $formFields = Formfield::select('id' , 'title', 'description', 'placeholder', 'type', 'options' , 'form_group_id', 'validation')
             ->where('form_group_id', $groupId)
-            ->where('relation', 'customer')
             ->get();
         return $formFields;
     }
@@ -762,7 +763,9 @@ class CustomerController extends Controller
      */
     public function showFormGroup()
     {
-        $formGroups = Formgroup::select('id', 'title', 'description', 'sort_id')
+        $formGroups = Formgroup::select('form_groups.id', 'form_groups.title')
+            ->join('form_fields', 'form_groups.id', '=', 'form_fields.form_group_id')
+            ->groupBy('form_groups.title')
             ->get();
         return $formGroups;
     }
