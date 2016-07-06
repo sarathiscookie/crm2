@@ -193,7 +193,7 @@ class CustomerController extends Controller
             }
         }
         /*save customer in actindo warehouse*/
-        //$this->createCustomerActindo($customer_id);
+        $this->createCustomerActindo($customer_id);
 
         $eventHtml = view('emails.newEvent', [ 'customer' => Customer::find($customer_id), 'events' => $events, 'vehicles' => $vehicles])->render();
         try {
