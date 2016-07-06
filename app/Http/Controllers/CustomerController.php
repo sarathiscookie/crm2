@@ -304,7 +304,7 @@ class CustomerController extends Controller
      */
     protected function getCustomerEvents($customer_id)
     {
-        $customer_events = Event::select('events.id', 'vehicles.execution_id', 'customer_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
+        $customer_events = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'tuning', 'dyno', 'payment', 'begin_at', 'price')
             ->join('vehicles', 'vehicles.id', '=', 'events.vehicle_id')
             ->where('customer_id', $customer_id)
             ->orderBy('events.created_at', 'DESC')
