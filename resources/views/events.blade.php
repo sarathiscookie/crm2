@@ -3,7 +3,19 @@
 @section('title', 'Events')
 
 @section('style')
+    <style>
+        .page-container .page-content-wrapper .content {
+            padding: 0;
+        }
 
+        .page-container {
+            padding: 0;
+        }
+
+        .calendar .calendar-header > .drager {
+            border: none;
+        }
+    </style>
 @endsection
 
 <link href="/assets/css/jquery.scrollbar.css" rel="stylesheet" type="text/css" media="screen" />
@@ -125,7 +137,47 @@
                     //Web Service
                     events: data,
                     view:"week",
-                    slotDuration: '15',
+                    ui: {
+                        year: {
+                            visible: true,
+                            format: 'YYYY',
+                            startYear: '2014',
+                            endYear: moment().add(1, 'year').format('YYYY'),
+                            eventBubble: true
+                        },
+                        //Month Selector
+                        month: {
+                            visible: true,
+                            format: 'MMMM',
+                            eventBubble: true
+                        },
+                        dateHeader: {
+                            format: 'dddd, D MMMM YYYY',
+                            visible: true,
+                        },
+                        week: {
+                            day: {
+                                format: 'D'
+                            },
+                            header: {
+                                format: 'dd'
+                            },
+                            eventBubble: true,
+                            startOfTheWeek: '0',
+                            endOfTheWeek:'6'
+                        },
+                        grid: {
+                            dateFormat: 'D dddd',
+                            timeFormat: 'hh:mm',
+                            eventBubble: false,
+                        }
+                    },
+                    locale: 'de',
+                    timeFormat: 'hh:mm',
+                    minTime:8,
+                    maxTime:19,
+                    dateFormat: 'MMMM Do YYYY',
+                    slotDuration: '15', //In Mins : supports 15, 30 and 60
                     onViewRenderComplete: function() {
                         //You can Do a Simple AJAX here and update
                     },
