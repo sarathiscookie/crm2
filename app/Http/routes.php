@@ -49,9 +49,10 @@ Route::get('/document/download/{id}/{path}', 'VehicleController@getDocumentDownl
 /*Get Hidden info of an event*/    
 Route::get('/event/info', 'EventController@getInfo');    
 
-    /*Testing*/
+/*Testing*/
 Route::get('/temp_reminder','CronjobController@sendEventReminder');
 Route::get('/temp_feedback','CronjobController@sendFeedbackLink');
+Route::get('/temp_sync','CronjobController@syncCustomer');
 
 
 /*
