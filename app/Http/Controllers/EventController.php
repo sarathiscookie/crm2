@@ -38,7 +38,7 @@ class EventController extends Controller
     public function view()
     {
         $result = "";
-        $listEvents    = Event::select('id', 'customer_id', 'title', 'begin_at', 'end_at')
+        $listEvents    = Event::select('id', 'title', 'begin_at', 'end_at')
             ->orderBy('id', 'desc')
             ->get();
         foreach ($listEvents as $listEvent){
@@ -65,7 +65,6 @@ class EventController extends Controller
         $event = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'payment', 'begin_at', 'price', 'customer_id')
             ->join('vehicles', 'vehicles.id', '=', 'events.vehicle_id')
             ->where('events.id', $eventId)
-            ->orderBy('events.created_at', 'DESC')
             ->first();
 
         $vehicle_title ='';
