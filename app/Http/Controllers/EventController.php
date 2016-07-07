@@ -96,8 +96,6 @@ class EventController extends Controller
                          <div>Fahrzeug: '.$vehicle_title.'</div>
                          <div>Tuning-Stufe: '.$event->stage.'</div>
                          <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
-                         <div>Bereits getunt: '.$event->tuning.'</div>
-                         <div>Prüfstandslauf: '.$event->dyno.'</div>
                          <div>Zahlungsart: '.$event->payment.'</div><br>
                          <strong>Weitere Details:</strong><br>
                         ' . $event->freetext_external . '

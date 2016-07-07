@@ -779,7 +779,7 @@ class CustomerController extends Controller
      */
     public function customerFormDetails($id)
     {
-        $customerDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title')
+        $customerDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title', 'form_fields.options', 'form_fields.type')
             ->join('form_fields', 'form_values.form_field_id', '=', 'form_fields.id')
             ->where('form_values.parent_id', $id)
             ->where('form_fields.relation', 'customer')
