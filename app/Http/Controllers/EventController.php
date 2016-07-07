@@ -38,25 +38,77 @@ class EventController extends Controller
     public function view()
     {
         $result = "";
-        $listEvents    = Event::select('customer_id', 'title', 'begin_at', 'end_at')
+        $listEvents    = Event::select('id', 'customer_id', 'title', 'begin_at', 'end_at')
             ->orderBy('id', 'desc')
             ->get();
         foreach ($listEvents as $listEvent){
-            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $listEvent->begin_at); //2016-06-28 05:00:00
+            $dt = Carbon::createFromFormat('Y-m-d H:i:s', $listEvent->begin_at);
             $dt->addHours(2);
             $resultSet = array (
                 'title' => $listEvent->title,
                 'start' => $listEvent->begin_at,
                 'end' => $dt->format('Y-m-d H:i:s'),
                 'class' => "bg-complete-lighter",
-                "other" => array('id' => $listEvent->customer_id)
+                "other" => array('eventId' => $listEvent->id)
             );
             $result[] = $resultSet;
         }
         return $result;
     }
 
+    /**
+     * view individual event details
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($eventId)
+    {
+        $event = Event::select('events.id', 'vehicles.execution_id', 'title', 'freetext_external', 'stage', 'mileage', 'payment', 'begin_at', 'price', 'customer_id')
+            ->join('vehicles', 'vehicles.id', '=', 'events.vehicle_id')
+            ->where('events.id', $eventId)
+            ->orderBy('events.created_at', 'DESC')
+            ->first();
 
+        $vehicle_title ='';
+        $vehicle_informations = DB::connection('fes')
+            ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+                                    (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+                                    (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+                                    (SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+                                FROM mainpage.ausfuehrung_view_neu av
+                                WHERE av.id = '$event->execution_id'");
+
+        foreach($vehicle_informations as $vehicle_information) {
+            if ($vehicle_information->motor_power)
+                $power = $vehicle_information->motor_power;
+            else
+                $power = $vehicle_information->ps_from_dimsport_kw;
+            $vehicle_title = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
+        }
+        $eventHtml = '<div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+                          <h4 class="panel-title">
+                            <a role="button" style="outline: none; text-decoration: none">
+                            <h4>' . $event->title . ' ( '.$event->id.' )</h4>
+                            <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
+                             </a>
+                          </h4>
+                        </div>
+                        <div class="panel-body">
+                         <div>Fahrzeug: '.$vehicle_title.'</div>
+                         <div>Tuning-Stufe: '.$event->stage.'</div>
+                         <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
+                         <div>Bereits getunt: '.$event->tuning.'</div>
+                         <div>Prüfstandslauf: '.$event->dyno.'</div>
+                         <div>Zahlungsart: '.$event->payment.'</div><br>
+                         <strong>Weitere Details:</strong><br>
+                        ' . $event->freetext_external . '
+                        <br>
+                        <a href="/customer/details/'.$event->customer_id.'" class="btn btn-info pull-right">Customer Details</a>
+                       </div>
+                    </div>';
+
+        return $eventHtml;
+    }
     /**
      * Create an event - show form
      * @param $customer_id
