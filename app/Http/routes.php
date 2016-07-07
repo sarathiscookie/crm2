@@ -105,6 +105,8 @@ Route::get('/events', ['as' => 'showEventsPage', 'uses' => 'EventController@inde
 /* Show events page*/
 Route::get('/events/list', ['as' => 'listEvents', 'uses' => 'EventController@view']);
 
+/* Show events page*/
+Route::get('/events/list/{id}', ['as' => 'listEachEvent', 'uses' => 'EventController@show']);
 /*
  |--------------------------------------------------------------------------
  | Routes for dashboard
