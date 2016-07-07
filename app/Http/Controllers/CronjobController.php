@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Event;
 use Illuminate\Http\Request;
 
@@ -9,6 +10,9 @@ use App\Http\Requests;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use DB;
+
+use SoapClient;
+use Exception;
 
 class CronjobController extends Controller
 {
@@ -114,6 +118,35 @@ class CronjobController extends Controller
                 }
             }
         }
+    }
+
+    /**
+     * Cron - Insert new customers from Actindo into db
+     */
+    public function syncCustomer()
+    {
+
+        $erp_max = Customer::max('erp_id');
+        $start = $erp_max + 1;
+        $end = $start + 5;
+
+
+
+        $soap = new SoapClient('https://www.actindo.biz/actindo/soap.php?WSDL', ['encoding' => 'utf-8']);
+        try {
+            $sid = $soap->auth__login('shdevelopment', 'W.H*dhtj*w', 38372, 'NOID', 'NOSERIAL');
+
+            //for($i=$start; $i<= $end; $i++){
+                $result = $soap->dk__get_content( $sid, $start, NULL );
+                print_r($result);
+            //}
+
+            $soap->auth__logout($sid);
+        } catch (Exception $e) {
+            var_dump( $e );
+        }
+            
+
     }
 
 
