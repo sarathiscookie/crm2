@@ -67,6 +67,14 @@ class EventController extends Controller
             ->where('events.id', $eventId)
             ->first();
 
+        $eventDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title', 'form_fields.options', 'form_fields.type')
+            ->join('form_fields', 'form_values.form_field_id', '=', 'form_fields.id')
+            ->join('events', 'events.id', '=', 'form_values.parent_id')
+            ->where('events.id', $eventId)
+            ->where('form_fields.relation', 'event')
+            ->get();
+
+
         $vehicle_title ='';
         $vehicle_informations = DB::connection('fes')
             ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
@@ -83,28 +91,36 @@ class EventController extends Controller
                 $power = $vehicle_information->ps_from_dimsport_kw;
             $vehicle_title = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
         }
-        $eventHtml = '<div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="heading' . $event->id . '">
-                          <h4 class="panel-title">
-                            <a role="button" style="outline: none; text-decoration: none">
-                            <h4>' . $event->title . ' ( '.$event->id.' )</h4>
-                            <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
-                             </a>
-                          </h4>
-                        </div>
-                        <div class="panel-body">
-                         <div>Fahrzeug: '.$vehicle_title.'</div>
-                         <div>Tuning-Stufe: '.$event->stage.'</div>
-                         <div>Kilometerstand: '. number_format($event->mileage, 0, ',', '.')  .' km</div>
-                         <div>Zahlungsart: '.$event->payment.'</div><br>
-                         <strong>Weitere Details:</strong><br>
-                        ' . $event->freetext_external . '
-                        <br>
-                        <a href="/customer/details/'.$event->customer_id.'" class="btn btn-info pull-right">Customer Details</a>
-                       </div>
-                    </div>';
-
-        return $eventHtml;
+        ?>
+        <div class="panel panel-default">
+           <div class="panel-heading" role="tab" id="heading' . $event->id . '">
+              <h4 class="panel-title">
+                  <a role="button" style="outline: none; text-decoration: none">
+                      <h4><?php echo $event->title;?> ( <?php echo $event->id; ?> ) </h4>
+                      <p><small><?php echo date('d.m.Y H:i', strtotime($event->begin_at)); ?></small></p>
+                  </a>
+              </h4>
+           </div>
+            <div class="panel-body">
+                <div>Fahrzeug: <?php echo $vehicle_title; ?></div>
+                <div>Tuning-Stufe: <?php echo $event->stage; ?></div>
+                <div>Kilometerstand:  <?php echo number_format($event->mileage, 0, ',', '.');?> km</div>
+                <div>Zahlungsart: <?php echo $event->payment; ?></div><br>
+                <strong>Weitere Details:</strong><br>
+                <?php echo $event->freetext_external; ?>
+                <br>
+                <?php
+                if(count($eventDynamicFormDetails) > 0){
+                foreach ($eventDynamicFormDetails as $eventDynamicFormDetail){?>
+                <div><?php echo $eventDynamicFormDetail->title; ?> : <?php echo $eventDynamicFormDetail->value;?></div>
+                <?php
+                }
+                }
+                ?>
+                <a href="/customer/details/<?php echo $event->customer_id;?>" class="btn btn-info pull-right">Customer Details</a>
+            </div>
+        </div>
+        <?php
     }
     /**
      * Create an event - show form
@@ -192,7 +208,7 @@ class EventController extends Controller
                     $formValue                = new Formvalue;
                     $formValue->form_field_id = $IdResult;
                     $formValue->value         = $request->$ValField;
-                    $formValue->parent_id     = $event_customer_id;
+                    $formValue->parent_id     = $event->id;
                     $formValue->save();
                     $j++;
                 }

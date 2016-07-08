@@ -2,6 +2,8 @@
 
 @section('title', 'Customer details')
 
+@inject('vehicleEventDetails', 'App\Http\Controllers\CustomerController')
+
 @section('style')
     <link rel="stylesheet" href="/assets/css/editor.css">
     <style>
@@ -54,9 +56,64 @@
             <hr>
             <h3>Termine</h3>
             <div class="panel-group" id="accordionEvent" role="tablist" aria-multiselectable="true">
-
-                {!! $events !!}
-
+                <?php
+                if(isset($events)){
+                    $i = 1;
+                    foreach($events as $event){
+                        $vehicle_title = '';
+                        foreach ($vehicleEventDetails->vehicleDetails($event->execution_id) as $vehicle_information) {
+                            if ($vehicle_information->motor_power)
+                                $power = $vehicle_information->motor_power;
+                            else
+                                $power = $vehicle_information->ps_from_dimsport_kw;
+                            $vehicle_title = $vehicle_information->marke_name . " " . $vehicle_information->modell_name . " " . $vehicle_information->tpbezeichnung . " " . "mit " . $power . "PS";
+                        }
+                        if ($i == 1) {
+                            $collapse = "in";
+                            $a_class = '';
+                            $expanded = "true";
+                        } else {
+                            $collapse = "";
+                            $a_class = 'class="collapsed"';
+                            $expanded = "false";
+                        }
+                        ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="heading<?php echo $event->id; ?>">
+                            <h4 class="panel-title">
+                                <a <?php echo $a_class;?> role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse<?php echo $event->id; ?>" area-expanded="<?php echo $expanded; ?>" aria-controls="collapse<?php echo $event->id; ?>" style="outline: none; text-decoration: none">
+                                <h4><?php echo $event->title;?> ( <?php echo $event->id; ?> )</h4>
+                                <p><small><?php echo date('d.m.Y H:i', strtotime($event->begin_at));?></small></p>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse<?php echo $event->id; ?>" class="panel-collapse collapse<?php echo $collapse;?>" role="tabpanel" aria-labelledby="heading<?php echo $event->id;?>">
+                            <div class="panel-body">
+                                <div>Fahrzeug: <?php echo $vehicle_title; ?></div>
+                                <div>Tuning-Stufe: <?php echo $event->stage; ?></div>
+                                <div>Kilometerstand: <?php echo number_format($event->mileage, 0, ',', '.');?> km</div>
+                                <div>Bereits getunt: <?php echo $event->tuning; ?></div>
+                                <div>Prüfstandslauf: <?php echo $event->dyno; ?></div>
+                                <div>Zahlungsart: <?php echo $event->payment; ?></div><br>
+                                <strong>Weitere Details:</strong><br>
+                                <?php echo $event->freetext_external; ?>
+                                <br>
+                                <?php
+                                foreach ($vehicleEventDetails->eventCustDetails($event->id) as $eventDynamicForm) {
+                                ?>
+                                <div><?php echo $eventDynamicForm->title; ?>: <?php echo $eventDynamicForm->value;?></div>
+                                <?php
+                                }
+                                ?>
+                                <button type="button" class="btn btn-primary get-info" id="<?php echo $event->id; ?>" data-toggle="modal" data-target="#infoModal">Hidden Info</button>
+                            </div>
+                        </div>
+                     </div>
+                <?php
+                    $i++;
+                    }
+                }
+                ?>
             </div>
         </div>
         <div class="col-md-6">
@@ -317,5 +374,6 @@
     $('#infoModal').on('hidden.bs.modal', function (e) {
         $('#infoContent').html('');
     });
+
 </script>
 @endpush

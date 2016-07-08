@@ -133,29 +133,6 @@ class CustomerController extends Controller
         $customer->save();
         $customer_id = $customer->id;
 
-        if($request->fieldID != ''){
-            if($customer_id > 0){
-                // Storing form values begin
-                foreach($request->fieldID as $values){
-                    $fieldsIdResult[]   = $values;
-                }
-
-                $j = 0;
-                while($j < count($request->fieldID)) {
-                    $IdResult                 = $fieldsIdResult[$j];
-                    $ValField                 = 'dynField_'.$IdResult;
-                    $formValue                = new Formvalue;
-                    $formValue->form_field_id = $IdResult;
-                    $formValue->value         = $request->$ValField;
-                    $formValue->parent_id     = $customer_id;
-                    $formValue->save();
-                    $j++;
-                }
-                // Storing form values end
-            }
-        }
-
-
         $vehicle_id = $this->saveVehicle($request);
         $events     = $this->saveEvent($customer_id, $vehicle_id, $request);
         $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
@@ -260,6 +237,26 @@ class CustomerController extends Controller
             $event->begin_at = $begin_at;
             $event->end_at   = $end_at;
             $event->save();
+
+            if($request->fieldID != ''){
+                // Storing form values begin
+                foreach($request->fieldID as $values){
+                    $fieldsIdResult[]   = $values;
+                }
+
+                $j = 0;
+                while($j < count($request->fieldID)) {
+                    $IdResult                 = $fieldsIdResult[$j];
+                    $ValField                 = 'dynField_'.$IdResult;
+                    $formValue                = new Formvalue;
+                    $formValue->form_field_id = $IdResult;
+                    $formValue->value         = $request->$ValField;
+                    $formValue->parent_id     = $event->id;
+                    $formValue->save();
+                    $j++;
+                }
+                // Storing form values end
+            }
         }
 
         return $this->getEventData($event->id);
@@ -309,65 +306,7 @@ class CustomerController extends Controller
             ->where('customer_id', $customer_id)
             ->orderBy('events.created_at', 'DESC')
             ->get();
-
-        $events = '';
-        $i=1;
-        foreach($customer_events as $event) {
-            $vehicle_title = '';
-            $vehicle_informations = DB::connection('fes')
-                ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
-										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
-										(select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
-										(SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
-									FROM mainpage.ausfuehrung_view_neu av
-									WHERE av.id = '$event->execution_id'");
-
-            foreach ($vehicle_informations as $vehicle_information) {
-                if ($vehicle_information->motor_power)
-                    $power = $vehicle_information->motor_power;
-                else
-                    $power = $vehicle_information->ps_from_dimsport_kw;
-                $vehicle_title = $vehicle_information->marke_name . " " . $vehicle_information->modell_name . " " . $vehicle_information->tpbezeichnung . " " . "mit " . $power . "PS";
-            }
-            if ($i == 1) {
-                $collapse = "in";
-                $a_class = '';
-                $expanded = "true";
-            } else {
-                $collapse = "";
-                $a_class = 'class="collapsed"';
-                $expanded = "false";
-            }
-
-            $events .= '<div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="heading' . $event->id . '">
-                        <h4 class="panel-title">
-                            <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse' . $event->id . '" area-expanded="' . $expanded . '" aria-controls="collapse' . $event->id . '" style="outline: none; text-decoration: none">
-                                <h4>' . $event->title . ' ( ' . $event->id . ' )</h4>
-                                <p><small>' . date('d.m.Y H:i', strtotime($event->begin_at)) . '</small></p>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapse' . $event->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="heading' . $event->id . '">
-                        <div class="panel-body">
-                             <div>Fahrzeug: ' . $vehicle_title . '</div>
-                             <div>Tuning-Stufe: ' . $event->stage . '</div>
-                             <div>Kilometerstand: ' . number_format($event->mileage, 0, ',', '.') . ' km</div>
-                             <div>Bereits getunt: ' . $event->tuning . '</div>
-                             <div>Prüfstandslauf: ' . $event->dyno . '</div>
-                             <div>Zahlungsart: ' . $event->payment . '</div><br>
-                             <strong>Weitere Details:</strong><br>
-                            ' . $event->freetext_external . '
-                            <br>
-                            <button type="button" class="btn btn-primary get-info" id="' . $event->id . '" data-toggle="modal" data-target="#infoModal">Hidden Info</button>
-                        </div>
-                    </div>
-                </div>';
-            $i++;
-
-        }
-
-        return $events;
+        return $customer_events;
     }
 
     /**
@@ -781,9 +720,33 @@ class CustomerController extends Controller
     {
         $customerDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title', 'form_fields.options', 'form_fields.type')
             ->join('form_fields', 'form_values.form_field_id', '=', 'form_fields.id')
-            ->where('form_values.parent_id', $id)
+            ->join('events', 'events.id', '=', 'form_values.parent_id')
+            ->where('events.customer_id', $id)
             ->where('form_fields.relation', 'customer')
             ->get();
         return $customerDynamicFormDetails;
+    }
+
+    public function vehicleDetails($execution_id)
+    {
+        $vehicle_informations = DB::connection('fes')
+            ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+                (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+                (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+                (SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+                FROM mainpage.ausfuehrung_view_neu av
+                WHERE av.id = '$execution_id'");
+        return $vehicle_informations;
+    }
+
+    public function eventCustDetails($event_id)
+    {
+        $eventDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title', 'form_fields.options', 'form_fields.type')
+            ->join('form_fields', 'form_values.form_field_id', '=', 'form_fields.id')
+            ->join('events', 'events.id', '=', 'form_values.parent_id')
+            ->where('events.id', $event_id)
+            ->where('form_fields.relation', 'event')
+            ->get();
+        return $eventDynamicFormDetails;
     }
 }

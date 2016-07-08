@@ -16,10 +16,11 @@ class CreateFormValuesTable extends Migration
             $table->increments('id');
             $table->integer('form_field_id')->unsigned();
             $table->text('value')->nullable();
-            $table->integer('parent_id')->comment('id of customers and events');
+            $table->integer('parent_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('form_field_id')->references('id')->on('form_fields');
+            $table->foreign('parent_id')->references('id')->on('events');
         });
     }
 
