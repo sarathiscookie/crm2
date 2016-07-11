@@ -6,12 +6,12 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'dashboardItemHeaderCustomersList' => 'Customer List',
-    'dashboardItemHeaderNoCustomerMessage' => 'No new customers',
-    'dashboardItemHeaderTodayList' => 'Today',
-    'dashboardItemHeaderNoTodayListMessage' => 'No events today',
-    'dashboardItemHeaderTomorrowList' => 'Tomorrow',
-    'dashboardItemHeaderNoTomorrowListMessage' => 'No events tomorrow',
+    'dashboardItemHeaderCustomersList' => 'Kunden',
+    'dashboardItemHeaderNoCustomerMessage' => 'Keine Kunden verfügbar',
+    'dashboardItemHeaderTodayList' => 'Termine HEUTE',
+    'dashboardItemHeaderNoTodayListMessage' => 'Heute keine Termine',
+    'dashboardItemHeaderTomorrowList' => 'Termine MORGEN',
+    'dashboardItemHeaderNoTomorrowListMessage' => 'Morgen keine Termine',
     /*
     /*
     |--------------------------------------------------------------------------
@@ -19,10 +19,10 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'headerTabCustomersList' => 'Customers',
+    'headerTabCustomersList' => 'Kunden',
     'headerTabAddCustomers' => 'Kunden hinzufügen',
     'headerTabServices' => 'Services',
-    'headerTabEvents' => 'Events',
+    'headerTabEvents' => 'Terminkalender',
     'headerTabSearchBoxPlaceholder' => 'Suche',
     /*
     |--------------------------------------------------------------------------
