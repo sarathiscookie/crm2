@@ -31,7 +31,13 @@ Route::get('/customer/details/{id}', 'CustomerController@showDetails')->where(['
 Route::get('/event/create/{customer}/{car}', 'EventController@create')->where('customer', '[0-9]+')->where('car', '[0-9]+');
 
 /* Store event */
-Route::post('/event/save', 'EventController@save'); 
+Route::post('/event/save', 'EventController@save');
+
+/* Edit event */
+Route::get('/event/edit/{id}', 'EventController@showEdit')->where(['id' => '[0-9]+']);
+
+/* Update event */
+Route::post('/event/update/{id}', 'EventController@update')->where(['id' => '[0-9]+']);    
     
 /* Store Vehicle */
 Route::post('/vehicle/save', 'VehicleController@saveVehicle');

@@ -80,12 +80,14 @@
                         ?>
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading<?php echo $event->id; ?>">
-                            <h4 class="panel-title">
+                            <h3 class="panel-title">
                                 <a <?php echo $a_class;?> role="button" data-toggle="collapse" data-parent="#accordionEvent" href="#collapse<?php echo $event->id; ?>" area-expanded="<?php echo $expanded; ?>" aria-controls="collapse<?php echo $event->id; ?>" style="outline: none; text-decoration: none">
-                                <h4><?php echo $event->title;?> ( <?php echo $event->id; ?> )</h4>
-                                <p><small><?php echo date('d.m.Y H:i', strtotime($event->begin_at));?></small></p>
+                                <?php echo $event->title;?> ( <?php echo $event->id; ?> )
+                                <br><span><small><?php echo date('d.m.Y H:i', strtotime($event->begin_at));?></small></span>
                                 </a>
-                            </h4>
+                                <a role="button" class="btn btn-primary pull-right" href="/event/edit/<?=$event->id?>">Edit event</a>
+                                <div class="clearfix"></div>
+                            </h3>
                         </div>
                         <div id="collapse<?php echo $event->id; ?>" class="panel-collapse collapse<?php echo $collapse;?>" role="tabpanel" aria-labelledby="heading<?php echo $event->id;?>">
                             <div class="panel-body">

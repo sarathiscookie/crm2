@@ -134,10 +134,13 @@ class CronjobController extends Controller
 
         $soap = new SoapClient('https://www.actindo.biz/actindo/soap.php?WSDL', ['encoding' => 'utf-8']);
         try {
-            $sid = $soap->auth__login('shdevelopment', 'W.H*dhtj*w', 38372, 'NOID', 'NOSERIAL');
+            //$sid = $soap->auth__login('shdevelopment', 'W.H*dhtj*w', 38372, 'NOID', 'NOSERIAL');
+            $sid = $soap->auth__login('ep_dev', 'lib2016', 41781, 'NOID', 'NOSERIAL');
 
             //for($i=$start; $i<= $end; $i++){
-                $result = $soap->dk__get_content( $sid, $start, NULL );
+                $result = $soap->dk__get_content( $sid, 12551, NULL );
+                //$result = $soap->dk__search( $sid, 'deb', ['deb_kred_id'=>12551, 'vorname' => 'Christian'], 0, true );
+
                 print_r($result);
             //}
 

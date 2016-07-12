@@ -322,4 +322,101 @@ class EventController extends Controller
             ->get();
         return $formGroups;
     }
+
+    public function showEdit($id)
+    {
+        $event = Event::find($id);
+        $customer = Customer::select('id', 'firstname', 'lastname')->find($event->customer_id);
+        $car = Vehicle::select('id', 'execution_id')->find($event->vehicle_id);
+
+        $customer_name = title_case($customer->firstname). ' ' .title_case($customer->lastname);
+
+        $vehicle_informations = DB::connection('fes')
+            ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
+										(select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) as motor_id,
+										(select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) as motor_power,
+										(SELECT CASE WHEN (select t.motor_id from mainpage.tuning t where av.tuning_id = t.id) <> NULL THEN (select m.power from mainpage.motor m, mainpage.tuning t where av.tuning_id = t.id and t.motor_id = m.id) ELSE round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) END ) as sort_leistung
+									FROM mainpage.ausfuehrung_view_neu av
+									WHERE av.id = '$car->execution_id'");
+
+        foreach($vehicle_informations as $vehicle_information) {
+            if ($vehicle_information->motor_power)
+                $power = $vehicle_information->motor_power;
+            else
+                $power = $vehicle_information->ps_from_dimsport_kw;
+        }
+        $car_name = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
+
+        $assignedTags   = array();
+        $tags = Hardware::select('hardwares.id','title')
+            ->join('vehicle_hardwares AS VH', 'VH.hardware_id', '=', 'hardwares.id')
+            ->where('VH.vehicle_id', $event->vehicle_id)
+            ->get();
+        foreach ($tags as $tag){
+            $assignedTags[] = $tag->title;
+        }
+
+        return view('editEvent', ['customer_name' =>$customer_name, 'car_name' => $car_name, 'event' => $event, 'assignedTags' =>json_encode($assignedTags)]);
+
+    }
+
+    public function showFormFieldsEdit($groupId, $parent_id)
+    {
+        $formFields = Formfield::select('form_fields.id' , 'title', 'description', 'placeholder', 'type', 'options' , 'form_group_id', 'validation', 'form_values.value', 'form_values.id as formvalueid', 'form_values.parent_id')
+            ->leftjoin('form_values', 'form_fields.id','=','form_values.form_field_id')
+            ->where('form_group_id', $groupId)
+            ->where('relation', 'event')
+            ->where('form_values.parent_id', $parent_id)
+            ->get();
+        return $formFields;
+    }
+
+    public function update(EventRequest $request, $id)
+    {
+        $date_split = explode(" To ",$request->eventrange);
+        $begin_at   = date('Y-m-d H:i', strtotime($date_split[0]));
+        $end_at = date('Y-m-d H:i', strtotime($date_split[1]));
+
+        $event = Event::find($id);
+        $event->title = $request->title;
+        $event->freetext_external = $request->freetext_external;
+        $event->freetext_internal = $request->freetext_internal;
+        $event->stage    = $request->stage;
+        $event->mileage  = str_replace(".", "", $request->mileage);
+        $event->tuning   = $request->tuning;
+        $event->dyno     = $request->dyno;
+        $event->payment  = $request->payment;
+        $event->begin_at = $begin_at;
+        $event->end_at   = $end_at;
+        $event->price   = $request->price;
+        $event->save();
+        $this->saveHardwares($request);
+
+
+        //// Updating form values
+        $event_customer_id = $event->customer_id;
+        if($request->fieldID != ''){
+            if($event_customer_id > 0){
+                foreach($request->fieldID as $values){
+                    $fieldsIdResult[]   = $values;
+                }
+
+                foreach($request->formValueID as $valueid){
+                    $formValueIdResult[] = $valueid;
+                }
+
+                $j = 0;
+                while($j < count($request->fieldID)) {
+                    $IdResult             = $fieldsIdResult[$j];
+                    $ValField             = 'dynField_'.$IdResult;
+                    $ValResult            = $request->$ValField;
+                    $ValIDResult          = $formValueIdResult[$j];
+                    Formvalue::where('id', $ValIDResult)
+                        ->update(['form_field_id' => $IdResult, 'value' => $ValResult]);
+                    $j++;
+                }
+            }
+        }
+        return redirect(url('/customer/details/'.$event_customer_id));
+    }
 }
