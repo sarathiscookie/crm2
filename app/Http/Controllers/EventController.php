@@ -371,7 +371,7 @@ class EventController extends Controller
     }
 
     /**
-     * Sho dynamic fields and corresponding values in event edit
+     * Show dynamic fields and corresponding values in event edit
      * @param $groupId
      * @param $parent_id
      * @return mixed
@@ -397,7 +397,7 @@ class EventController extends Controller
     {
         $date_split = explode(" To ",$request->eventrange);
         $begin_at   = date('Y-m-d H:i', strtotime($date_split[0]));
-        $end_at = date('Y-m-d H:i', strtotime($date_split[1]));
+        $end_at     = date('Y-m-d H:i', strtotime($date_split[1]));
 
         $event = Event::find($id);
         $event->title = $request->title;
@@ -415,7 +415,7 @@ class EventController extends Controller
         $this->saveHardwares($request);
 
 
-        //// Updating form values
+        //Updating Dynamic form input values
         $event_customer_id = $event->customer_id;
         if($request->fieldID != ''){
             if($event_customer_id > 0){

@@ -314,10 +314,8 @@
 
         //Add thousand seperator in mileage field
         $('input.mileageNumber').keyup(function(event) {
-
             // skip for arrow keys
             if(event.which >= 37 && event.which <= 40) return;
-
             // format number
             $(this).val(function(index, value) {
                 return value
@@ -362,7 +360,7 @@
             }
         });
 
-        //WYSIWYG Editor
+        //Initialize WYSIWYG Editor
         $(document).ready(function() {
             $("#txtEditor").Editor({
                 'l_align':false, 'r_align':false, 'c_align':false,
@@ -470,7 +468,7 @@
         });
 
 
-        /*Search Advertiser*/
+        /*Search customers as Advertiser*/
         var timer;
         function doSearch(){
             timer = setTimeout(function(){

@@ -602,6 +602,10 @@ class CustomerController extends Controller
         return $documents;
     }
 
+    /**
+     * 
+     * @return array
+     */
     public function listCustomers()
     {
         $results =  Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
@@ -728,6 +732,11 @@ class CustomerController extends Controller
         return $customerDynamicFormDetails;
     }
 
+    /**
+     * get Vehicle details - pgsql db
+     * @param $execution_id
+     * @return mixed
+     */
     public function vehicleDetails($execution_id)
     {
         $vehicle_informations = DB::connection('fes')
@@ -740,6 +749,11 @@ class CustomerController extends Controller
         return $vehicle_informations;
     }
 
+    /**
+     * Get Custom form field details
+     * @param $event_id
+     * @return mixed
+     */
     public function eventCustDetails($event_id)
     {
         $eventDynamicFormDetails = Formvalue::select('form_values.value', 'form_fields.title', 'form_fields.options', 'form_fields.type')
@@ -754,7 +768,7 @@ class CustomerController extends Controller
 
 
     /**
-     * Search Customer as Advertiser
+     * Search Customer ajax- to set as advertiser_id from the search results- in create customer
      * @param Request $request
      */
     public function searchAdvertiser(Request $request)
@@ -772,19 +786,20 @@ class CustomerController extends Controller
             ->orderBy('firstname')
             ->take(20)
             ->get();
-            if (count($customers) == 0)
-                $list .='<div class="alert alert-danger" style="margin-bottom:0;" role="alert"><strong>Kunde wurde nicht gefunden!</strong> Bitte prüfen Sie Ihren Suchbegriff.</div>';
+        if (count($customers) == 0)
+            $list .='<div class="alert alert-danger" style="margin-bottom:0;" role="alert"><strong>Kunde wurde nicht gefunden!</strong> Bitte prüfen Sie Ihren Suchbegriff.</div>';
 
-            else {
-                $list .='<div class="list-group">';
-                foreach($customers as $row) {
-                    $list .='<a class="list-group-item listgroup_'.$row->id.'" data-id="'.$row->id.'" data-model="'.title_case($row->firstname). " " .title_case($row->lastname). '">' . title_case($row->firstname). " " .title_case($row->lastname) . '<br><small>' . $row->erp_id . '</small></a>';
-                }
-                $list .='</div>';
+        else {
+            $list .= '<div class="list-group">';
+            foreach ($customers as $row) {
+                $list .= '<a class="list-group-item listgroup_' . $row->id . '" data-id="' . $row->id . '" data-model="' . title_case($row->firstname) . " " . title_case($row->lastname) . '">' . title_case($row->firstname) . " " . title_case($row->lastname) . '<br><small>' . $row->erp_id . '</small></a>';
             }
+            $list .= '</div>';
+        }
         $list .='<span style="clear: both"></span>';
 
         $list .='</div>';
+
         return response($list);
     }
 }

@@ -12,7 +12,7 @@ use Storage, File;
 class VehicleController extends Controller
 {
     /**
-     * save Vehicle
+     * Save Vehicle
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
