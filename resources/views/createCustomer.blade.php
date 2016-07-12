@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/assets/css/editor.css">
     <link rel="stylesheet" href="/assets/css/daterangepicker.css">
     <style>
-        #search-result{
+        #search-result {
             background: transparent none repeat scroll 0% 0%;
             position: absolute;
             display: block;
@@ -17,7 +17,27 @@
             border-bottom-left-radius: 6px;
             border-bottom-right-radius: 6px;
         }
-        #search-result .insearch {
+        #search-result.insearch {
+            background: #FFF;
+            box-shadow: 0 20px 15px rgba(0,0,0,.2);
+            border: solid 1px #bebebe;
+            border-top: 0;
+            width: 301px;
+            padding: 10px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+        #advertiser-result {
+            background: transparent none repeat scroll 0% 0%;
+            position: absolute;
+            display: block;
+            left: 15px;
+            top: 62px;
+            z-index: 1;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+        #advertiser-result.insearch {
             background: #FFF;
             box-shadow: 0 20px 15px rgba(0,0,0,.2);
             border: solid 1px #bebebe;
@@ -45,6 +65,19 @@
         @endif
         <form id="addCustomerFrm" action="{{ url('/customer/save') }}" method="post">
             {{ csrf_field() }}
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="name">{{ trans('messages.customerCreateFormLabelAdvertiser') }}</label>
+                    <div id="advertiserInput">
+                        <input type="text" class="form-control" name="advertiser" id="advertiser"  onkeydown="clearOut()" onkeyup="doSearch()" autocomplete="off" value="">
+                        <div id="advertiser-result" class="col-md-6 search-box"></div>
+                    </div>
+                    <div id="selectedIdDiv" style="display:none">
+                        <input type="hidden" id="advertiser_id" name="advertiser_id" value="">
+                        <div class="well well-sm" id="selectedId"></div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="name">{{ trans('messages.customerCreateFormLabelCompany') }}</label>
@@ -435,5 +468,40 @@
                 "separator": " To ",
             },
         });
+
+
+        /*Search Advertiser*/
+        var timer;
+        function doSearch(){
+            timer = setTimeout(function(){
+                var keywords = $("#advertiser").val();
+                if(keywords.length >0){
+                    $.post("/search/advertiser", {keywords: keywords}, function(response){
+                        $("#advertiser-result").html(response);
+                        $("#advertiser-result").fadeIn("fast");
+
+                        $(".list-group-item").on("click", function(){
+                            $("#advertiserInput").hide();
+                            $("#advertiser_id").attr("value", $(this).attr("data-id"));
+                            $("#selectedId").html($(this).attr("data-model")+'<span class="glyphicon glyphicon glyphicon-remove pull-right" aria-hidden="true" style="cursor: pointer;"></span>');
+                            $("#selectedIdDiv").show();
+
+                            $(".glyphicon-remove").on("click", function(){
+                                $("#advertiserInput").show();
+                                $("#selectedIdDiv").hide();
+                                $("#advertiser_id").val('');
+                            });
+                        });
+                    });
+                }
+                if(keywords.length == 0){
+                    $("#advertiser-result").fadeOut("fast");
+                }
+            }, 500);
+        }
+
+        function clearOut(){
+            clearTimeout(timer);
+        }
     </script>
 @endpush

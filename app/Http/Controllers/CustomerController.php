@@ -115,6 +115,7 @@ class CustomerController extends Controller
 
         $customer = new Customer();
         $customer->erp_id = rand(1,999);
+        $customer->advertiser_id = $request->advertiser_id;
         $customer->company = $request->company;
         $customer->title = $request->title;
         $customer->firstname = $request->firstname;
@@ -748,5 +749,42 @@ class CustomerController extends Controller
             ->where('form_fields.relation', 'event')
             ->get();
         return $eventDynamicFormDetails;
+    }
+
+
+
+    /**
+     * Search Customer as Advertiser
+     * @param Request $request
+     */
+    public function searchAdvertiser(Request $request)
+    {
+        $keyword = $request->keywords;
+        $list ='<div class="insearch">';
+
+        $customers   = Customer::select('customers.id', 'firstname', 'lastname', 'erp_id')
+            ->where(function ($query) use($keyword) {
+                $query->where('firstname', 'LIKE', '%'.$keyword.'%')
+                    ->orWhere('lastname', 'LIKE', '%'.$keyword.'%')
+                    ->orWhere('email', 'LIKE', '%'.$keyword.'%')
+                    ->orWhere('erp_id', 'LIKE', '%'.$keyword.'%');
+            })
+            ->orderBy('firstname')
+            ->take(20)
+            ->get();
+            if (count($customers) == 0)
+                $list .='<div class="alert alert-danger" style="margin-bottom:0;" role="alert"><strong>Ihr Fahrzeug wurde nicht gefunden!</strong> Bitte prüfen Sie Ihren Suchbegriff oder durchsuchen Sie die Fahrzeug Datenbank <a class="alert-link" href="/chiptuning">hier</a> manuell.</div>';
+
+            else {
+                $list .='<div class="list-group">';
+                foreach($customers as $row) {
+                    $list .='<a class="list-group-item listgroup_'.$row->id.'" data-id="'.$row->id.'" data-model="'.title_case($row->firstname). " " .title_case($row->lastname). '">' . title_case($row->firstname). " " .title_case($row->lastname) . '<br><small>' . $row->erp_id . '</small></a>';
+                }
+                $list .='</div>';
+            }
+        $list .='<span style="clear: both"></span>';
+
+        $list .='</div>';
+        return response($list);
     }
 }

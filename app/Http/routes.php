@@ -81,6 +81,9 @@ Route::get('/tag/hardware', ['as' => 'listHardware', 'uses' => 'CustomerControll
 /* Search vehicles */
 Route::post('/search/vehicle', ['as' => 'searchVehicle', 'uses' => 'CustomerController@searchVehicle']);
 
+/* Search Advertiser*/
+Route::post('/search/advertiser', ['as' => 'searchCustomer', 'uses' => 'CustomerController@searchAdvertiser']);    
+     
 
 /*
  |--------------------------------------------------------------------------
