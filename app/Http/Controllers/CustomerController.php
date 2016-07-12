@@ -762,7 +762,7 @@ class CustomerController extends Controller
         $keyword = $request->keywords;
         $list ='<div class="insearch">';
 
-        $customers   = Customer::select('customers.id', 'firstname', 'lastname', 'erp_id')
+        $customers   = Customer::select('id', 'firstname', 'lastname', 'erp_id')
             ->where(function ($query) use($keyword) {
                 $query->where('firstname', 'LIKE', '%'.$keyword.'%')
                     ->orWhere('lastname', 'LIKE', '%'.$keyword.'%')
@@ -773,7 +773,7 @@ class CustomerController extends Controller
             ->take(20)
             ->get();
             if (count($customers) == 0)
-                $list .='<div class="alert alert-danger" style="margin-bottom:0;" role="alert"><strong>Ihr Fahrzeug wurde nicht gefunden!</strong> Bitte prüfen Sie Ihren Suchbegriff oder durchsuchen Sie die Fahrzeug Datenbank <a class="alert-link" href="/chiptuning">hier</a> manuell.</div>';
+                $list .='<div class="alert alert-danger" style="margin-bottom:0;" role="alert"><strong>Kunde wurde nicht gefunden!</strong> Bitte prüfen Sie Ihren Suchbegriff.</div>';
 
             else {
                 $list .='<div class="list-group">';

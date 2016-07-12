@@ -44,6 +44,7 @@ return [
     |
     */
     'customerCreateFormHeadingLabel' => 'Kunden hinzufügen',
+    'customerCreateFormLabelAdvertiser' => 'Inserent ID',
     'customerCreateFormLabelCompany' => 'Firma',
     'customerCreateFormLabelTitle' => 'Title',
     'customerCreateFormTitleLabelCompany' => 'Firma',

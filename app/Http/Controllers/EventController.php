@@ -280,6 +280,11 @@ class EventController extends Controller
         }
     }
 
+    /**
+     * Get event's internal details - Ajax
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getInfo(Request $request)
     {
         if(!$request->ajax()){
@@ -323,6 +328,11 @@ class EventController extends Controller
         return $formGroups;
     }
 
+    /**
+     * Event edit page
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showEdit($id)
     {
         $event = Event::find($id);
@@ -360,6 +370,12 @@ class EventController extends Controller
 
     }
 
+    /**
+     * Sho dynamic fields and corresponding values in event edit
+     * @param $groupId
+     * @param $parent_id
+     * @return mixed
+     */
     public function showFormFieldsEdit($groupId, $parent_id)
     {
         $formFields = Formfield::select('form_fields.id' , 'title', 'description', 'placeholder', 'type', 'options' , 'form_group_id', 'validation', 'form_values.value', 'form_values.id as formvalueid', 'form_values.parent_id')
@@ -371,6 +387,12 @@ class EventController extends Controller
         return $formFields;
     }
 
+    /**
+     * Update event details
+     * @param EventRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function update(EventRequest $request, $id)
     {
         $date_split = explode(" To ",$request->eventrange);
