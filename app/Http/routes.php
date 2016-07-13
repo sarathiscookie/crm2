@@ -53,7 +53,13 @@ Route::get('/document/download/{id}/{path}', 'VehicleController@getDocumentDownl
     ->where('id', '[0-9]+');
     
 /*Get Hidden info of an event*/    
-Route::get('/event/info', 'EventController@getInfo');    
+Route::get('/event/info', 'EventController@getInfo');
+
+/*Create notice - vehicle histories*/
+Route::get('/notice/create/{id}', 'VehicleHistoryController@create')->where('id', '[0-9]+');
+
+/* Save notice*/
+Route::post('/notice/save', 'VehicleHistoryController@save');
 
 /*Testing*/
 Route::get('/temp_reminder','CronjobController@sendEventReminder');

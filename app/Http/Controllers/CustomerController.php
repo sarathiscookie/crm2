@@ -11,6 +11,7 @@ use App\Vehicle;
 use App\Formgroup;
 use App\Formfield;
 use App\Formvalue;
+use App\Vehiclehistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -328,6 +329,7 @@ class CustomerController extends Controller
         foreach($customer_vehicle as $vehicle) {
 
             $documents = $this->getDocuments($vehicle->id);
+            $notices   = $this->getNotices($vehicle->id);
 
             $vehicle_informations = DB::connection('fes')
                 ->select("SELECT av.id, av.tuning_id, av.tpbezeichnung, av.marke_name, av.modell_name, av.marke_alias, av.modell_alias, av.kraftstoff, av.vehicletype_title, CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int) as dimsport_kw, CAST(SUBSTRING(substring(tpleistung from (position('/' in tpleistung)+1)), 'm*([0-9]{1,})') as int) as dimsport_ps, round((CAST(SUBSTRING(av.tpleistung, 'm*([0-9]{1,})') as int)) * 1.359622) as ps_from_dimsport_kw,
@@ -357,8 +359,11 @@ class CustomerController extends Controller
                         <h3 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
                                 ' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '
-                            </a> 
-                            <a role="button" class="btn btn-primary pull-right" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
+                            </a>
+                             <div class="pull-right">
+                            <a role="button" class="btn btn-primary" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
+                            &nbsp;<a role="button" class="btn btn-primary" href="'.url('/notice/create/'.$vehicle->id).'">Add notice</a>   
+                            </div>
                             <div class="clearfix"></div>
                         </h3>
                         
@@ -379,7 +384,7 @@ class CustomerController extends Controller
                                  </form>
                                  </div>
                                  <img src="/assets/img/loading.gif" class="media-middle file-loader invisible" width="24px" alt="loading" >
-                             </div>
+                             </div>'.$notices.'
                         </div>
                     </div>                    
                 </div>';
@@ -600,6 +605,24 @@ class CustomerController extends Controller
             }
         }
         return $documents;
+    }
+
+    protected function getNotices($vehicle)
+    {
+        $html ='';
+        $notices = Vehiclehistory::where('vehicle_id', $vehicle)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        if(count($notices)>0){
+            $html = '<h4>Notices</h4>';
+            foreach ($notices as $notice){
+                $html .= '<div class="well well-sm">'.$notice->freetext.'
+                <p><small>'.date('d.m.Y H:i', strtotime($notice->created_at)).'</small></p>
+                </div>';
+            }
+            $html = '<div>'. $html .'</div>';
+        }
+        return $html;
     }
 
     /**
