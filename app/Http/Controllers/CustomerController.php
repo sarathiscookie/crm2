@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Customerhistory;
 use App\Hardware;
 use App\Vehiclehardware;
 use App\Customervehicle;
@@ -292,8 +293,9 @@ class CustomerController extends Controller
         $vehicles           = $this->getCustomerVehicles($id);
         $gears              = $this->gearbox;
         $customerFormValues = $this->customerFormDetails($id);
+        $notices            = $this->getCustomerNotices($id);
 
-        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears, 'customerFormValues' => $customerFormValues]);
+        return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears, 'customerFormValues' => $customerFormValues, 'notices' =>$notices]);
     }
 
     /**
@@ -607,10 +609,16 @@ class CustomerController extends Controller
         return $documents;
     }
 
+    /**
+     * Get vehicle history as notices
+     * @param $vehicle
+     * @return string
+     */
     protected function getNotices($vehicle)
     {
         $html ='';
         $notices = Vehiclehistory::where('vehicle_id', $vehicle)
+            ->where('status', 'online')
             ->orderBy('created_at', 'DESC')
             ->get();
         if(count($notices)>0){
@@ -824,5 +832,29 @@ class CustomerController extends Controller
         $list .='</div>';
 
         return response($list);
+    }
+
+    /**
+     * Get Customer history as notices
+     * @param $id
+     * @return string
+     */
+    protected function getCustomerNotices($id)
+    {
+        $html ='';
+        $notices = Customerhistory::where('customer_id', $id)
+            ->where('status', 'online')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        if(count($notices)>0){
+            $html = '<h4>Notices</h4>';
+            foreach ($notices as $notice){
+                $html .= '<div class="well well-sm">'.$notice->freetext.'
+                <p><small>'.date('d.m.Y H:i', strtotime($notice->created_at)).'</small></p>
+                </div>';
+            }
+            $html = '<div>'. $html .'</div>';
+        }
+        return $html;
     }
 }

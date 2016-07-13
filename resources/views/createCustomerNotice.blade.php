@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title',' Create Notice')
+@section('title',' Create Customer Notice')
 
 @section('style')
     <link rel="stylesheet" href="/assets/css/editor.css">
 @endsection
 
 @section('content')
-    <h1 class="page-header">{{ trans('messages.noticeCreateFormHeadingLabel') }} <small>[{{ $vehicle }}]</small></h1>
+    <h1 class="page-header">{{ trans('messages.noticeCreateFormHeadingLabel') }} <small>[{{ title_case($customer->firstname).' '. title_case($customer->lastname) }}]</small></h1>
     @if (count($errors) > 0)
         <div class="alert alert-danger">
             <ul>
@@ -17,7 +17,7 @@
             </ul>
         </div>
     @endif
-    <form id="addNoticeFrm" action="{{ url('/notice/save') }}" method="post">
+    <form id="addNoticeFrm" action="{{ url('/customer/notice/save') }}" method="post">
         {{ csrf_field() }}
         <div class="row">
             <div class="form-group col-md-12">
@@ -25,7 +25,7 @@
                 <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
             </div>
         </div>
-        <input type="hidden" name="vehicle_id" value="{{ $vehicle_id }}">
+        <input type="hidden" name="customer_id" value="{{ $customer->id }}">
         <div class="form-group">
             <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Create Notice</button>
         </div>

@@ -53,6 +53,9 @@
                     <label>{{ $customerFormValue->title }}: {{ $customerFormValue->value }}</label><br>
                 @endforeach
             @endif
+            <br>
+            <a href="{{ url('/customer/notice/create/'.$customer->id) }}" role="button" class="btn btn-primary">Add notice</a>
+            {!! $notices !!}
             <hr>
             <h3>Termine</h3>
             <div class="panel-group" id="accordionEvent" role="tablist" aria-multiselectable="true">
@@ -85,7 +88,9 @@
                                 <?php echo $event->title;?> ( <?php echo $event->id; ?> )
                                 <br><span><small><?php echo date('d.m.Y H:i', strtotime($event->begin_at));?></small></span>
                                 </a>
-                                <a role="button" class="btn btn-primary pull-right" href="/event/edit/<?=$event->id?>">Edit event</a>
+                                <div class="pull-right">
+                                <a role="button" class="btn btn-primary" href="/event/edit/<?=$event->id?>">Edit event</a>
+                                </div>
                                 <div class="clearfix"></div>
                             </h3>
                         </div>
@@ -107,6 +112,7 @@
                                 <?php
                                 }
                                 ?>
+                                <br>
                                 <button type="button" class="btn btn-primary get-info" id="<?php echo $event->id; ?>" data-toggle="modal" data-target="#infoModal">Hidden Info</button>
                             </div>
                         </div>

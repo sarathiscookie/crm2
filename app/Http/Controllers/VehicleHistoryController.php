@@ -13,6 +13,11 @@ use App\Http\Requests\VehicleHistoryRequest;
 class VehicleHistoryController extends Controller
 {
 
+    /**
+     * Show create notice form for vehicle
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create($id)
     {
         $vehicle_title ='';
@@ -34,6 +39,11 @@ class VehicleHistoryController extends Controller
 
     }
 
+    /**
+     * Save vehicle history as notice
+     * @param VehicleHistoryRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function save(VehicleHistoryRequest $request)
     {
         $notice = new Vehiclehistory();

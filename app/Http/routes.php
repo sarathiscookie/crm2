@@ -61,6 +61,13 @@ Route::get('/notice/create/{id}', 'VehicleHistoryController@create')->where('id'
 /* Save notice*/
 Route::post('/notice/save', 'VehicleHistoryController@save');
 
+/*Create notice - customer histories*/
+Route::get('/customer/notice/create/{id}', 'CustomerHistoryController@create')->where('id', '[0-9]+');
+
+/* Save notice*/
+Route::post('/customer/notice/save', 'CustomerHistoryController@save');
+
+
 /*Testing*/
 Route::get('/temp_reminder','CronjobController@sendEventReminder');
 Route::get('/temp_feedback','CronjobController@sendFeedbackLink');
