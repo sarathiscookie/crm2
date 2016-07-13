@@ -24,6 +24,7 @@ class CreateVehiclesTable extends Migration
             $table->string('license_plate', 50);
             $table->tinyInteger('gearbox');
             $table->text('freetext');
+            $table->enum('status',['online', 'offline'])->default('online');
             $table->timestamps();
         });
     }

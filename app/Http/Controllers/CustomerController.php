@@ -322,6 +322,7 @@ class CustomerController extends Controller
     {
         $customer_vehicle = Customervehicle::select('VC.id', 'VC.execution_id', 'VC.chassis_number', 'VC.license_plate', 'VC.gearbox', 'VC.created_at')
             ->where('customer_id', $customer_id)
+            ->where('VC.status', 'online')
             ->join('vehicles AS VC', 'VC.id', '=', 'customer_vehicles.vehicle_id')
             ->orderBy('created_at', 'DESC')
             ->get();
@@ -362,8 +363,9 @@ class CustomerController extends Controller
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
                                 ' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '
                             </a>
-                             <div class="pull-right">
-                            <a role="button" class="btn btn-primary" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
+                            <div class="pull-right">
+                            <a href="'.url('/vehicle/edit/'.$vehicle->id).'" title="edit vehicle"><i class="fa fa-pencil"></i></a>
+                            &nbsp;<a role="button" class="btn btn-primary" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
                             &nbsp;<a role="button" class="btn btn-primary" href="'.url('/notice/create/'.$vehicle->id).'">Add notice</a>   
                             </div>
                             <div class="clearfix"></div>

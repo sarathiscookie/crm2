@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Customervehicle;
 use App\Vehicle;
 use Illuminate\Http\Request;
+use App\Http\Requests\VehicleRequest;
 
 use App\Http\Requests;
 use Storage, File;
@@ -111,5 +112,65 @@ class VehicleController extends Controller
         }
         else
             return redirect('/customer/details/'.$customer->customer_id);
+    }
+
+    /**
+     * Show form - vehicle edit
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showEdit($id)
+    {
+        $customerObj = new CustomerController();
+        $vehicle_title='';
+        $vehicle = Vehicle::where('id', $id)->first();
+        if($vehicle) {
+            $vehicleInfo = $customerObj->vehicleDetails($vehicle->execution_id);
+            foreach($vehicleInfo as $vehicle_information) {
+                if ($vehicle_information->motor_power)
+                    $power = $vehicle_information->motor_power;
+                else
+                    $power = $vehicle_information->ps_from_dimsport_kw;
+                $vehicle_title = $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS";
+            }
+        }
+        $gears = $customerObj->gearbox;
+
+        return view('editVehicle', ['vehicle'=> $vehicle, 'gears' =>$gears, 'vehicle_title' =>$vehicle_title]);
+    }
+
+    /**
+     * Update vehicle
+     * @param VehicleRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function update(VehicleRequest $request, $id)
+    {
+        $vehicle  = Vehicle::find($id);
+        $vehicle->chassis_number = $request->chassis;
+        $vehicle->license_plate = $request->license;
+        $vehicle->gearbox = $request->gearbox;
+        $vehicle->freetext = $request->freetext;
+        $vehicle->save();
+
+        $related = Customervehicle::select('customer_id')->where('vehicle_id', $id)->first();
+        return redirect('/customer/details/'.$related->customer_id);
+    }
+
+    public function delete(Request $request)
+    {
+        if(!$request->ajax())
+            return response()->json(['mes' => 'bad request']);
+        $id = $request->id;
+        $affected = Vehicle::where('id', $id)->update(['status' => 'offline']);
+        if($affected>=0){
+            $related = Customervehicle::select('customer_id')->where('vehicle_id', $id)->first();
+            return response()->json(['mes' => 'done', 'ref' => $related->customer_id]);
+        }
+        else
+            return response()->json(['mes' => '<strong>Error! </strong>Could not be deleted']);
+
+
     }
 }

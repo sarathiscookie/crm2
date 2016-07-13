@@ -42,6 +42,15 @@ Route::post('/event/update/{id}', 'EventController@update')->where(['id' => '[0-
 /* Store Vehicle */
 Route::post('/vehicle/save', 'VehicleController@saveVehicle');
 
+/* Store Vehicle */
+Route::get('/vehicle/edit/{id}', 'VehicleController@showEdit')->where(['id' => '[0-9]+']);
+
+/*Update vehicle details*/
+Route::post('/vehicle/update/{id}', 'VehicleController@update')->where(['id' => '[0-9]+']);
+
+/*Delete vehicle - set status*/
+Route::post('/vehicle/delete', 'VehicleController@delete');
+
 /* Check vehicle already added for customer */
 Route::post('/vehicle/check', 'VehicleController@checkVehicle');
     
