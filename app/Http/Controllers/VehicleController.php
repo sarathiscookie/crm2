@@ -158,6 +158,11 @@ class VehicleController extends Controller
         return redirect('/customer/details/'.$related->customer_id);
     }
 
+    /**
+     * Delete - mark vehicle status as offline
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         if(!$request->ajax())
@@ -170,7 +175,6 @@ class VehicleController extends Controller
         }
         else
             return response()->json(['mes' => '<strong>Error! </strong>Could not be deleted']);
-
 
     }
 }
