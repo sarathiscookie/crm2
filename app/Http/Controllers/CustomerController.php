@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\CustomerEditRequest;
 use Mail;
 use DB;
 use Storage;
@@ -289,11 +290,16 @@ class CustomerController extends Controller
     public function showDetails($id)
     {
         $customer           = Customer::find($id);
-        $events             = $this->getCustomerEvents($id);
-        $vehicles           = $this->getCustomerVehicles($id);
-        $gears              = $this->gearbox;
-        $customerFormValues = $this->customerFormDetails($id);
-        $notices            = $this->getCustomerNotices($id);
+        if($customer) {
+            $events             = $this->getCustomerEvents($id);
+            $vehicles           = $this->getCustomerVehicles($id);
+            $gears              = $this->gearbox;
+            $customerFormValues = $this->customerFormDetails($id);
+            $notices            = $this->getCustomerNotices($id);
+        }
+        else {
+            abort(400); //bad request
+        }
 
         return view('customerDetails', ['customer' => $customer, 'events' => $events, 'vehicles'=>$vehicles, 'gears' =>$gears, 'customerFormValues' => $customerFormValues, 'notices' =>$notices]);
     }
@@ -858,5 +864,135 @@ class CustomerController extends Controller
             $html = '<div>'. $html .'</div>';
         }
         return $html;
+    }
+
+    /**
+     * Show customer edit form
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showEdit($id)
+    {
+        $customer = Customer::find($id);
+        if($customer) {
+            $customerTitles = $this->customerTitle;
+            $customerStatus = $this->customerStatus();
+        }
+        else
+            abort(400); //bad request
+
+        return view('editCustomer', ['customer' => $customer, 'customerTitles' => $customerTitles, 'customerStatus' => $customerStatus]);
+    }
+
+    /**
+     * Get advertiser name
+     * @param $id
+     * @return string
+     */
+    public function getAdvertiser($id)
+    {
+        $advertiser = Customer::select('firstname', 'lastname')
+            ->where('id', $id)
+            ->first();
+        return title_case($advertiser->firstname).' '.title_case($advertiser->lastname);
+    }
+
+    /**
+     * Update customer details and actindo
+     * @param CustomerEditRequest $request
+     * @param $id
+     */
+    public function update(CustomerEditRequest $request, $id)
+    {
+        $route         = $request->route;
+        $street_number = $request->street_number;
+        $street ='';
+        if($route!='')
+            $street  = $route;
+        if($street !='' && $street_number!='')
+            $street .= ' '.$street_number;
+        elseif ($street_number!='')
+            $street = $street_number;
+
+        $customer = Customer::find($id);
+        if(isset($request->advertiser_id) && $request->advertiser_id>0)
+            $customer->advertiser_id = $request->advertiser_id;
+        $customer->company = $request->company;
+        $customer->title = $request->title;
+        $customer->firstname = $request->firstname;
+        $customer->lastname = $request->lastname;
+        $customer->email = $request->email;
+        $customer->phone_1 = $request->phone;
+        $customer->phone_2 = $request->phone_2;
+        $customer->phone_mobile = $request->phone_mobile;
+        $customer->additional_address = $request->additional_address;
+        $customer->freetext = $request->freetext;
+        $customer->status = $request->status;
+        $customer->save();
+        $this->updateCustomerActindo($id);
+
+        return redirect('/customer/details/'.$id);
+    }
+
+    /**
+     * update customer details in warehouse.
+     * @param $customer_id
+     */
+    protected function updateCustomerActindo($customer_id)
+    {
+        $customer = Customer::select('erp_id', 'company', 'title', 'firstname', 'lastname', 'street', 'additional_address', 'city', 'country_long', 'postal', 'email', 'phone_1', 'phone_mobile')
+            ->where('id', $customer_id)
+            ->first();
+
+        $title = '';
+        if (!empty($customer)) {
+            if ($customer->erp_id >= 10000) {
+                if ($customer->title == 1) {
+                    $title = 'Herr';
+                } elseif ($customer->title == 2) {
+                    $title = 'Frau';
+                } elseif ($customer->title == 3) {
+                    $title = 'Firma';
+                }
+
+                $params = [
+                    'deb_kred_id' => NULL,
+                    'anrede'      => $title,
+                    'firma'       => $customer->company,
+                    'kurzname'    => $customer->firstname . ' ' . $customer->lastname,
+                    'name'        => $customer->lastname,
+                    'vorname'     => $customer->firstname,
+                    'land '       => 'D',
+                ];
+                if ($customer->street != '')
+                    $params['adresse'] = $customer->street;
+
+                if ($customer->additional_address != '')
+                    $params['adresse2'] = $customer->additional_address;
+
+                if ($customer->postal != '')
+                    $params['plz'] = $customer->postal;
+
+                if ($customer->city != '')
+                    $params['ort'] = $customer->city;
+
+                if ($customer->phone_mobile != '')
+                    $params['mobiltel'] = $customer->phone_mobile;
+
+                $params['email'] = $customer->email;
+                $params['tel'] = $customer->phone_1;
+
+                $soap = new SoapClient('https://www.actindo.biz/actindo/soap.php?WSDL', ['encoding' => 'utf-8']);
+                try {
+                    $sid = $soap->auth__login('shdevelopment', 'W.H*dhtj*w', 38372, 'NOID', 'NOSERIAL');
+
+                    $update = $soap->dk__change($sid, $customer->erp_id, $params);
+
+                    $soap->auth__logout($sid);
+                } catch (Exception $e) {
+
+                }
+            }
+        }
     }
 }

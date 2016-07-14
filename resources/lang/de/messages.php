@@ -90,4 +90,7 @@ return [
     'customerCreateFormLabelFreetextInternal' => 'Freitext Innen',
     'customerCreateFormSubmitButton' => 'Kunde & Termin anlegen',
     'noticeCreateFormHeadingLabel' => 'Beachten hinzufügen',
+    'customerEditFormHeadingLabel' => 'Kunden bearbeiten',
+    'customerEditFormSubmitButton' => 'Kunde Update',
+    'customerEditFormLabelFreetext' => 'Freitext',
     ];

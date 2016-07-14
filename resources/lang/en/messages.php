@@ -91,4 +91,7 @@ return [
     'customerCreateFormLabelFreetextInternal' => 'Freetext Internal',
     'customerCreateFormSubmitButton' => 'Create Customer',
     'noticeCreateFormHeadingLabel' => 'Add notice',
+    'customerEditFormHeadingLabel' => 'Edit customer',
+    'customerEditFormSubmitButton' => 'Update customer',
+    'customerEditFormLabelFreetext' => 'Freetext',
     ];

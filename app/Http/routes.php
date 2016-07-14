@@ -21,6 +21,12 @@ Route::get('/customer/create', 'CustomerController@create');
 /* Store customers */
 Route::post('/customer/save', 'CustomerController@save');
 
+/*Edit form - Customer*/
+Route::get('/customer/edit/{id}', 'CustomerController@showEdit')->where(['id' => '[0-9]+']);
+
+/* Update customer */
+Route::post('/customer/update/{id}', 'CustomerController@update')->where(['id' => '[0-9]+']);
+
 /*Search on navbar*/
 Route::get('/search', 'SearchController@search');
 
