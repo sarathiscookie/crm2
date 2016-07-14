@@ -32,6 +32,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('end_at')->nullable();
             $table->decimal('price', 10,2);
             $table->decimal('discount', 10,2);
+            $table->enum('status',['online', 'offline'])->default('online');
             $table->dateTime('reminded_at')->nullable();
             $table->dateTime('feedback_at')->nullable();
             $table->timestamps();
