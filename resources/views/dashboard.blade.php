@@ -8,7 +8,9 @@
 @inject('listTodayTomorrowEvents', 'App\Http\Controllers\DashboardController')
 
 @section('content')
-    <div class="col-md-4">
+    <h1>Dashboard</h1>
+    <div class="row">
+        <div class="col-md-4">
         @if(isset($listCustomers))
         <div class="list-group">
             <a href="/customers" class="list-group-item active">
@@ -29,7 +31,7 @@
         @endif
     </div>
 
-    <div class="col-md-4">
+        <div class="col-md-4">
         <div class="list-group">
             <a href="#" class="list-group-item active">
                 <span class="badge">20</span>
@@ -42,7 +44,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+        <div class="col-md-4">
         <div class="list-group">
             <a href="#" class="list-group-item active">
                 <span class="badge">{{ count($listTodayTomorrowEvents->getTodayEvents()) }}</span>
@@ -101,6 +103,7 @@
                 <a href="#" class="list-group-item">{{ trans('messages.dashboardItemHeaderNoTomorrowListMessage') }}</a>
             @endforelse
         </div>
+    </div>
     </div>
 @endsection
 
