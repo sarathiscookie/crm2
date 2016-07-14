@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-md-6">
             <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }} ( {{ $customer->erp_id }} )
-            &nbsp; <a href="{{ url('/customer/edit/'.$customer->id) }}" title="Edit customer"><i class="fa fa-pencil"></i></a>
+            &nbsp;<a href="{{ url('/customer/edit/'.$customer->id) }}" title="Edit customer"><i class="fa fa-pencil"></i></a>
             </h2>
             @if($customer->company)<label>{{ $customer->company }}</label>@endif <br>
             <address>
