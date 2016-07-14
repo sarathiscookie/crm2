@@ -901,6 +901,7 @@ class CustomerController extends Controller
      * Update customer details and actindo
      * @param CustomerEditRequest $request
      * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(CustomerEditRequest $request, $id)
     {
