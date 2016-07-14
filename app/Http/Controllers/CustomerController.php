@@ -366,18 +366,19 @@ class CustomerController extends Controller
                 }
                 $vehicleList .= '<div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingV' . $vehicle->id . '">
+                        <div class="col-md-7">
                         <h3 class="panel-title">
                             <a ' . $a_class . ' role="button" data-toggle="collapse" data-parent="#accordionVehicle" href="#collapseV' . $vehicle->id . '" area-expanded="' . $expanded . '" aria-controls="collapseV' . $vehicle->id . '" style="outline: none; text-decoration: none">
                                 ' . $vehicle_information->marke_name. " " .$vehicle_information->modell_name. " ". $vehicle_information->tpbezeichnung. " " . "mit " . $power."PS" . '
-                            </a>
-                            <div class="pull-right">
+                            </a>                            
+                        </h3>
+                        </div>
+                        <div class="pull-right">
                             <a href="'.url('/vehicle/edit/'.$vehicle->id).'" title="edit vehicle"><i class="fa fa-pencil"></i></a>
                             &nbsp;<a role="button" class="btn btn-primary" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
                             &nbsp;<a role="button" class="btn btn-primary" href="'.url('/notice/create/'.$vehicle->id).'">Add notice</a>   
-                            </div>
-                            <div class="clearfix"></div>
-                        </h3>
-                        
+                        </div>
+                        <div class="clearfix"></div>                        
                     </div>
                     <div id="collapseV' . $vehicle->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
                         <div class="panel-body">
