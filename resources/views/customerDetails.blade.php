@@ -2,7 +2,7 @@
 
 @section('title', 'Customer details')
 
-@inject('vehicleEventDetails', 'App\Http\Controllers\CustomerController')
+@inject('customerClsObj', 'App\Http\Controllers\CustomerController')
 
 @section('style')
     <link rel="stylesheet" href="/assets/css/editor.css">
@@ -48,7 +48,7 @@
             </address>
             <label>E-Mail: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br>
             @if($customer->advertiser_id>0)
-                <label>Advertiser: <a href="{{ url('/customer/details/'.$customer->advertiser_id) }}" target="_blank" title="View advertiser">{{ $vehicleEventDetails->getAdvertiser($customer->advertiser_id) }}</a></label><br>
+                <label>Advertiser: <a href="{{ url('/customer/details/'.$customer->advertiser_id) }}" target="_blank" title="View advertiser">{{ $customerClsObj->getAdvertiser($customer->advertiser_id) }}</a></label><br>
             @endif
             <label>Telefon: {{ $customer->phone_1 }} </label>
             @if($customer->phone_2) <br><label>Telefon 2: {{ $customer->phone_2 }} </label> @endif
@@ -69,7 +69,7 @@
                     $i = 1;
                     foreach($events as $event){
                         $vehicle_title = '';
-                        foreach ($vehicleEventDetails->vehicleDetails($event->execution_id) as $vehicle_information) {
+                        foreach ($customerClsObj->vehicleDetails($event->execution_id) as $vehicle_information) {
                             if ($vehicle_information->motor_power)
                                 $power = $vehicle_information->motor_power;
                             else
@@ -113,7 +113,7 @@
                                 <?php echo $event->freetext_external; ?>
                                 <br>
                                 <?php
-                                foreach ($vehicleEventDetails->eventCustDetails($event->id) as $eventDynamicForm) {
+                                foreach ($customerClsObj->eventCustDetails($event->id) as $eventDynamicForm) {
                                 ?>
                                 <div><?php echo $eventDynamicForm->title; ?>: <?php echo $eventDynamicForm->value;?></div>
                                 <?php

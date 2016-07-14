@@ -44,7 +44,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'customerCreateFormHeadingLabel' => 'Add customers',
+    'customerCreateFormHeadingLabel' => 'Add customer',
     'customerCreateFormLabelAdvertiser' => 'Advertiser ID',
     'customerCreateFormLabelCompany' => 'Company',
     'customerCreateFormLabelTitle' => 'Title',
