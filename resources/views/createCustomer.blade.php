@@ -66,19 +66,6 @@
         <form id="addCustomerFrm" action="{{ url('/customer/save') }}" method="post">
             {{ csrf_field() }}
             <div class="row">
-                <div class="form-group col-md-12">
-                    <label for="name">{{ trans('messages.customerCreateFormLabelAdvertiser') }}</label>
-                    <div id="advertiserInput">
-                        <input type="text" class="form-control" name="advertiser" id="advertiser"  onkeydown="clearOut()" onkeyup="doSearch()" autocomplete="off" value="">
-                        <div id="advertiser-result" class="col-md-6 search-box"></div>
-                    </div>
-                    <div id="selectedIdDiv" style="display:none">
-                        <input type="hidden" id="advertiser_id" name="advertiser_id" value="">
-                        <div class="well well-sm" id="selectedId"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="name">{{ trans('messages.customerCreateFormLabelCompany') }}</label>
                     <input type="text" class="form-control" name="company" value="{{ old('company') }}">
@@ -211,7 +198,7 @@
                     <input type="hidden" id="hardwares" name="hardwares" value="">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Begin_at - End_at</label>
+                    <label for="name">Termin-Zeitraum</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="eventrange" name="eventrange" value="{{ old('eventrange') }}" readonly aria-describedby="cal-addon">
                         <span class="input-group-addon" id="cal-addon"><i class="fa fa-calendar"></i></span>
@@ -226,6 +213,20 @@
                 <div class="form-group col-md-6">
                     <label for="name">{{ trans('messages.customerCreateFormLabelFreetextInternal') }}</label>
                     <textarea id="txtEditor_i" name="freetext_internal">{{ old('freetext_internal') }}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 col-md-offset-6">
+                    <label for="name">{{ trans('messages.customerCreateFormLabelAdvertiser') }}</label>
+                    <div id="advertiserInput">
+                        <input type="text" class="form-control" name="advertiser" id="advertiser" onkeydown="clearOut()"
+                               onkeyup="doSearch()" autocomplete="off" value="">
+                        <div id="advertiser-result" class="col-md-6 search-box"></div>
+                    </div>
+                    <div id="selectedIdDiv" style="display:none">
+                        <input type="hidden" id="advertiser_id" name="advertiser_id" value="">
+                        <div class="well well-sm" id="selectedId"></div>
+                    </div>
                 </div>
             </div>
             @foreach($typesCustomerAndGearbox->showFormGroup() as $formGroup)
@@ -404,8 +405,8 @@
             autoUpdate: true,
             minChars:2,
             onAdd: function (tag) {
-                assignedTags: [ tag ],
-                        $('#hardwares').val(function(i,val) {
+                [tag],
+                        $('#hardwares').val(function (i, val) {
                             return val + (!val ? '' : ',') + tag;
                         });
             },
@@ -462,8 +463,8 @@
             startDate: '{{ $begin_at }}',
             endDate: '{{ $end_at }}',
             locale: {
-                "format": "DD-MM-YYYY H:mm",
-                "separator": " To ",
+                "format": "DD.MM.YYYY H:mm",
+                "separator": "     bis     ",
             },
         });
 

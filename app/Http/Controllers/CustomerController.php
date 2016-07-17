@@ -221,7 +221,7 @@ class CustomerController extends Controller
      */
     protected function saveEvent($customer_id, $vehicle_id, $request)
     {
-        $date_split = explode(" To ",$request->eventrange);
+        $date_split = explode("     bis     ", $request->eventrange);
         $begin_at   = date('Y-m-d H:i', strtotime($date_split[0]));
         $end_at     = date('Y-m-d H:i', strtotime($date_split[1]));
 
