@@ -105,12 +105,12 @@
                         },
                         grid: {
                             dateFormat: 'D dddd',
-                            timeFormat: 'hh:mm',
+                            timeFormat: 'H:00',
                             eventBubble: false,
                         }
                     },
                     locale: 'de',
-                    timeFormat: 'hh:mm',
+                    timeFormat: 'H:mm',
                     minTime:8,
                     maxTime:19,
                     dateFormat: 'MMMM Do YYYY',
