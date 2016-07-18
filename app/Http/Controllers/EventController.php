@@ -110,11 +110,55 @@ class EventController extends Controller
                 <?php echo $event->freetext_external; ?>
                 <br>
                 <?php
-                if(count($eventDynamicFormDetails) > 0){
-                foreach ($eventDynamicFormDetails as $eventDynamicFormDetail){?>
-                <div><?php echo $eventDynamicFormDetail->title; ?> : <?php echo $eventDynamicFormDetail->value;?></div>
-                <?php
-                }
+                if(count($eventDynamicFormDetails) > 0)
+                {
+                    foreach ($eventDynamicFormDetails as $eventDynamicFormDetail)
+                    {
+                        ?>
+                        <?php
+                        if ($eventDynamicFormDetail->type == 'radio')
+                        {
+                            foreach(explode("|", $eventDynamicFormDetail->options) as $options)
+                            {
+                                if ($eventDynamicFormDetail->value == explode(":", $options)[0])
+                                {
+                                    ?>
+                                    <div><?php echo $eventDynamicFormDetail->title; ?>: <?php echo explode(":", $options)[1]; ?></div>
+                                    <?php
+                                }
+                            }
+                        }
+                        if ($eventDynamicFormDetail->type == 'checkbox')
+                        {
+                            ?>
+                            <div><?php echo $eventDynamicFormDetail->title; ?>: <?php echo $eventDynamicFormDetail->value; ?></div>
+                            <?php
+                        }
+                        if ($eventDynamicFormDetail->type == 'textarea')
+                        {
+                            ?>
+                            <div><?php echo $eventDynamicFormDetail->title; ?>: <?php echo $eventDynamicFormDetail->value; ?></div>
+                            <?php
+                        }
+                        if ($eventDynamicFormDetail->type == 'input')
+                        {
+                            ?>
+                            <div><?php echo $eventDynamicFormDetail->title; ?>: <?php echo $eventDynamicFormDetail->value; ?></div>
+                            <?php
+                        }
+                        if ($eventDynamicFormDetail->type == 'select')
+                        {
+                            foreach(explode("|", $eventDynamicFormDetail->options) as $options)
+                            {
+                                if ($eventDynamicFormDetail->value == explode(":", $options)[0])
+                                {
+                                    ?>
+                                    <div><?php echo $eventDynamicFormDetail->title; ?>: <?php echo explode(":", $options)[1]; ?></div>
+                                    <?php
+                                }
+                            }
+                        }
+                    }
                 }
                 ?>
                 <a href="/customer/details/<?php echo $event->customer_id;?>" class="btn btn-info pull-right">Customer Details</a>

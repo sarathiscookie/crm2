@@ -55,7 +55,34 @@
             @if($customer->phone_mobile) <br><label>Mobile: {{ $customer->phone_mobile }} </label> @endif<br>
             @if(isset($customerFormValues))
                 @foreach($customerFormValues as $customerFormValue)
-                    <label>{{ $customerFormValue->title }}: {{ $customerFormValue->value }}</label><br>
+                    @if ($customerFormValue->type == 'radio')
+                        @foreach(explode("|", $customerFormValue->options) as $options)
+                            @if ($customerFormValue->value == explode(":", $options)[0])
+                                <label>{{ $customerFormValue->title }}: {{ explode(":", $options)[1] }}</label><br>
+                            @endif
+                        @endforeach
+                    @endif
+
+                    @if ($customerFormValue->type == 'checkbox')
+                        <label>{{ $customerFormValue->title }}: {{ $customerFormValue->value }}</label><br>
+                    @endif
+
+                    @if ($customerFormValue->type == 'textarea')
+                        <label>{{ $customerFormValue->title }}: {{ $customerFormValue->value }}</label><br>
+                    @endif
+
+                    @if ($customerFormValue->type == 'input')
+                        <label>{{ $customerFormValue->title }}: {{ $customerFormValue->value }}</label><br>
+                    @endif
+
+                    @if ($customerFormValue->type == 'select')
+                        @foreach(explode("|", $customerFormValue->options) as $options)
+                            @if ($customerFormValue->value == explode(":", $options)[0])
+                            <label>{{ $customerFormValue->title }}: {{ explode(":", $options)[1] }}</label><br>
+                            @endif
+                        @endforeach
+                    @endif
+
                 @endforeach
             @endif
             <br>
@@ -112,13 +139,35 @@
                                 <strong>Weitere Details:</strong><br>
                                 <?php echo $event->freetext_external; ?>
                                 <br>
-                                <?php
-                                foreach ($customerClsObj->eventCustDetails($event->id) as $eventDynamicForm) {
-                                ?>
-                                <div><?php echo $eventDynamicForm->title; ?>: <?php echo $eventDynamicForm->value;?></div>
-                                <?php
-                                }
-                                ?>
+                                @foreach ($customerClsObj->eventCustDetails($event->id) as $eventDynamicForm)
+                                    @if ($eventDynamicForm->type == 'radio')
+                                        @foreach(explode("|", $eventDynamicForm->options) as $options)
+                                            @if ($eventDynamicForm->value == explode(":", $options)[0])
+                                                <div>{{ $eventDynamicForm->title }}: {{ explode(":", $options)[1] }}</div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+
+                                    @if ($eventDynamicForm->type == 'checkbox')
+                                        <div>{{ $eventDynamicForm->title }}: {{ $eventDynamicForm->value }}</div>
+                                    @endif
+
+                                    @if ($eventDynamicForm->type == 'textarea')
+                                        <div>{{ $eventDynamicForm->title }}: {{ $eventDynamicForm->value }}</div>
+                                    @endif
+
+                                    @if ($eventDynamicForm->type == 'input')
+                                        <div>{{ $eventDynamicForm->title }}: {{ $eventDynamicForm->value }}</div>
+                                    @endif
+
+                                    @if ($eventDynamicForm->type == 'select')
+                                        @foreach(explode("|", $eventDynamicForm->options) as $options)
+                                            @if ($eventDynamicForm->value == explode(":", $options)[0])
+                                                <div>{{ $eventDynamicForm->title }}: {{ explode(":", $options)[1] }}</div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                @endforeach
                                 <br>
                                 <button type="button" class="btn btn-primary get-info" id="<?php echo $event->id; ?>" data-toggle="modal" data-target="#infoModal">Hidden Info</button>
                             </div>
