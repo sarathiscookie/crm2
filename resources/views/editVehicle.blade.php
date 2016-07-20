@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <h1 class="page-header">Fahrzeug bearbeiten</h1>
+    <h1 class="page-header">{{ trans('messages.editVehicleHeader') }}</h1>
     @if (count($errors) > 0)
         <div class="alert alert-danger">
             <ul>
@@ -21,21 +21,21 @@
         {{ csrf_field() }}
         <div class="row">
             <div class="form-group col-md-6">
-                <label class="control-label">Vehicle </label>
+                <label class="control-label">{{ trans('messages.editVehicleVehicleLabel') }}</label>
                 <p class="form-control-static">{{ $vehicle_title }}</p>
             </div>
             <div class="form-group col-md-6">
-                <label for="name">Fahrgestellnummer</label>
+                <label for="name">{{ trans('messages.editVehicleChassisNumberLabel') }}</label>
                 <input type="text" class="form-control txtInput" id="chassis" name="chassis" value="{{ $vehicle->chassis_number or old('chassis') }}">
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6">
-                <label for="name">KFZ-Kennzeichen</label>
+                <label for="name">{{ trans('messages.editVehicleLicensePlateLabel') }}</label>
                 <input type="text" class="form-control txtInput" id="license" name="license" value="{{ $vehicle->license_plate or old('license') }}">
             </div>
             <div class="form-group col-md-6">
-                <label for="name">Gearbox</label>
+                <label for="name">{{ trans('messages.editVehicleGearboxLabel') }}</label>
                 <select class="form-control" id="gearbox" name="gearbox">
                     @foreach($gears as $optKey => $optLabel)
                         <option @if($optKey==$vehicle->gearbox || $optKey==old('gearbox')) selected="selected" @endif value="{{ $optKey }}">{{ $optLabel }}</option>
@@ -45,21 +45,21 @@
         </div>
         <div class="row">
             <div class="form-group col-md-12">
-                <label for="name">Zusatzinformationen</label>
+                <label for="name">{{ trans('messages.editVehicleAdditionalInformationLabel') }}</label>
                 <textarea id="txtEditor" name="freetext">{{ $vehicle->freetext or old('freetext') }}</textarea>
             </div>
         </div>
         <div class="row">
             @if($vehicle->status=='online')
             <div class="col-md-6">
-                <button type="button" class="btn btn-danger btn-lg btn-block" id="btnDel">Delete Fahrzeug</button>
+                <button type="button" class="btn btn-danger btn-lg btn-block" id="btnDel">{{ trans('messages.editVehicleDeleteButton') }}</button>
             </div>
             <div class="col-md-6">
-                <button type="button" class="btn btn-primary btn-lg btn-block" id="btnUpdate">Update Fahrzeug</button>
+                <button type="button" class="btn btn-primary btn-lg btn-block" id="btnUpdate">{{ trans('messages.editVehicleUpdateButton') }}</button>
             </div>
             @else
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-primary btn-lg btn-block" id="btnUpdate">Update Fahrzeug</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" id="btnUpdate">{{ trans('messages.editVehicleUpdateButton') }}</button>
                 </div>
             @endif
         </div>

@@ -167,4 +167,18 @@ return [
     'editEventPriceLabel' => 'Price',
     'editEventHardwareLabel' => 'Already built components',
     'editEventUpdateButton' => 'Update Event',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in vehicle edit page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'editVehicleHeader' => 'Edit Vehicle',
+    'editVehicleVehicleLabel' => 'Vehicle',
+    'editVehicleChassisNumberLabel' => 'Chassis Number',
+    'editVehicleLicensePlateLabel' => 'License Plate',
+    'editVehicleGearboxLabel' => 'Gearbox',
+    'editVehicleAdditionalInformationLabel' => 'Additional information',
+    'editVehicleDeleteButton' => 'Delete Vehicle',
+    'editVehicleUpdateButton' => 'Update Vehicle',
     ];

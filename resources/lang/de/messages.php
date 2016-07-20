@@ -166,4 +166,18 @@ return [
     'editEventPriceLabel' => 'Price',
     'editEventHardwareLabel' => 'Bereits verbaute Komponenten',
     'editEventUpdateButton' => 'Update Event',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in vehicle edit page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'editVehicleHeader' => 'Fahrzeug bearbeiten',
+    'editVehicleVehicleLabel' => 'Vehicle',
+    'editVehicleChassisNumberLabel' => 'Fahrgestellnummer',
+    'editVehicleLicensePlateLabel' => 'KFZ-Kennzeichen',
+    'editVehicleGearboxLabel' => 'Getriebe',
+    'editVehicleAdditionalInformationLabel' => 'Zusatzinformationen',
+    'editVehicleDeleteButton' => 'Delete Fahrzeug',
+    'editVehicleUpdateButton' => 'Update Fahrzeug',
     ];
