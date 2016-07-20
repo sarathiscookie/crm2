@@ -32,11 +32,11 @@
         </div>
 
         <div class="col-md-4">
-            <h1>BETA-Version</h1><br>
+            <h1>BETA-Version 0.1</h1><br>
             Es können noch Fehler auftreten und die erfassten Daten könnten auch noch mal gelöscht werden.<br>
             <br>
-            Alles Fehler bitte direkt in Redbooth <a href="https://redbooth.com/a/#!/projects/989360/tasks/24861073"
-                                                     target="_blank">hier</a> melden.
+            Alle Fehler bitte direkt in Redbooth <a href="https://redbooth.com/a/#!/projects/989360/tasks/24861073"
+                                                    target="_blank">hier</a> melden.
         </div>
 
         <div class="col-md-4">
