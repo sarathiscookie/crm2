@@ -94,4 +94,39 @@ return [
     'customerEditFormHeadingLabel' => 'Edit customer',
     'customerEditFormSubmitButton' => 'Update customer',
     'customerEditFormLabelFreetext' => 'Freetext',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in customer details page
+    |--------------------------------------------------------------------------
+    |
+    */
+    /*Customer details*/
+    'customerDetailHeading' => 'Customer-Details',
+    'customerDetailAddNoticeButton' => 'Add Notice',
+    'customerDetailTelephoneLabel' => 'Telephone',
+    'customerDetailTelephone2Label' => 'Telephone 2',
+    'customerDetailMobileLabel' => 'Mobile',
+    'customerDetailEmailLabel' => 'E-Mail Address',
+    'customerDetailAdvertiserLabel' => 'Advertiser',
+    /*Event details*/
+    'eventDetailHeading' => 'Events',
+    'eventDetailEditEventButton' => 'Edit Event',
+    'eventDetailVehicleLabel' => 'Vehicle',
+    'eventDetailStageLabel' => 'Stage',
+    'eventDetailKilometerLabel' => 'Mileage',
+    'eventDetailTuningLabel' => 'Tuning',
+    'eventDetailDynoLabel' => 'Dyno',
+    'eventDetailPaymentLabel' => 'Payment',
+    'eventDetailMoreDetailsHeading' => 'More Details',
+    /*Vehicle details*/
+    'vehicleDetailHeading' => 'Vehicle',
+    'vehicleDetailAddNewVehicleButton' => 'Add New Vehicle',
+    'vehicleDetailAddEventButton' => 'Add Event',
+    'vehicleDetailAddNoticeButton' => 'Add Notice',
+    'vehicleDetailLicensePlateLabel' => 'License Plate',
+    'vehicleDetailChassisNumberLabel' => 'Chassis Number',
+    'vehicleDetailGearboxLabel' => 'Gearbox',
+    'vehicleDetailHardwareLabel' => 'Hardware',
+    'vehicleDetailCreatedAtLabel' => 'Created at',
+    'vehicleDetailDocumentsHeading' => 'Documents',
     ];

@@ -93,4 +93,39 @@ return [
     'customerEditFormHeadingLabel'             => 'Kunden bearbeiten',
     'customerEditFormSubmitButton'             => 'Kundendaten aktualisieren',
     'customerEditFormLabelFreetext'            => 'Anmerkungen',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in customer details page
+    |--------------------------------------------------------------------------
+    |
+    */
+    /*Customer details*/
+    'customerDetailHeading' => 'Kunden-Details',
+    'customerDetailAddNoticeButton' => 'Add notice',
+    'customerDetailTelephoneLabel' => 'Telefon',
+    'customerDetailTelephone2Label' => 'Telefon 2',
+    'customerDetailMobileLabel' => 'Mobil',
+    'customerDetailEmailLabel' => 'E-Mail Adresse',
+    'customerDetailAdvertiserLabel' => 'Advertiser',
+    /*Event details*/
+    'eventDetailHeading' => 'Termine',
+    'eventDetailEditEventButton' => 'Edit event',
+    'eventDetailVehicleLabel' => 'Fahrzeug',
+    'eventDetailStageLabel' => 'Tuning-Stufe',
+    'eventDetailKilometerLabel' => 'Kilometerstand',
+    'eventDetailTuningLabel' => 'Bereits getunt',
+    'eventDetailDynoLabel' => 'Prüfstandslauf',
+    'eventDetailPaymentLabel' => 'Zahlungsart',
+    'eventDetailMoreDetailsHeading' => 'Weitere Details',
+    /*Vehicle details*/
+    'vehicleDetailHeading' => 'Fahrzeuge',
+    'vehicleDetailAddNewVehicleButton' => 'Neues Fahrzeug hinzufügen',
+    'vehicleDetailAddEventButton' => 'Add event',
+    'vehicleDetailAddNoticeButton' => 'Add notice',
+    'vehicleDetailLicensePlateLabel' => 'Kennzeichen',
+    'vehicleDetailChassisNumberLabel' => 'Fahrgestellnummer',
+    'vehicleDetailGearboxLabel' => 'Getriebe',
+    'vehicleDetailHardwareLabel' => 'Hardware',
+    'vehicleDetailCreatedAtLabel' => 'Hinzugefügt am',
+    'vehicleDetailDocumentsHeading' => 'Documents',
     ];

@@ -32,7 +32,7 @@
 
 @section('content')
 
-    <h1 class="page-header">Kunden-Details</h1>
+    <h1 class="page-header">{{ trans('messages.customerDetailHeading') }}</h1>
     <div class="row">
         <div class="col-md-6">
             <h2>{{ title_case($customer->firstname) }}  {{ title_case($customer->lastname) }} ( {{ $customer->erp_id }} )
@@ -46,13 +46,13 @@
                     {{ $customer->country_long }}
 
             </address>
-            <label>E-Mail: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br>
+            <label>{{ trans('messages.customerDetailEmailLabel') }}: <a href="mailto:{{ $customer->email }}">{{ $customer->email }}</a></label><br>
             @if($customer->advertiser_id>0)
-                <label>Advertiser: <a href="{{ url('/customer/details/'.$customer->advertiser_id) }}" target="_blank" title="View advertiser">{{ $customerClsObj->getAdvertiser($customer->advertiser_id) }}</a></label><br>
+                <label>{{ trans('messages.customerDetailAdvertiserLabel') }}: <a href="{{ url('/customer/details/'.$customer->advertiser_id) }}" target="_blank" title="View advertiser">{{ $customerClsObj->getAdvertiser($customer->advertiser_id) }}</a></label><br>
             @endif
-            <label>Telefon: {{ $customer->phone_1 }} </label>
-            @if($customer->phone_2) <br><label>Telefon 2: {{ $customer->phone_2 }} </label> @endif
-            @if($customer->phone_mobile) <br><label>Mobile: {{ $customer->phone_mobile }} </label> @endif<br>
+            <label>{{ trans('messages.customerDetailTelephoneLabel') }}: {{ $customer->phone_1 }} </label>
+            @if($customer->phone_2) <br><label>{{ trans('messages.customerDetailTelephone2Label') }}: {{ $customer->phone_2 }} </label> @endif
+            @if($customer->phone_mobile) <br><label>{{ trans('messages.customerDetailMobileLabel') }}: {{ $customer->phone_mobile }} </label> @endif<br>
             @if(isset($customerFormValues))
                 @foreach($customerFormValues as $customerFormValue)
                     @if ($customerFormValue->type == 'radio')
@@ -86,10 +86,10 @@
                 @endforeach
             @endif
             <br>
-            <a href="{{ url('/customer/notice/create/'.$customer->id) }}" role="button" class="btn btn-primary">Add notice</a>
+            <a href="{{ url('/customer/notice/create/'.$customer->id) }}" role="button" class="btn btn-primary">{{ trans('messages.customerDetailAddNoticeButton') }}</a>
             {!! $notices !!}
             <hr>
-            <h3>Termine</h3>
+            <h3>{{ trans('messages.eventDetailHeading') }}</h3>
             <div class="panel-group" id="accordionEvent" role="tablist" aria-multiselectable="true">
                 <?php
                 if(isset($events)){
@@ -124,19 +124,19 @@
                                 </h3>
                             </div>
                             <div class="pull-right">
-                                <a role="button" class="btn btn-primary" href="/event/edit/<?=$event->id?>">Edit event</a>
+                                <a role="button" class="btn btn-primary" href="/event/edit/<?=$event->id?>">{{ trans('messages.eventDetailEditEventButton') }}</a>
                             </div>
                             <div class="clearfix"></div>
                         </div>
                         <div id="collapse<?php echo $event->id; ?>" class="panel-collapse collapse<?php echo $collapse;?>" role="tabpanel" aria-labelledby="heading<?php echo $event->id;?>">
                             <div class="panel-body">
-                                <div>Fahrzeug: <?php echo $vehicle_title; ?></div>
-                                <div>Tuning-Stufe: <?php echo $event->stage; ?></div>
-                                <div>Kilometerstand: <?php echo number_format($event->mileage, 0, ',', '.');?> km</div>
-                                <div>Bereits getunt: <?php echo $event->tuning; ?></div>
-                                <div>Prüfstandslauf: <?php echo $event->dyno; ?></div>
-                                <div>Zahlungsart: <?php echo $event->payment; ?></div><br>
-                                <strong>Weitere Details:</strong><br>
+                                <div>{{ trans('messages.eventDetailVehicleLabel') }}: <?php echo $vehicle_title; ?></div>
+                                <div>{{ trans('messages.eventDetailStageLabel') }}: <?php echo $event->stage; ?></div>
+                                <div>{{ trans('messages.eventDetailKilometerLabel') }}: <?php echo number_format($event->mileage, 0, ',', '.');?> km</div>
+                                <div>{{ trans('messages.eventDetailTuningLabel') }}: <?php echo $event->tuning; ?></div>
+                                <div>{{ trans('messages.eventDetailDynoLabel') }}: <?php echo $event->dyno; ?></div>
+                                <div>{{ trans('messages.eventDetailPaymentLabel') }}: <?php echo $event->payment; ?></div><br>
+                                <strong>{{ trans('messages.eventDetailMoreDetailsHeading') }}:</strong><br>
                                 <?php echo $event->freetext_external; ?>
                                 <br>
                                 @foreach ($customerClsObj->eventCustDetails($event->id) as $eventDynamicForm)
@@ -181,7 +181,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h2>Fahrzeuge <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addVehicleModal">Neues Fahrzeug hinzufügen</button></h2>
+            <h2>{{ trans('messages.vehicleDetailHeading') }} <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addVehicleModal">{{ trans('messages.vehicleDetailAddNewVehicleButton') }}</button></h2>
             <div class="panel-group" id="accordionVehicle" role="tablist" aria-multiselectable="true">
 
                 {!! $vehicles !!}

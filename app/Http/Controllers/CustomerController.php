@@ -372,20 +372,20 @@ class CustomerController extends Controller
                         </div>
                         <div class="pull-right">
                             <a href="'.url('/vehicle/edit/'.$vehicle->id).'" title="edit vehicle"><i class="fa fa-pencil"></i></a>
-                            &nbsp;<a role="button" class="btn btn-primary" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">Add event</a>   
-                            &nbsp;<a role="button" class="btn btn-primary" href="'.url('/notice/create/'.$vehicle->id).'">Add notice</a>   
+                            &nbsp;<a role="button" class="btn btn-primary" href="'.url('/event/create/'.$customer_id.'/'.$vehicle->id).'">'.trans("messages.vehicleDetailAddEventButton").'</a>   
+                            &nbsp;<a role="button" class="btn btn-primary" href="'.url('/notice/create/'.$vehicle->id).'">'.trans("messages.vehicleDetailAddNoticeButton").'</a>   
                         </div>
                         <div class="clearfix"></div>                        
                     </div>
                     <div id="collapseV' . $vehicle->id . '" class="panel-collapse collapse ' . $collapse . '" role="tabpanel" aria-labelledby="headingV' . $vehicle->id . '">
                         <div class="panel-body">
-                             <div>Kennzeichen: '.$vehicle->license_plate.'</div>
-                             <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
-                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
-                             <div>Hardware: '.rtrim($this->hardware($vehicle->id), ",").'</div><br>
-                             <div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
+                             <div>'.trans("messages.vehicleDetailLicensePlateLabel").': '.$vehicle->license_plate.'</div>
+                             <div>'.trans("messages.vehicleDetailChassisNumberLabel").': '.$vehicle->chassis_number.'</div>
+                             <div>'.trans("messages.vehicleDetailGearboxLabel").': '.$this->gearbox[$vehicle->gearbox].'</div>
+                             <div>'.trans("messages.vehicleDetailHardwareLabel").': '.rtrim($this->hardware($vehicle->id), ",").'</div><br>
+                             <div><small>'.trans("messages.vehicleDetailCreatedAtLabel").' ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                              <div>
-                                 <h4>Documents</h4>
+                                 <h4>'.trans("messages.vehicleDetailDocumentsHeading").'</h4>
                                  <div class="list-group" id="fileList_' . $vehicle->id . '">'. $documents .'</div>
                                  <div class="row col-md-10">
                                  <form id="uploadFrm_' . $vehicle->id . '" method="post" enctype="multipart/form-data">
