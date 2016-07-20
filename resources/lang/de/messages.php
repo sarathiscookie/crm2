@@ -136,4 +136,34 @@ return [
     'noticeCreateFormHeadingLabel' => 'Beachten hinzufügen',
     'noticeCreateSubmitButton' => 'Create Notice',
     'noticeCreateFormFreetextLabel' => 'Freetext',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in edit event page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'editEventHeading' => 'Termin bearbeiten',
+    'editEventCustomerLabel' => 'Customer',
+    'editEventCarLabel' => 'Car',
+    'editEventTitleLabel' => 'Title',
+    'editEventPaymentLabel' => 'Zahlungsweise',
+    'editEventPaymentLabelCash' => 'Barzahlung',
+    'editEventPaymentLabelBank' => 'EC-Karte ',
+    'editEventPaymentLabelCreditcard' => 'Kreditkarte ',
+    'editEventPaymentLabelPaypal' => 'PayPal',
+    'editEventPaymentLabelInvoice' => 'Rechnung',
+    'editEventFreetextExternalLabel' => 'Freetext External',
+    'editEventFreetextInternalLabel' => 'Freetext Internal',
+    'editEventStageLabel' => 'Stage',
+    'editEventMileageLabel' => 'Kilometerstand',
+    'editEventTuningLabel' => 'Tuning bereits vorhanden?',
+    'editEventTuningLabelYes' => 'Ja',
+    'editEventTuningLabelNo' => 'Nein',
+    'editEventDynoLabel' => 'Prüfstandslauf',
+    'editEventDynoLabelYes' => 'Ja',
+    'editEventDynoLabelNo' => 'Nein',
+    'editEventDateLabel' => 'Begin_at - End_at',
+    'editEventPriceLabel' => 'Price',
+    'editEventHardwareLabel' => 'Bereits verbaute Komponenten',
+    'editEventUpdateButton' => 'Update Event',
     ];

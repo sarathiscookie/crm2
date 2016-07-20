@@ -137,4 +137,34 @@ return [
     'noticeCreateFormHeadingLabel' => 'Add notice',
     'noticeCreateSubmitButton' => 'Create Notice',
     'noticeCreateFormFreetextLabel' => 'Freetext',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in edit event page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'editEventHeading' => 'Termin bearbeiten',
+    'editEventCustomerLabel' => 'Customer',
+    'editEventCarLabel' => 'Car',
+    'editEventTitleLabel' => 'Title',
+    'editEventPaymentLabel' => 'Payment',
+    'editEventPaymentLabelCash' => 'Cash',
+    'editEventPaymentLabelBank' => 'Bank',
+    'editEventPaymentLabelCreditcard' => 'Creditcard',
+    'editEventPaymentLabelPaypal' => 'PayPal',
+    'editEventPaymentLabelInvoice' => 'Invoice',
+    'editEventFreetextExternalLabel' => 'Freetext External',
+    'editEventFreetextInternalLabel' => 'Freetext Internal',
+    'editEventStageLabel' => 'Stage',
+    'editEventMileageLabel' => 'Mileage',
+    'editEventTuningLabel' => 'Tuning',
+    'editEventTuningLabelYes' => 'Yes',
+    'editEventTuningLabelNo' => 'No',
+    'editEventDynoLabel' => 'Dyno',
+    'editEventDynoLabelYes' => 'Yes',
+    'editEventDynoLabelNo' => 'No',
+    'editEventDateLabel' => 'Begin_at - End_at',
+    'editEventPriceLabel' => 'Price',
+    'editEventHardwareLabel' => 'Already built components',
+    'editEventUpdateButton' => 'Update Event',
     ];

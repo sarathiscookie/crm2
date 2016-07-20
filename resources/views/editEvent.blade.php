@@ -11,7 +11,7 @@
 @inject('dynamicformdetails', 'App\Http\Controllers\EventController')
 
 @section('content')
-        <h1 class="page-header">Termin bearbeiten</h1>
+        <h1 class="page-header">{{ trans('messages.editEventHeading') }}</h1>
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -25,42 +25,42 @@
             {{ csrf_field() }}
             <div class="row">
                 <div class="form-inline col-md-6">
-                    <label class="control-label">Customer : </label>
+                    <label class="control-label">{{ trans('messages.editEventCustomerLabel') }} : </label>
                     <p class="form-control-static">{{ $customer_name }}</p>
                 </div>
                 <div class="form-inline col-md-6">
-                    <label class="control-label">Car : </label>
+                    <label class="control-label">{{ trans('messages.editEventCarLabel') }} : </label>
                     <p class="form-control-static">{{ $car_name }}</p>
                 </div>
                 <br /><br />
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Title</label>
+                    <label for="name">{{ trans('messages.editEventTitleLabel') }}</label>
                     <input type="text" class="form-control" name="title" value="{{ $event->title }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="payment">Zahlungsweise</label><br />
-                    <label class="radio-inline"><input type="radio" name="payment" value="cash" @if($event->payment=='cash') checked="checked" @endif >Barzahlung</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="bank" @if($event->payment=='bank') checked="checked" @endif >EC-Karte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard" @if($event->payment=='creditcard') checked="checked" @endif >Kreditkarte</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="paypal" @if($event->payment=='paypal') checked="checked" @endif >PayPal</label>
-                    <label class="radio-inline"><input type="radio" name="payment" value="invoice" @if($event->payment=='invoice') checked="checked" @endif >Rechnung</label>
+                    <label for="payment">{{ trans('messages.editEventPaymentLabel') }}</label><br />
+                    <label class="radio-inline"><input type="radio" name="payment" value="cash" @if($event->payment=='cash') checked="checked" @endif >{{ trans('messages.editEventPaymentLabelCash') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="bank" @if($event->payment=='bank') checked="checked" @endif >{{ trans('messages.editEventPaymentLabelBank') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="creditcard" @if($event->payment=='creditcard') checked="checked" @endif >{{ trans('messages.editEventPaymentLabelCreditcard') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="paypal" @if($event->payment=='paypal') checked="checked" @endif >{{ trans('messages.editEventPaymentLabelPaypal') }}</label>
+                    <label class="radio-inline"><input type="radio" name="payment" value="invoice" @if($event->payment=='invoice') checked="checked" @endif >{{ trans('messages.editEventPaymentLabelInvoice') }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Freetext External</label>
+                    <label for="name">{{ trans('messages.editEventFreetextExternalLabel') }}</label>
                     <textarea id="txtEditor_x" name="freetext_external">{{ $event->freetext_external }}</textarea>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Freetext Internal</label>
+                    <label for="name">{{ trans('messages.editEventFreetextInternalLabel') }}</label>
                     <textarea id="txtEditor_i" name="freetext_internal">{{ $event->freetext_internal }}</textarea>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Stage</label>
+                    <label for="name">{{ trans('messages.editEventStageLabel') }}</label>
                     <select class="form-control" name="stage">
                         @for($i=1;$i<=5;$i++)
                             <option @if($i == $event->stage || $i == old('stage')) selected="selected" @endif value="{{ $i }}">{{ $i }}</option>
@@ -68,23 +68,23 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Kilometerstand</label>
+                    <label for="name">{{ trans('messages.editEventMileageLabel') }}</label>
                     <input type="text" class="form-control mileageNumber" name="mileage" value="{{ $event->mileage }}">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-3">
-                    <label for="tuning">Tuning bereits vorhanden?</label><br />
-                    <label class="radio-inline"><input type="radio" name="tuning" value="yes" @if($event->tuning=='yes') checked="checked" @endif >Ja</label>
-                    <label class="radio-inline"><input type="radio" name="tuning" value="no" @if($event->tuning=='no') checked="checked" @endif >Nein</label>
+                    <label for="tuning">{{ trans('messages.editEventTuningLabel') }}</label><br />
+                    <label class="radio-inline"><input type="radio" name="tuning" value="yes" @if($event->tuning=='yes') checked="checked" @endif >{{ trans('messages.editEventTuningLabelYes') }}</label>
+                    <label class="radio-inline"><input type="radio" name="tuning" value="no" @if($event->tuning=='no') checked="checked" @endif >{{ trans('messages.editEventTuningLabelNo') }}</label>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="dyno" >Prüfstandslauf</label><br />
-                    <label class="radio-inline"><input type="radio" name="dyno" value="yes" @if($event->dyno=='yes') checked="checked" @endif >Ja</label>
-                    <label class="radio-inline"><input type="radio" name="dyno" value="no" @if($event->dyno=='no') checked="checked" @endif >Nein</label>
+                    <label for="dyno" >{{ trans('messages.editEventDynoLabel') }}</label><br />
+                    <label class="radio-inline"><input type="radio" name="dyno" value="yes" @if($event->dyno=='yes') checked="checked" @endif >{{ trans('messages.editEventDynoLabelYes') }}</label>
+                    <label class="radio-inline"><input type="radio" name="dyno" value="no" @if($event->dyno=='no') checked="checked" @endif >{{ trans('messages.editEventDynoLabelNo') }}</label>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Begin_at - End_at</label>
+                    <label for="name">{{ trans('messages.editEventDateLabel') }}</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="eventrange" name="eventrange" value="{{ old('eventrange') }}" readonly aria-describedby="cal-addon">
                         <span class="input-group-addon" id="cal-addon"><i class="fa fa-calendar"></i></span>
@@ -93,11 +93,11 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">Price</label>
+                    <label for="name">{{ trans('messages.editEventPriceLabel') }}</label>
                     <input type="text" class="form-control" name="price" value="{{ $event->price }}">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Bereits verbaute Komponenten</label>
+                    <label for="name">{{ trans('messages.editEventHardwareLabel') }}</label>
                     <ul class="tag-handler form-control" style="margin: 0">
                     </ul>
                     <input type="hidden" id="hardwares" name="hardwares" value="{{ implode(",", json_decode($assignedTags)) }}">
@@ -169,7 +169,7 @@
             @endforeach
             <input type="hidden" name="vehicle_id" value="{{ $event->vehicle_id }}">
             <div class="form-group">
-                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Update Event</button>
+                <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">{{ trans('messages.editEventUpdateButton') }}</button>
             </div>
         </form>
 @endsection
