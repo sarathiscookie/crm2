@@ -90,7 +90,6 @@ return [
     'customerCreateFormLabelFreetext' => 'Freetext External',
     'customerCreateFormLabelFreetextInternal' => 'Freetext Internal',
     'customerCreateFormSubmitButton' => 'Create Customer',
-    'noticeCreateFormHeadingLabel' => 'Add notice',
     'customerEditFormHeadingLabel' => 'Edit customer',
     'customerEditFormSubmitButton' => 'Update customer',
     'customerEditFormLabelFreetext' => 'Freetext',
@@ -129,4 +128,13 @@ return [
     'vehicleDetailHardwareLabel' => 'Hardware',
     'vehicleDetailCreatedAtLabel' => 'Created at',
     'vehicleDetailDocumentsHeading' => 'Documents',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in notice create page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'noticeCreateFormHeadingLabel' => 'Add notice',
+    'noticeCreateSubmitButton' => 'Create Notice',
+    'noticeCreateFormFreetextLabel' => 'Freetext',
     ];

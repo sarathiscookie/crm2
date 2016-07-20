@@ -89,7 +89,6 @@ return [
     'customerCreateFormLabelFreetext'          => 'Anmerkung (Sichtbar für den Kunden)',
     'customerCreateFormLabelFreetextInternal'  => 'Interne Anmerkungen',
     'customerCreateFormSubmitButton'           => 'Kunde & Termin anlegen',
-    'noticeCreateFormHeadingLabel'             => 'Beachten hinzufügen',
     'customerEditFormHeadingLabel'             => 'Kunden bearbeiten',
     'customerEditFormSubmitButton'             => 'Kundendaten aktualisieren',
     'customerEditFormLabelFreetext'            => 'Anmerkungen',
@@ -128,4 +127,13 @@ return [
     'vehicleDetailHardwareLabel' => 'Hardware',
     'vehicleDetailCreatedAtLabel' => 'Hinzugefügt am',
     'vehicleDetailDocumentsHeading' => 'Documents',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in notice create page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'noticeCreateFormHeadingLabel' => 'Beachten hinzufügen',
+    'noticeCreateSubmitButton' => 'Create Notice',
+    'noticeCreateFormFreetextLabel' => 'Freetext',
     ];

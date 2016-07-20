@@ -21,13 +21,13 @@
         {{ csrf_field() }}
         <div class="row">
             <div class="form-group col-md-12">
-                <label for="name">Freetext</label>
+                <label for="name">{{ trans('messages.noticeCreateFormFreetextLabel') }}</label>
                 <textarea id="txtEditor" name="freetext">{{ old('freetext') }}</textarea>
             </div>
         </div>
         <input type="hidden" name="customer_id" value="{{ $customer->id }}">
         <div class="form-group">
-            <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">Create Notice</button>
+            <button type="button" id="btnCreate" class="btn btn-primary btn-lg btn-block">{{ trans('messages.noticeCreateSubmitButton') }}</button>
         </div>
     </form>
 @endsection
