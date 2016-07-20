@@ -192,6 +192,14 @@ return [
     'editVehicleUpdateButton'               => 'Fahrzeug aktualisieren',
     /*
     |--------------------------------------------------------------------------
+    | Messages in add vehicle modal
+    |--------------------------------------------------------------------------
+    |
+    */
+    'addVehicleHeader'                      => 'Neues Fahrzeug hinzufügen',
+    'addVehicleButton'                      => 'Save',
+    /*
+    |--------------------------------------------------------------------------
     | Messages in services page
     |--------------------------------------------------------------------------
     |

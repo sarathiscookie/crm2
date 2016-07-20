@@ -195,7 +195,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="addVehicleModalLabel">Neues Fahrzeug hinzufügen</h4>
+                    <h4 class="modal-title" id="addVehicleModalLabel">{{trans('messages.addVehicleHeader')}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger" role="alert" id="errMsg" style="display: none"></div>
@@ -203,7 +203,7 @@
                         {{ csrf_field() }}
                     <div class="row">
                         <div class="form-group col-md-9">
-                            <label for="name">Vehicle</label>
+                            <label for="name">{{trans('messages.editVehicleVehicleLabel')}}</label>
                             <div id="vehicleInputBox">
                                 <input type="text" class="form-control" name="vehicle" id="vehicle"  onkeydown="down()" onkeyup="up()" autocomplete="off" value="">
                                 <div id="search-result" class="search-box col-md-12"></div>
@@ -214,15 +214,15 @@
                             </div>
                         </div>
                         <div class="form-group col-md-9">
-                            <label for="name">Fahrgestellnummer</label>
+                            <label for="name">{{trans('messages.editVehicleChassisNumberLabel')}}</label>
                             <input type="text" class="form-control txtInput" id="chassis" name="chassis" value="">
                         </div>
                         <div class="form-group col-md-9">
-                            <label for="name">KFZ-Kennzeichen</label>
+                            <label for="name">{{trans('messages.editVehicleLicensePlateLabel')}}</label>
                             <input type="text" class="form-control txtInput" id="license" name="license" value="">
                         </div>
                         <div class="form-group col-md-9">
-                            <label for="name">Gearbox</label>
+                            <label for="name">{{trans('messages.editVehicleGearboxLabel')}}</label>
                             <select class="form-control" id="gearbox" name="gearbox">
                                 @foreach($gears as $optKey => $optLabel)
                                     <option @if($optKey==1) selected="selected" @endif value="{{ $optKey }}">{{ $optLabel }}</option>
@@ -230,7 +230,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-12">
-                            <label for="name">Zusatzinformationen</label>
+                            <label for="name">{{trans('messages.editVehicleAdditionalInformationLabel')}}</label>
                             <textarea id="txtEditor" name="freetext"></textarea>
                         </div>
                     </div>
@@ -239,7 +239,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary disabled" disabled="disabled" id="btnSave" data-loading-text="Saving..." autocomplete="off">Save</button>
+                    <button type="button" class="btn btn-primary disabled" disabled="disabled" id="btnSave" data-loading-text="Saving..." autocomplete="off">{{trans('messages.addVehicleButton')}}</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
