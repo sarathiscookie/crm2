@@ -80,10 +80,6 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        /*$listCustomers    = Customer::select('id', 'erp_id', 'firstname', 'lastname', 'email', 'phone_1', 'status', DB::raw("DATE_FORMAT(created_at, '%d.%m.%Y %H:%i') AS created_on"))
-            ->orderBy('id', 'desc')
-            ->get();
-        return view('customers', compact('listCustomers'));*/
         return view('customers');
     }
 
@@ -139,7 +135,6 @@ class CustomerController extends Controller
 
         $vehicle_id = $this->saveVehicle($request);
         $events     = $this->saveEvent($customer_id, $vehicle_id, $request);
-        $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
 
         /* Save data in to hardware table and vehicle_hardwares */
         if($request->hardwares != ""){
@@ -173,6 +168,8 @@ class CustomerController extends Controller
                 }
             }
         }
+
+        $vehicles   = $this->saveCustomerVehicle($customer_id, $vehicle_id);
         /*save customer in actindo warehouse*/
         $this->createCustomerActindo($customer_id);
 
@@ -384,7 +381,8 @@ class CustomerController extends Controller
                         <div class="panel-body">
                              <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                              <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
-                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div><br>
+                             <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
+                             <div>Hardware: '.rtrim($this->hardware($vehicle->id), ",").'</div><br>
                              <div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                              <div>
                                  <h4>Documents</h4>
@@ -405,6 +403,24 @@ class CustomerController extends Controller
         }
 
         return $vehicleList;
+    }
+
+    /**
+     * Listing hardware types
+     * For vehicle section in customer details page
+     */
+    public function hardware($id)
+    {
+        $title = "";
+        $hardwares = Hardware::select('hardwares.title')
+            ->join('vehicle_hardwares', 'hardwares.id', '=', 'vehicle_hardwares.hardware_id')
+            ->where('vehicle_hardwares.vehicle_id', $id)
+            ->where('hardwares.status', 'online')
+            ->get();
+        foreach ($hardwares as $hardware){
+            $title .= $hardware->title .",";
+        }
+        return $title;
     }
 
     /**
@@ -591,6 +607,7 @@ class CustomerController extends Controller
                          <div>Kennzeichen: '.$vehicle->license_plate.'</div>
                          <div>Fahrgestellnummer: '.$vehicle->chassis_number.'</div>
                          <div>Gearbox: '.$this->gearbox[$vehicle->gearbox].'</div>
+                         <div>Hardware: '.rtrim($this->hardware($vehicle->id), ",").'</div><br>
                          <br><div><small>Hinzugefügt am ' . date('d.m.Y H:i', strtotime($vehicle->created_at)).'</small></div>
                     </div>
                 </div>
