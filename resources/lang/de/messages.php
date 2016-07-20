@@ -170,6 +170,14 @@ return [
     'editEventUpdateButton'                 => 'Termin aktualisieren',
     /*
     |--------------------------------------------------------------------------
+    | Messages in add event page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'addEventHeading'                       => 'Termin hinzufügen',
+    'addEventUpdateButton'                  => 'Termin hinzufügen',
+    /*
+    |--------------------------------------------------------------------------
     | Messages in vehicle edit page
     |--------------------------------------------------------------------------
     |
