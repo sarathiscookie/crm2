@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="row">
-        <h1 class="page-header">Services</h1>
+        <h1 class="page-header">{{ trans('messages.servicesListHeading') }}</h1>
         <form class="form-inline">
             <div id="form-errors"></div>
             <div class="form-group">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-default btn-primary" id="createServices">Create Service</button>
+                <button type="button" class="btn btn-default btn-primary" id="createServices">{{ trans('messages.servicesCreateServiceButton') }}</button>
                 <div id="loadings" class="pull-right" style="position:relative; top:5px;"></div>
             </div>
             <br />
@@ -39,9 +39,9 @@
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Hours</th>
-                    <th>Rate</th>
+                    <th>{{ trans('messages.servicesListTableHeadTitleLabel') }}</th>
+                    <th>{{ trans('messages.servicesListTableHeadHoursLabel') }}</th>
+                    <th>{{ trans('messages.servicesListTableHeadRateLabel') }}</th>
                 </tr>
                 </thead>
                 <tbody>

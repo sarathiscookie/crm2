@@ -169,7 +169,7 @@
                                     @endif
                                 @endforeach
                                 <br>
-                                <button type="button" class="btn btn-primary get-info" id="<?php echo $event->id; ?>" data-toggle="modal" data-target="#infoModal">Hidden Info</button>
+                                <button type="button" class="btn btn-primary get-info" id="<?php echo $event->id; ?>" data-toggle="modal" data-target="#infoModal">{{ trans('messages.eventDetailHiddenInfoButton') }}</button>
                             </div>
                         </div>
                      </div>
@@ -252,7 +252,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="infoModalLabel">Hidden Info</h4>
+                    <h4 class="modal-title" id="infoModalLabel">{{ trans('messages.eventDetailHiddenInfoModalHeading') }}</h4>
                 </div>
                 <div class="modal-body">
                     <img src="/assets/img/loading.gif" class="media-middle info-loader hidden" width="32px" alt="loading" >

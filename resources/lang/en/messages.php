@@ -117,6 +117,8 @@ return [
     'eventDetailDynoLabel' => 'Dyno',
     'eventDetailPaymentLabel' => 'Payment',
     'eventDetailMoreDetailsHeading' => 'More Details',
+    'eventDetailHiddenInfoButton' => 'Hidden Info',
+    'eventDetailHiddenInfoModalHeading' => 'Hidden Info',
     /*Vehicle details*/
     'vehicleDetailHeading' => 'Vehicle',
     'vehicleDetailAddNewVehicleButton' => 'Add New Vehicle',
@@ -181,4 +183,15 @@ return [
     'editVehicleAdditionalInformationLabel' => 'Additional information',
     'editVehicleDeleteButton' => 'Delete Vehicle',
     'editVehicleUpdateButton' => 'Update Vehicle',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in services page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'servicesListHeading' => 'Services',
+    'servicesCreateServiceButton' => 'Create Service',
+    'servicesListTableHeadTitleLabel' => 'Title',
+    'servicesListTableHeadHoursLabel' => 'Hours',
+    'servicesListTableHeadRateLabel' => 'Rate',
     ];

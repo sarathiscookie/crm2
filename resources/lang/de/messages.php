@@ -6,10 +6,10 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'dashboardItemHeaderCustomersList' => 'Kunden',
-    'dashboardItemHeaderNoCustomerMessage' => 'Keine Kunden verfügbar',
-    'dashboardItemHeaderTodayList' => 'Termine HEUTE',
-    'dashboardItemHeaderNoTodayListMessage' => 'Heute keine Termine',
+    'dashboardItemHeaderCustomersList'         => 'Kunden',
+    'dashboardItemHeaderNoCustomerMessage'     => 'Keine Kunden verfügbar',
+    'dashboardItemHeaderTodayList'             => 'Termine HEUTE',
+    'dashboardItemHeaderNoTodayListMessage'    => 'Heute keine Termine',
     'dashboardItemHeaderTomorrowList'          => 'Termine MORGEN',
     'dashboardItemHeaderNoTomorrowListMessage' => 'Morgen keine Termine',
     /*
@@ -55,28 +55,28 @@ return [
     'customerCreateFormLabelEmail'             => 'E-Mail Adresse',
     'customerCreateFormLabelAddress'           => 'Adresse',
     'customerCreateFormLabelAdditionalAddress' => 'Abteilung',
-    'customerCreateFormLabelPhone1' => 'Telefon',
-    'customerCreateFormLabelPhone2' => 'Telefon',
-    'customerCreateFormLabelPhone' => 'Mobil',
-    'customerCreateFormLabelVehicle' => 'Fahrzeug',
-    'customerCreateFormLabelPayment' => 'Zahlungsweise',
-    'customerCreateFormPaymentLabelCash' => 'Barzahlung',
-    'customerCreateFormPaymentLabelBank' => 'EC-Karte',
+    'customerCreateFormLabelPhone1'            => 'Telefon',
+    'customerCreateFormLabelPhone2'            => 'Telefon',
+    'customerCreateFormLabelPhone'             => 'Mobil',
+    'customerCreateFormLabelVehicle'           => 'Fahrzeug',
+    'customerCreateFormLabelPayment'           => 'Zahlungsweise',
+    'customerCreateFormPaymentLabelCash'       => 'Barzahlung',
+    'customerCreateFormPaymentLabelBank'       => 'EC-Karte',
     'customerCreateFormPaymentLabelCreditcard' => 'Kreditkarte',
-    'customerCreateFormPaymentLabelPaypal' => 'PayPal',
-    'customerCreateFormLabelVehicleInvoice' => 'Rechnung',
-    'customerCreateFormLabelStage' => 'Tuning-Stufe',
-    'customerCreateFormLabelLicensePlate' => 'KFZ-Kennzeichen',
-    'customerCreateFormLabelChassis' => 'Fahrgestellnummer',
-    'customerCreateFormLabelMileage' => 'Kilometerstand',
-    'customerCreateFormLabelTuning' => 'Tuning bereits vorhanden?',
-    'customerCreateFormTuningLabelYes' => 'Ja',
-    'customerCreateFormTuningLabelNo' => 'Nein',
-    'customerCreateFormLabelDyno' => 'Prüfstandslauf',
-    'customerCreateFormDynoLabelYes' => 'Ja',
-    'customerCreateFormDynoLabelNo' => 'Nein',
-    'customerCreateFormLabelGearbox' => 'Getriebe',
-    'customerCreateFormGearboxManualLabel' => 'Manuell',
+    'customerCreateFormPaymentLabelPaypal'     => 'PayPal',
+    'customerCreateFormLabelVehicleInvoice'    => 'Rechnung',
+    'customerCreateFormLabelStage'             => 'Tuning-Stufe',
+    'customerCreateFormLabelLicensePlate'      => 'KFZ-Kennzeichen',
+    'customerCreateFormLabelChassis'           => 'Fahrgestellnummer',
+    'customerCreateFormLabelMileage'           => 'Kilometerstand',
+    'customerCreateFormLabelTuning'            => 'Tuning bereits vorhanden?',
+    'customerCreateFormTuningLabelYes'         => 'Ja',
+    'customerCreateFormTuningLabelNo'          => 'Nein',
+    'customerCreateFormLabelDyno'              => 'Prüfstandslauf',
+    'customerCreateFormDynoLabelYes'           => 'Ja',
+    'customerCreateFormDynoLabelNo'            => 'Nein',
+    'customerCreateFormLabelGearbox'           => 'Getriebe',
+    'customerCreateFormGearboxManualLabel'     => 'Manuell',
     'customerCreateFormGearboxAutomaticLabel'  => 'Automatik',
     'customerCreateFormLabelCustomerStatus'    => 'Kundentyp',
     'customerCreateFormStatusLabelCustomer'    => 'Kunde',
@@ -89,9 +89,9 @@ return [
     'customerCreateFormLabelFreetext'          => 'Anmerkung (Sichtbar für den Kunden)',
     'customerCreateFormLabelFreetextInternal'  => 'Interne Anmerkungen',
     'customerCreateFormSubmitButton'           => 'Kunde & Termin anlegen',
-    'customerEditFormHeadingLabel'          => 'Kunden bearbeiten',
-    'customerEditFormSubmitButton'          => 'Kundendaten aktualisieren',
-    'customerEditFormLabelFreetext'         => 'Anmerkungen',
+    'customerEditFormHeadingLabel'             => 'Kunden bearbeiten',
+    'customerEditFormSubmitButton'             => 'Kundendaten aktualisieren',
+    'customerEditFormLabelFreetext'            => 'Anmerkungen',
     /*
     |--------------------------------------------------------------------------
     | Messages in customer details page
@@ -116,6 +116,8 @@ return [
     'eventDetailDynoLabel'                  => 'Prüfstandslauf',
     'eventDetailPaymentLabel'               => 'Zahlungsart',
     'eventDetailMoreDetailsHeading'         => 'Weitere Details',
+    'eventDetailHiddenInfoButton'           => 'Hidden Info',
+    'eventDetailHiddenInfoModalHeading'     => 'Hidden Info',
     /*Vehicle details*/
     'vehicleDetailHeading'                  => 'Fahrzeuge',
     'vehicleDetailAddNewVehicleButton'      => 'Neues Fahrzeug hinzufügen',
@@ -180,4 +182,15 @@ return [
     'editVehicleAdditionalInformationLabel' => 'Zusatzinformationen',
     'editVehicleDeleteButton'               => 'Fahrzeug löschen',
     'editVehicleUpdateButton'               => 'Fahrzeug aktualisieren',
+    /*
+    |--------------------------------------------------------------------------
+    | Messages in services page
+    |--------------------------------------------------------------------------
+    |
+    */
+    'servicesListHeading'                   => 'Services',
+    'servicesCreateServiceButton'           => 'Create Service',
+    'servicesListTableHeadTitleLabel'       => 'Title',
+    'servicesListTableHeadHoursLabel'       => 'Hours',
+    'servicesListTableHeadRateLabel'        => 'Rate',
     ];
